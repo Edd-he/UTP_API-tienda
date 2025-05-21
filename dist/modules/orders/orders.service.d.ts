@@ -12,8 +12,8 @@ export declare class OrdersService {
         id: number;
         creado: Date;
         hora_programada: Date;
-        transaccion: string;
         monto_total: Prisma.Decimal;
+        transaccion: string;
         estado: import(".prisma/client").$Enums.Estado;
         usuario_id: number;
     }>;
@@ -21,34 +21,34 @@ export declare class OrdersService {
         id: number;
         creado: Date;
         hora_programada: Date;
-        transaccion: string;
         monto_total: Prisma.Decimal;
+        transaccion: string;
         estado: import(".prisma/client").$Enums.Estado;
         usuario_id: number;
     }[]>;
     findOne(id: number): Promise<{
-        Orden_Item: {
-            id: number;
-            nombre_producto: string;
-            cantidad: number;
-            precio: Prisma.Decimal;
-            producto_id: number;
-            orden_id: number;
-        }[];
         Usuario: {
-            id: number;
             dni: string;
+            correo: string;
+            id: number;
             nombre: string;
             apellidos: string;
-            correo: string;
             rol: import(".prisma/client").$Enums.Rol;
         };
+        Orden_Item: {
+            id: number;
+            precio: Prisma.Decimal;
+            producto_id: number;
+            nombre_producto: string;
+            cantidad: number;
+            orden_id: number;
+        }[];
     } & {
         id: number;
         creado: Date;
         hora_programada: Date;
-        transaccion: string;
         monto_total: Prisma.Decimal;
+        transaccion: string;
         estado: import(".prisma/client").$Enums.Estado;
         usuario_id: number;
     }>;
@@ -56,8 +56,8 @@ export declare class OrdersService {
         id: number;
         creado: Date;
         hora_programada: Date;
-        transaccion: string;
         monto_total: Prisma.Decimal;
+        transaccion: string;
         estado: import(".prisma/client").$Enums.Estado;
         usuario_id: number;
     }>;
