@@ -15,6 +15,8 @@ export declare class ProductsService {
         precio: import("@prisma/client/runtime/library").Decimal;
         stock: number;
         limite_de_orden: number;
+        categoria: import(".prisma/client").$Enums.Categoria;
+        url: string;
     }>;
     getAll(): Promise<{
         habilitado: boolean;
@@ -27,6 +29,8 @@ export declare class ProductsService {
         precio: import("@prisma/client/runtime/library").Decimal;
         stock: number;
         limite_de_orden: number;
+        categoria: import(".prisma/client").$Enums.Categoria;
+        url: string;
     }[]>;
     getActiveProducts(): Promise<{
         habilitado: boolean;
@@ -39,6 +43,8 @@ export declare class ProductsService {
         precio: import("@prisma/client/runtime/library").Decimal;
         stock: number;
         limite_de_orden: number;
+        categoria: import(".prisma/client").$Enums.Categoria;
+        url: string;
     }[]>;
     getOne(id: number): Promise<{
         habilitado: boolean;
@@ -51,6 +57,8 @@ export declare class ProductsService {
         precio: import("@prisma/client/runtime/library").Decimal;
         stock: number;
         limite_de_orden: number;
+        categoria: import(".prisma/client").$Enums.Categoria;
+        url: string;
     }>;
     update(id: number, updateProductDto: UpdateProductDto): Promise<{
         habilitado: boolean;
@@ -63,6 +71,8 @@ export declare class ProductsService {
         precio: import("@prisma/client/runtime/library").Decimal;
         stock: number;
         limite_de_orden: number;
+        categoria: import(".prisma/client").$Enums.Categoria;
+        url: string;
     }>;
     remove(id: number): Promise<{
         message: string;
@@ -78,5 +88,7 @@ export declare class ProductsService {
         precio: import("@prisma/client/runtime/library").Decimal;
         stock: number;
         limite_de_orden: number;
+        categoria: import(".prisma/client").$Enums.Categoria;
+        url: string;
     }>;
 }

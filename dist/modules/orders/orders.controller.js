@@ -36,13 +36,19 @@ let OrdersController = class OrdersController {
     findOne(id) {
         return this.ordersService.findOne(id);
     }
-    process(id) {
+    processOrder(id) {
         return this.ordersService.changeStatusOrder(id, client_1.Estado.EN_PROCESO);
     }
-    complete(id) {
+    pickupOrder(id) {
+        return this.ordersService.changeStatusOrder(id, client_1.Estado.RECOGER);
+    }
+    abandonOrder(id) {
+        return this.ordersService.changeStatusOrder(id, client_1.Estado.ABANDONADA);
+    }
+    completeOrder(id) {
         return this.ordersService.changeStatusOrder(id, client_1.Estado.COMPLETADA);
     }
-    cancel(id) {
+    cancelOrder(id) {
         return this.ordersService.changeStatusOrder(id, client_1.Estado.CANCELADA);
     }
 };
@@ -92,7 +98,29 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", void 0)
-], OrdersController.prototype, "process", null);
+], OrdersController.prototype, "processOrder", null);
+__decorate([
+    (0, common_1.Get)(':id/abandonar-orden'),
+    (0, swagger_1.ApiOperation)({
+        summary: 'Marca como abandonada una orden',
+    }),
+    openapi.ApiResponse({ status: 200 }),
+    __param(0, (0, common_1.Param)('id', validate_id_pipe_1.ValidateId)),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", void 0)
+], OrdersController.prototype, "pickupOrder", null);
+__decorate([
+    (0, common_1.Get)(':id/abandonar-orden'),
+    (0, swagger_1.ApiOperation)({
+        summary: 'Marca como abandonada una orden',
+    }),
+    openapi.ApiResponse({ status: 200 }),
+    __param(0, (0, common_1.Param)('id', validate_id_pipe_1.ValidateId)),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", void 0)
+], OrdersController.prototype, "abandonOrder", null);
 __decorate([
     (0, common_1.Get)(':id/completar-orden'),
     (0, swagger_1.ApiOperation)({
@@ -103,7 +131,7 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", void 0)
-], OrdersController.prototype, "complete", null);
+], OrdersController.prototype, "completeOrder", null);
 __decorate([
     (0, common_1.Get)(':id/cancelar-orden'),
     (0, swagger_1.ApiOperation)({
@@ -114,7 +142,7 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", void 0)
-], OrdersController.prototype, "cancel", null);
+], OrdersController.prototype, "cancelOrder", null);
 exports.OrdersController = OrdersController = __decorate([
     (0, swagger_1.ApiTags)('Ordenes'),
     (0, common_1.Controller)('ordenes'),

@@ -1,5 +1,7 @@
+import { ApiProperty } from '@nestjs/swagger'
+import { Categoria } from '@prisma/client'
 import { Type } from 'class-transformer'
-import { IsInt, IsNumber, IsPositive, IsString } from 'class-validator'
+import { IsEnum, IsInt, IsNumber, IsPositive, IsString } from 'class-validator'
 
 export class CreateProductDto {
   @IsString({ message: 'El nombre del producto debe ser una cadena de texto' })
@@ -28,4 +30,8 @@ export class CreateProductDto {
     message: 'El limite de orden del producto debe ser un número entero',
   })
   limite_de_orden: number
+
+  @ApiProperty({ enum: Categoria })
+  @IsEnum(Categoria, { message: 'La categoria no es válida' })
+  categoria: Categoria
 }

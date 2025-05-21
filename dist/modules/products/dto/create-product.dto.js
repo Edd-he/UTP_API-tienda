@@ -11,11 +11,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateProductDto = void 0;
 const openapi = require("@nestjs/swagger");
+const swagger_1 = require("@nestjs/swagger");
+const client_1 = require("@prisma/client");
 const class_transformer_1 = require("class-transformer");
 const class_validator_1 = require("class-validator");
 class CreateProductDto {
     static _OPENAPI_METADATA_FACTORY() {
-        return { nombre: { required: true, type: () => String }, descripcion: { required: true, type: () => String }, precio: { required: true, type: () => Number }, stock: { required: true, type: () => Number, minimum: 1 }, limite_de_orden: { required: true, type: () => Number, minimum: 1 } };
+        return { nombre: { required: true, type: () => String }, descripcion: { required: true, type: () => String }, precio: { required: true, type: () => Number }, stock: { required: true, type: () => Number, minimum: 1 }, limite_de_orden: { required: true, type: () => Number, minimum: 1 }, categoria: { required: true, type: () => Object } };
     }
 }
 exports.CreateProductDto = CreateProductDto;
@@ -48,4 +50,9 @@ __decorate([
     }),
     __metadata("design:type", Number)
 ], CreateProductDto.prototype, "limite_de_orden", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ enum: client_1.Categoria }),
+    (0, class_validator_1.IsEnum)(client_1.Categoria, { message: 'La categoria no es válida' }),
+    __metadata("design:type", String)
+], CreateProductDto.prototype, "categoria", void 0);
 //# sourceMappingURL=create-product.dto.js.map

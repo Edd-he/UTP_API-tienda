@@ -30,7 +30,7 @@ let ReniecService = class ReniecService {
             return response.data;
         }
         catch (e) {
-            console.log(e);
+            console.warn(e);
             throw new common_1.NotFoundException('El DNI no existe');
         }
     }

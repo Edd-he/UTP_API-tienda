@@ -22,7 +22,7 @@ export class ReniecService {
       )
       return response.data as IReniecResponse
     } catch (e) {
-      console.log(e)
+      console.warn(e)
       throw new NotFoundException('El DNI no existe')
     }
   }

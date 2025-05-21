@@ -47,15 +47,31 @@ export class OrdersController {
   @ApiOperation({
     summary: 'Marca como en proceso una orden',
   })
-  process(@Param('id', ValidateId) id: number) {
+  processOrder(@Param('id', ValidateId) id: number) {
     return this.ordersService.changeStatusOrder(id, Estado.EN_PROCESO)
+  }
+
+  @Get(':id/abandonar-orden')
+  @ApiOperation({
+    summary: 'Marca como abandonada una orden',
+  })
+  pickupOrder(@Param('id', ValidateId) id: number) {
+    return this.ordersService.changeStatusOrder(id, Estado.RECOGER)
+  }
+
+  @Get(':id/abandonar-orden')
+  @ApiOperation({
+    summary: 'Marca como abandonada una orden',
+  })
+  abandonOrder(@Param('id', ValidateId) id: number) {
+    return this.ordersService.changeStatusOrder(id, Estado.ABANDONADA)
   }
 
   @Get(':id/completar-orden')
   @ApiOperation({
     summary: 'Marca como completada una orden',
   })
-  complete(@Param('id', ValidateId) id: number) {
+  completeOrder(@Param('id', ValidateId) id: number) {
     return this.ordersService.changeStatusOrder(id, Estado.COMPLETADA)
   }
 
@@ -63,7 +79,7 @@ export class OrdersController {
   @ApiOperation({
     summary: 'Marca como cancelada una orden',
   })
-  cancel(@Param('id', ValidateId) id: number) {
+  cancelOrder(@Param('id', ValidateId) id: number) {
     return this.ordersService.changeStatusOrder(id, Estado.CANCELADA)
   }
 }

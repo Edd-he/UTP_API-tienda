@@ -35,7 +35,7 @@ export class ProductsController {
     return this.productsService.getOne(productoId)
   }
 
-  @Get(':productoID/obtener-producto-disponibles')
+  @Get('obtener-productos-disponibles')
   @ApiOperation({
     summary: 'Obtiene todos los productos disponibles',
   })

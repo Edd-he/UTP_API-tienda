@@ -66,7 +66,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ProductsController.prototype, "getOne", null);
 __decorate([
-    (0, common_1.Get)(':productoID/obtener-producto-disponibles'),
+    (0, common_1.Get)('obtener-productos-disponibles'),
     (0, swagger_1.ApiOperation)({
         summary: 'Obtiene todos los productos disponibles',
     }),

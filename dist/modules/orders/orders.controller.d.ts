@@ -49,7 +49,7 @@ export declare class OrdersController {
         estado: import(".prisma/client").$Enums.Estado;
         usuario_id: number;
     }>;
-    process(id: number): Promise<{
+    processOrder(id: number): Promise<{
         id: number;
         creado: Date;
         hora_programada: Date;
@@ -58,7 +58,7 @@ export declare class OrdersController {
         estado: import(".prisma/client").$Enums.Estado;
         usuario_id: number;
     }>;
-    complete(id: number): Promise<{
+    pickupOrder(id: number): Promise<{
         id: number;
         creado: Date;
         hora_programada: Date;
@@ -67,7 +67,25 @@ export declare class OrdersController {
         estado: import(".prisma/client").$Enums.Estado;
         usuario_id: number;
     }>;
-    cancel(id: number): Promise<{
+    abandonOrder(id: number): Promise<{
+        id: number;
+        creado: Date;
+        hora_programada: Date;
+        monto_total: import("@prisma/client/runtime/library").Decimal;
+        transaccion: string;
+        estado: import(".prisma/client").$Enums.Estado;
+        usuario_id: number;
+    }>;
+    completeOrder(id: number): Promise<{
+        id: number;
+        creado: Date;
+        hora_programada: Date;
+        monto_total: import("@prisma/client/runtime/library").Decimal;
+        transaccion: string;
+        estado: import(".prisma/client").$Enums.Estado;
+        usuario_id: number;
+    }>;
+    cancelOrder(id: number): Promise<{
         id: number;
         creado: Date;
         hora_programada: Date;

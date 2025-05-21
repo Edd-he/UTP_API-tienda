@@ -19,7 +19,7 @@ model Orden {
   hora_programada DateTime
   transaccion     String       @default("NO HUBO TRANSACCION")
   monto_total     Decimal      @db.Decimal(10, 2)
-  estado          Estado       @default(PENDIENTE)
+  estado          Estado       @default(EN_PROCESO)
   Orden_Item      Orden_Item[]
   Usuario         Usuario      @relation(fields: [usuario_id], references: [id])
   usuario_id      Int
@@ -45,6 +45,8 @@ model Producto {
   precio          Decimal      @db.Decimal(10, 2)
   stock           Int          @default(0)
   limite_de_orden Int          @default(0)
+  categoria       Categoria
+  url             String       @default("PENDIENTE")
   habilitado      Boolean      @default(true)
   archivado       Boolean      @default(false)
   Orden_Item      Orden_Item[]
@@ -72,8 +74,18 @@ enum Rol {
 }
 
 enum Estado {
-  PENDIENTE
   EN_PROCESO
+  RECOGER
   COMPLETADA
+  ABANDONADA
   CANCELADA
+}
+
+enum Categoria {
+  PREPARADOS
+  SALUDABLES
+  BEBIDAS
+  SNACKS
+  ALMUERZOS
+  OTROS
 }

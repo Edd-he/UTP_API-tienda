@@ -15,6 +15,8 @@ export declare class ProductsController {
         precio: import("@prisma/client/runtime/library").Decimal;
         stock: number;
         limite_de_orden: number;
+        categoria: import(".prisma/client").$Enums.Categoria;
+        url: string;
     }>;
     getOne(productoId: number): Promise<{
         habilitado: boolean;
@@ -27,6 +29,8 @@ export declare class ProductsController {
         precio: import("@prisma/client/runtime/library").Decimal;
         stock: number;
         limite_de_orden: number;
+        categoria: import(".prisma/client").$Enums.Categoria;
+        url: string;
     }>;
     getActives(): Promise<{
         habilitado: boolean;
@@ -39,6 +43,8 @@ export declare class ProductsController {
         precio: import("@prisma/client/runtime/library").Decimal;
         stock: number;
         limite_de_orden: number;
+        categoria: import(".prisma/client").$Enums.Categoria;
+        url: string;
     }[]>;
     update(productId: number, updateProductDto: UpdateProductDto): Promise<{
         habilitado: boolean;
@@ -51,6 +57,8 @@ export declare class ProductsController {
         precio: import("@prisma/client/runtime/library").Decimal;
         stock: number;
         limite_de_orden: number;
+        categoria: import(".prisma/client").$Enums.Categoria;
+        url: string;
     }>;
     remove(productoId: number): Promise<{
         message: string;

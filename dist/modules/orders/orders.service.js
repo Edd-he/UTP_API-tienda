@@ -26,7 +26,7 @@ let OrdersService = class OrdersService {
                 data: {
                     usuario_id: session.id,
                     transaccion: (0, uuid_1.generateUUIDV7)(),
-                    estado: client_1.Estado.PENDIENTE,
+                    estado: client_1.Estado.EN_PROCESO,
                     ...createOrderDto,
                     Orden_Item: {
                         createMany: {

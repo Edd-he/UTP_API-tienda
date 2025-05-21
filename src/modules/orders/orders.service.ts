@@ -20,7 +20,7 @@ export class OrdersService {
         data: {
           usuario_id: session.id,
           transaccion: generateUUIDV7(),
-          estado: Estado.PENDIENTE,
+          estado: Estado.EN_PROCESO,
           ...createOrderDto,
           Orden_Item: {
             createMany: {
