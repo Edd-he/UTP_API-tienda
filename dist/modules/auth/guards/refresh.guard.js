@@ -13,6 +13,7 @@ exports.RefreshTokenGuard = void 0;
 const common_1 = require("@nestjs/common");
 const jwt_1 = require("@nestjs/jwt");
 const core_1 = require("@nestjs/core");
+const envs_1 = require("../../../config/envs");
 let RefreshTokenGuard = class RefreshTokenGuard {
     constructor(jwtService, reflector) {
         this.jwtService = jwtService;
@@ -20,12 +21,12 @@ let RefreshTokenGuard = class RefreshTokenGuard {
     }
     async canActivate(context) {
         const request = context.switchToHttp().getRequest();
-        const token = this.extractTokenFromHeader(request);
+        const token = this.extractToken(request);
         if (!token)
             throw new common_1.UnauthorizedException('No se ha proporcionado un token');
         try {
             const payload = await this.jwtService.verifyAsync(token, {
-                secret: process.env.JWT_REFRESH_SECRET,
+                secret: envs_1.envs.jwtRefreshSecret,
             });
             request['user'] = payload;
         }
@@ -34,7 +35,7 @@ let RefreshTokenGuard = class RefreshTokenGuard {
         }
         return true;
     }
-    extractTokenFromHeader(request) {
+    extractToken(request) {
         const [type, token] = request.headers.authorization?.split(' ') ?? [];
         return type === 'Refresh' ? token : undefined;
     }

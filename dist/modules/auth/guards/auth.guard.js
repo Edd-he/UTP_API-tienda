@@ -13,6 +13,7 @@ exports.AuthGuard = void 0;
 const common_1 = require("@nestjs/common");
 const jwt_1 = require("@nestjs/jwt");
 const core_1 = require("@nestjs/core");
+const envs_1 = require("../../../config/envs");
 const public_decorator_1 = require("../decorators/public.decorator");
 let AuthGuard = class AuthGuard {
     constructor(jwtService, reflector) {
@@ -32,7 +33,7 @@ let AuthGuard = class AuthGuard {
             throw new common_1.UnauthorizedException('No se ha proporcionado un token');
         try {
             const payload = await this.jwtService.verifyAsync(token, {
-                secret: process.env.JWT_SECRET,
+                secret: envs_1.envs.jwtSecret,
             });
             request['user'] = payload;
         }
