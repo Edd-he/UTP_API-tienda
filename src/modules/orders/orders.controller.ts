@@ -51,9 +51,9 @@ export class OrdersController {
     return this.ordersService.changeStatusOrder(id, Estado.EN_PROCESO)
   }
 
-  @Get(':id/abandonar-orden')
+  @Get(':id/recoger-orden')
   @ApiOperation({
-    summary: 'Marca como abandonada una orden',
+    summary: 'Marca como disponible para recoger una orden',
   })
   pickupOrder(@Param('id', ValidateId) id: number) {
     return this.ordersService.changeStatusOrder(id, Estado.RECOGER)

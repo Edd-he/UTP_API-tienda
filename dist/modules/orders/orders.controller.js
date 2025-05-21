@@ -100,9 +100,9 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], OrdersController.prototype, "processOrder", null);
 __decorate([
-    (0, common_1.Get)(':id/abandonar-orden'),
+    (0, common_1.Get)(':id/recoger-orden'),
     (0, swagger_1.ApiOperation)({
-        summary: 'Marca como abandonada una orden',
+        summary: 'Marca como disponible para recoger una orden',
     }),
     openapi.ApiResponse({ status: 200 }),
     __param(0, (0, common_1.Param)('id', validate_id_pipe_1.ValidateId)),
