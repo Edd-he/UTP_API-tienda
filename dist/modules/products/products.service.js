@@ -14,6 +14,7 @@ const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../../providers/prisma/prisma.service");
 const prisma_exception_1 = require("../../providers/prisma/exceptions/prisma.exception");
 const client_1 = require("@prisma/client");
+const format_date_1 = require("../../common/utils/format-date");
 let ProductsService = class ProductsService {
     constructor(db) {
         this.db = db;
@@ -21,9 +22,14 @@ let ProductsService = class ProductsService {
     async create(createProductDto) {
         try {
             const producto = await this.db.producto.create({
+                omit: { archivado: true },
                 data: createProductDto,
             });
-            return producto;
+            return {
+                ...producto,
+                creado: (0, format_date_1.formatDate)(producto.creado),
+                actualizado: (0, format_date_1.formatDate)(producto.actualizado),
+            };
         }
         catch (e) {
             if (e.code)
@@ -45,14 +51,22 @@ let ProductsService = class ProductsService {
             ],
             archivado: false,
         };
-        const [data, total] = await Promise.all([
+        const [products, total] = await Promise.all([
             this.db.producto.findMany({
                 where,
                 skip,
+                omit: { archivado: true },
                 take: page_size,
             }),
             this.db.producto.count({ where }),
         ]);
+        const data = products.map((product) => {
+            return {
+                ...product,
+                creado: (0, format_date_1.formatDate)(product.creado),
+                actualizado: (0, format_date_1.formatDate)(product.actualizado),
+            };
+        });
         const totalPages = Math.ceil(total / page_size);
         return {
             data,
@@ -69,13 +83,15 @@ let ProductsService = class ProductsService {
                 : undefined,
             ...(max_price && { precio: { lte: max_price } }),
             ...(category && { categoria: category }),
+            stock: { gt: 0 },
             habilitado: true,
             archivado: false,
         };
-        const [data, total] = await Promise.all([
+        const [products, total] = await Promise.all([
             this.db.producto.findMany({
                 where,
                 skip,
+                omit: { archivado: true },
                 take: page_size,
                 orderBy: order
                     ? { precio: order === 'asc' ? 'asc' : 'desc' }
@@ -84,6 +100,13 @@ let ProductsService = class ProductsService {
             this.db.producto.count({ where }),
         ]);
         const totalPages = Math.ceil(total / page_size);
+        const data = products.map((product) => {
+            return {
+                ...product,
+                creado: (0, format_date_1.formatDate)(product.creado),
+                actualizado: (0, format_date_1.formatDate)(product.actualizado),
+            };
+        });
         return {
             data,
             total,
@@ -91,23 +114,34 @@ let ProductsService = class ProductsService {
         };
     }
     async getOne(id) {
-        return await this.db.producto.findUnique({
+        const product = await this.db.producto.findUnique({
+            omit: { archivado: true },
             where: {
                 id,
                 archivado: false,
             },
         });
+        return {
+            ...product,
+            creado: (0, format_date_1.formatDate)(product.creado),
+            actualizado: (0, format_date_1.formatDate)(product.actualizado),
+        };
     }
     async update(id, updateProductDto) {
         try {
             const producto = await this.db.producto.update({
+                omit: { archivado: true },
                 where: {
                     id,
                     archivado: false,
                 },
                 data: updateProductDto,
             });
-            return producto;
+            return {
+                ...producto,
+                creado: (0, format_date_1.formatDate)(producto.creado),
+                actualizado: (0, format_date_1.formatDate)(producto.actualizado),
+            };
         }
         catch (e) {
             if (e.code)
@@ -125,7 +159,7 @@ let ProductsService = class ProductsService {
                 data: { archivado: true, habilitado: false },
             });
             if (producto) {
-                return { message: 'Producto archivado correctamente' };
+                return { id: producto.id, message: 'Producto archivado correctamente' };
             }
         }
         catch (e) {
@@ -138,6 +172,7 @@ let ProductsService = class ProductsService {
         const movementQuantity = type === 'ENTRADA' ? quantity : -quantity;
         try {
             const newStock = await this.db.producto.update({
+                omit: { archivado: true },
                 where: {
                     id: productId,
                     archivado: false,

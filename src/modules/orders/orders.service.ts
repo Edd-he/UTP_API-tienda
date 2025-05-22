@@ -16,7 +16,7 @@ export class OrdersService {
   ) {}
   async create(createOrderDto: CreateOrderDto, session: IUserSession) {
     return await this.db.$transaction(async (prisma) => {
-      const sale = await prisma.orden.create({
+      const order = await prisma.orden.create({
         data: {
           usuario_id: session.id,
           transaccion: generateUUIDV7(),
@@ -40,7 +40,7 @@ export class OrdersService {
         }),
       )
 
-      return sale
+      return order
     })
   }
 

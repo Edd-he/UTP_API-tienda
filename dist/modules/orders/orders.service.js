@@ -22,7 +22,7 @@ let OrdersService = class OrdersService {
     }
     async create(createOrderDto, session) {
         return await this.db.$transaction(async (prisma) => {
-            const sale = await prisma.orden.create({
+            const order = await prisma.orden.create({
                 data: {
                     usuario_id: session.id,
                     transaccion: (0, uuid_1.generateUUIDV7)(),
@@ -38,7 +38,7 @@ let OrdersService = class OrdersService {
             await Promise.all(createOrderDto.orderItems.map(async (item) => {
                 await this.productService.updateProductStock(item.producto_id, item.cantidad, 'SALIDA');
             }));
-            return sale;
+            return order;
         });
     }
     async findAll({ page_size, page, query }) {

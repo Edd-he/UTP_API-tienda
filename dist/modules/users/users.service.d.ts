@@ -9,26 +9,24 @@ export declare class UsersService {
     private reniecService;
     constructor(db: PrismaService, reniecService: ReniecService);
     create(createUserDto: CreateUserDto): Promise<{
+        creado: string;
+        actualizado: string;
         dni: string;
         correo: string;
-        contraseña: string;
         habilitado: boolean;
         id: number;
-        creado: Date;
-        actualizado: Date;
         nombre: string;
         apellidos: string;
         rol: import(".prisma/client").$Enums.Rol;
-        archivado: boolean;
     }>;
     findAll({ query, page, page_size, enable, }: SearchStatusQueryParamsDto): Promise<{
         data: {
+            creado: string;
+            actualizado: string;
             dni: string;
             correo: string;
             habilitado: boolean;
             id: number;
-            creado: Date;
-            actualizado: Date;
             nombre: string;
             apellidos: string;
             rol: import(".prisma/client").$Enums.Rol;
@@ -37,12 +35,12 @@ export declare class UsersService {
         totalPages: number;
     }>;
     getOne(id: number): Promise<{
+        creado: string;
+        actualizado: string;
         dni: string;
         correo: string;
         habilitado: boolean;
         id: number;
-        creado: Date;
-        actualizado: Date;
         nombre: string;
         apellidos: string;
         rol: import(".prisma/client").$Enums.Rol;
@@ -60,30 +58,19 @@ export declare class UsersService {
         rol: import(".prisma/client").$Enums.Rol;
     }>;
     update(id: number, updateUserDto: UpdateUserDto): Promise<{
+        creado: string;
+        actualizado: string;
         dni: string;
         correo: string;
-        contraseña: string;
         habilitado: boolean;
         id: number;
-        creado: Date;
-        actualizado: Date;
         nombre: string;
         apellidos: string;
         rol: import(".prisma/client").$Enums.Rol;
-        archivado: boolean;
     }>;
     remove(id: number): Promise<{
-        dni: string;
-        correo: string;
-        contraseña: string;
-        habilitado: boolean;
         id: number;
-        creado: Date;
-        actualizado: Date;
-        nombre: string;
-        apellidos: string;
-        rol: import(".prisma/client").$Enums.Rol;
-        archivado: boolean;
+        message: string;
     }>;
     verifyDni(dni: string): Promise<IReniecResponse>;
 }

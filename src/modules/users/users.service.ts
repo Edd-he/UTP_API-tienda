@@ -6,6 +6,7 @@ import { Prisma, Rol } from '@prisma/client'
 import * as bcrypt from 'bcryptjs'
 import { PrismaException } from '@providers/prisma/exceptions/prisma.exception'
 import { SearchStatusQueryParamsDto } from '@common/query-params/search-status-query-params'
+import { formatDate } from '@common/utils/format-date'
 
 import { CreateUserDto } from './dto/create-user.dto'
 import { UpdateUserDto } from './dto/update-user.dto'
@@ -21,7 +22,8 @@ export class UsersService {
     const { nombres, apellidoMaterno, apellidoPaterno }: IReniecResponse =
       await this.reniecService.getInfoDNI(createUserDto.dni)
     try {
-      const newAdmin = await this.db.usuario.create({
+      const newUser = await this.db.usuario.create({
+        omit: { archivado: true, contraseña: true },
         data: {
           nombre: nombres,
           apellidos: apellidoPaterno + ' ' + apellidoMaterno,
@@ -31,7 +33,11 @@ export class UsersService {
         },
       })
 
-      return newAdmin
+      return {
+        ...newUser,
+        creado: formatDate(newUser.creado),
+        actualizado: formatDate(newUser.actualizado),
+      }
     } catch (e) {
       if (e.code) throw new PrismaException(e)
 
@@ -60,7 +66,7 @@ export class UsersService {
       ],
       archivado: false,
     }
-    const [data, total] = await Promise.all([
+    const [users, total] = await Promise.all([
       this.db.usuario.findMany({
         omit: {
           contraseña: true,
@@ -73,13 +79,21 @@ export class UsersService {
       this.db.usuario.count({ where }),
     ])
 
+    const data = users.map((user) => {
+      return {
+        ...user,
+        creado: formatDate(user.creado),
+        actualizado: formatDate(user.actualizado),
+      }
+    })
+
     const totalPages = Math.ceil(total / page_size)
 
     return { data, total, totalPages }
   }
 
   async getOne(id: number) {
-    return await this.db.usuario.findFirst({
+    const user = await this.db.usuario.findFirst({
       omit: {
         contraseña: true,
         archivado: true,
@@ -89,6 +103,12 @@ export class UsersService {
         archivado: false,
       },
     })
+
+    return {
+      ...user,
+      creado: formatDate(user.creado),
+      actualizado: formatDate(user.actualizado),
+    }
   }
 
   async getOneByEmail(correo: string) {
@@ -117,6 +137,7 @@ export class UsersService {
 
     try {
       const updatedUser = await this.db.usuario.update({
+        omit: { archivado: true, contraseña: true },
         where: {
           id,
           archivado: false,
@@ -128,7 +149,11 @@ export class UsersService {
         },
       })
 
-      return updatedUser
+      return {
+        ...updatedUser,
+        creado: formatDate(updatedUser.creado),
+        actualizado: formatDate(updatedUser.actualizado),
+      }
     } catch (e) {
       if (e.code) throw new PrismaException(e)
 
@@ -151,7 +176,7 @@ export class UsersService {
         },
       })
 
-      return archivedUser
+      return { id: archivedUser.id, message: 'Usuario archivado' }
     } catch (e) {
       if (e.code) throw new PrismaException(e)
 

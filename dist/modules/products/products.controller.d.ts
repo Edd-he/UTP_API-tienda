@@ -7,12 +7,11 @@ export declare class ProductsController {
     private readonly productsService;
     constructor(productsService: ProductsService);
     create(createProductDto: CreateProductDto): Promise<{
+        creado: string;
+        actualizado: string;
         habilitado: boolean;
         id: number;
-        creado: Date;
-        actualizado: Date;
         nombre: string;
-        archivado: boolean;
         descripcion: string;
         precio: import("@prisma/client/runtime/library").Decimal;
         limite_de_orden: number;
@@ -21,12 +20,11 @@ export declare class ProductsController {
         url: string;
     }>;
     getOne(productoId: number): Promise<{
+        creado: string;
+        actualizado: string;
         habilitado: boolean;
         id: number;
-        creado: Date;
-        actualizado: Date;
         nombre: string;
-        archivado: boolean;
         descripcion: string;
         precio: import("@prisma/client/runtime/library").Decimal;
         limite_de_orden: number;
@@ -36,12 +34,11 @@ export declare class ProductsController {
     }>;
     getAll(params: SearchStatusQueryParamsDto): Promise<{
         data: {
+            creado: string;
+            actualizado: string;
             habilitado: boolean;
             id: number;
-            creado: Date;
-            actualizado: Date;
             nombre: string;
-            archivado: boolean;
             descripcion: string;
             precio: import("@prisma/client/runtime/library").Decimal;
             limite_de_orden: number;
@@ -54,12 +51,11 @@ export declare class ProductsController {
     }>;
     getActives(params: ProductsQueryParams): Promise<{
         data: {
+            creado: string;
+            actualizado: string;
             habilitado: boolean;
             id: number;
-            creado: Date;
-            actualizado: Date;
             nombre: string;
-            archivado: boolean;
             descripcion: string;
             precio: import("@prisma/client/runtime/library").Decimal;
             limite_de_orden: number;
@@ -71,12 +67,11 @@ export declare class ProductsController {
         totalPages: number;
     }>;
     update(productId: number, updateProductDto: UpdateProductDto): Promise<{
+        creado: string;
+        actualizado: string;
         habilitado: boolean;
         id: number;
-        creado: Date;
-        actualizado: Date;
         nombre: string;
-        archivado: boolean;
         descripcion: string;
         precio: import("@prisma/client/runtime/library").Decimal;
         limite_de_orden: number;
@@ -85,6 +80,7 @@ export declare class ProductsController {
         url: string;
     }>;
     remove(productoId: number): Promise<{
+        id: number;
         message: string;
     }>;
 }

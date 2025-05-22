@@ -8,12 +8,11 @@ export declare class ProductsService {
     private readonly db;
     constructor(db: PrismaService);
     create(createProductDto: CreateProductDto): Promise<{
+        creado: string;
+        actualizado: string;
         habilitado: boolean;
         id: number;
-        creado: Date;
-        actualizado: Date;
         nombre: string;
-        archivado: boolean;
         descripcion: string;
         precio: Prisma.Decimal;
         limite_de_orden: number;
@@ -23,12 +22,11 @@ export declare class ProductsService {
     }>;
     getAll({ query, page, page_size, enable }: SearchStatusQueryParamsDto): Promise<{
         data: {
+            creado: string;
+            actualizado: string;
             habilitado: boolean;
             id: number;
-            creado: Date;
-            actualizado: Date;
             nombre: string;
-            archivado: boolean;
             descripcion: string;
             precio: Prisma.Decimal;
             limite_de_orden: number;
@@ -41,12 +39,11 @@ export declare class ProductsService {
     }>;
     getActiveProducts({ query, page, page_size, order, max_price, category, }: ProductsQueryParams): Promise<{
         data: {
+            creado: string;
+            actualizado: string;
             habilitado: boolean;
             id: number;
-            creado: Date;
-            actualizado: Date;
             nombre: string;
-            archivado: boolean;
             descripcion: string;
             precio: Prisma.Decimal;
             limite_de_orden: number;
@@ -58,12 +55,11 @@ export declare class ProductsService {
         totalPages: number;
     }>;
     getOne(id: number): Promise<{
+        creado: string;
+        actualizado: string;
         habilitado: boolean;
         id: number;
-        creado: Date;
-        actualizado: Date;
         nombre: string;
-        archivado: boolean;
         descripcion: string;
         precio: Prisma.Decimal;
         limite_de_orden: number;
@@ -72,12 +68,11 @@ export declare class ProductsService {
         url: string;
     }>;
     update(id: number, updateProductDto: UpdateProductDto): Promise<{
+        creado: string;
+        actualizado: string;
         habilitado: boolean;
         id: number;
-        creado: Date;
-        actualizado: Date;
         nombre: string;
-        archivado: boolean;
         descripcion: string;
         precio: Prisma.Decimal;
         limite_de_orden: number;
@@ -86,6 +81,7 @@ export declare class ProductsService {
         url: string;
     }>;
     remove(id: number): Promise<{
+        id: number;
         message: string;
     }>;
     updateProductStock(productId: number, quantity: number, type: string): Promise<{
@@ -94,7 +90,6 @@ export declare class ProductsService {
         creado: Date;
         actualizado: Date;
         nombre: string;
-        archivado: boolean;
         descripcion: string;
         precio: Prisma.Decimal;
         limite_de_orden: number;

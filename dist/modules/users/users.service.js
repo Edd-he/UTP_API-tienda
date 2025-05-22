@@ -16,6 +16,7 @@ const reniec_service_1 = require("../../providers/reniec/reniec.service");
 const client_1 = require("@prisma/client");
 const bcrypt = require("bcryptjs");
 const prisma_exception_1 = require("../../providers/prisma/exceptions/prisma.exception");
+const format_date_1 = require("../../common/utils/format-date");
 let UsersService = class UsersService {
     constructor(db, reniecService) {
         this.db = db;
@@ -25,7 +26,8 @@ let UsersService = class UsersService {
         const { contraseña, ...rest } = createUserDto;
         const { nombres, apellidoMaterno, apellidoPaterno } = await this.reniecService.getInfoDNI(createUserDto.dni);
         try {
-            const newAdmin = await this.db.usuario.create({
+            const newUser = await this.db.usuario.create({
+                omit: { archivado: true, contraseña: true },
                 data: {
                     nombre: nombres,
                     apellidos: apellidoPaterno + ' ' + apellidoMaterno,
@@ -34,7 +36,11 @@ let UsersService = class UsersService {
                     ...rest,
                 },
             });
-            return newAdmin;
+            return {
+                ...newUser,
+                creado: (0, format_date_1.formatDate)(newUser.creado),
+                actualizado: (0, format_date_1.formatDate)(newUser.actualizado),
+            };
         }
         catch (e) {
             if (e.code)
@@ -56,7 +62,7 @@ let UsersService = class UsersService {
             ],
             archivado: false,
         };
-        const [data, total] = await Promise.all([
+        const [users, total] = await Promise.all([
             this.db.usuario.findMany({
                 omit: {
                     contraseña: true,
@@ -68,11 +74,18 @@ let UsersService = class UsersService {
             }),
             this.db.usuario.count({ where }),
         ]);
+        const data = users.map((user) => {
+            return {
+                ...user,
+                creado: (0, format_date_1.formatDate)(user.creado),
+                actualizado: (0, format_date_1.formatDate)(user.actualizado),
+            };
+        });
         const totalPages = Math.ceil(total / page_size);
         return { data, total, totalPages };
     }
     async getOne(id) {
-        return await this.db.usuario.findFirst({
+        const user = await this.db.usuario.findFirst({
             omit: {
                 contraseña: true,
                 archivado: true,
@@ -82,6 +95,11 @@ let UsersService = class UsersService {
                 archivado: false,
             },
         });
+        return {
+            ...user,
+            creado: (0, format_date_1.formatDate)(user.creado),
+            actualizado: (0, format_date_1.formatDate)(user.actualizado),
+        };
     }
     async getOneByEmail(correo) {
         return await this.db.usuario.findFirst({
@@ -104,6 +122,7 @@ let UsersService = class UsersService {
         }
         try {
             const updatedUser = await this.db.usuario.update({
+                omit: { archivado: true, contraseña: true },
                 where: {
                     id,
                     archivado: false,
@@ -114,7 +133,11 @@ let UsersService = class UsersService {
                     ...(apellidos && { apellidos }),
                 },
             });
-            return updatedUser;
+            return {
+                ...updatedUser,
+                creado: (0, format_date_1.formatDate)(updatedUser.creado),
+                actualizado: (0, format_date_1.formatDate)(updatedUser.actualizado),
+            };
         }
         catch (e) {
             if (e.code)
@@ -134,7 +157,7 @@ let UsersService = class UsersService {
                     archivado: true,
                 },
             });
-            return archivedUser;
+            return { id: archivedUser.id, message: 'Usuario archivado' };
         }
         catch (e) {
             if (e.code)

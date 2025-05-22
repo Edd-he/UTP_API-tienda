@@ -7,26 +7,24 @@ export declare class UsersController {
     private readonly usersService;
     constructor(usersService: UsersService);
     createUser(session: IUserSession, createUserDto: CreateUserDto): Promise<{
+        creado: string;
+        actualizado: string;
         dni: string;
         correo: string;
-        contraseña: string;
         habilitado: boolean;
         id: number;
-        creado: Date;
-        actualizado: Date;
         nombre: string;
         apellidos: string;
         rol: import(".prisma/client").$Enums.Rol;
-        archivado: boolean;
     }>;
     getAllUsers(query: SearchStatusQueryParamsDto): Promise<{
         data: {
+            creado: string;
+            actualizado: string;
             dni: string;
             correo: string;
             habilitado: boolean;
             id: number;
-            creado: Date;
-            actualizado: Date;
             nombre: string;
             apellidos: string;
             rol: import(".prisma/client").$Enums.Rol;
@@ -36,40 +34,29 @@ export declare class UsersController {
     }>;
     verifyDni(dni: string): Promise<import("../../providers/reniec/interfaces/reniec-response.interface").IReniecResponse>;
     getOneUser(userId: number): Promise<{
+        creado: string;
+        actualizado: string;
         dni: string;
         correo: string;
         habilitado: boolean;
         id: number;
-        creado: Date;
-        actualizado: Date;
         nombre: string;
         apellidos: string;
         rol: import(".prisma/client").$Enums.Rol;
     }>;
     updateUser(userId: number, session: IUserSession, updateUserDto: UpdateUserDto): Promise<{
+        creado: string;
+        actualizado: string;
         dni: string;
         correo: string;
-        contraseña: string;
         habilitado: boolean;
         id: number;
-        creado: Date;
-        actualizado: Date;
         nombre: string;
         apellidos: string;
         rol: import(".prisma/client").$Enums.Rol;
-        archivado: boolean;
     }>;
     removeUser(userId: number): Promise<{
-        dni: string;
-        correo: string;
-        contraseña: string;
-        habilitado: boolean;
         id: number;
-        creado: Date;
-        actualizado: Date;
-        nombre: string;
-        apellidos: string;
-        rol: import(".prisma/client").$Enums.Rol;
-        archivado: boolean;
+        message: string;
     }>;
 }

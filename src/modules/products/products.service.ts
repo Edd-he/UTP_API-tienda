@@ -3,6 +3,7 @@ import { PrismaService } from '@providers/prisma/prisma.service'
 import { PrismaException } from '@providers/prisma/exceptions/prisma.exception'
 import { SearchStatusQueryParamsDto } from '@common/query-params/search-status-query-params'
 import { Categoria, Prisma } from '@prisma/client'
+import { formatDate } from '@common/utils/format-date'
 
 import { CreateProductDto } from './dto/create-product.dto'
 import { UpdateProductDto } from './dto/update-product.dto'
@@ -14,9 +15,14 @@ export class ProductsService {
   async create(createProductDto: CreateProductDto) {
     try {
       const producto = await this.db.producto.create({
+        omit: { archivado: true },
         data: createProductDto,
       })
-      return producto
+      return {
+        ...producto,
+        creado: formatDate(producto.creado),
+        actualizado: formatDate(producto.actualizado),
+      }
     } catch (e) {
       if (e.code) throw new PrismaException(e)
       throw new InternalServerErrorException(
@@ -41,15 +47,23 @@ export class ProductsService {
       archivado: false,
     }
 
-    const [data, total] = await Promise.all([
+    const [products, total] = await Promise.all([
       this.db.producto.findMany({
         where,
         skip,
+        omit: { archivado: true },
         take: page_size,
       }),
       this.db.producto.count({ where }),
     ])
 
+    const data = products.map((product) => {
+      return {
+        ...product,
+        creado: formatDate(product.creado),
+        actualizado: formatDate(product.actualizado),
+      }
+    })
     const totalPages = Math.ceil(total / page_size)
 
     return {
@@ -76,14 +90,16 @@ export class ProductsService {
         : undefined,
       ...(max_price && { precio: { lte: max_price } }),
       ...(category && { categoria: category as Categoria }),
+      stock: { gt: 0 },
       habilitado: true,
       archivado: false,
     }
 
-    const [data, total] = await Promise.all([
+    const [products, total] = await Promise.all([
       this.db.producto.findMany({
         where,
         skip,
+        omit: { archivado: true },
         take: page_size,
         orderBy: order
           ? { precio: order === 'asc' ? 'asc' : 'desc' }
@@ -94,6 +110,13 @@ export class ProductsService {
 
     const totalPages = Math.ceil(total / page_size)
 
+    const data = products.map((product) => {
+      return {
+        ...product,
+        creado: formatDate(product.creado),
+        actualizado: formatDate(product.actualizado),
+      }
+    })
     return {
       data,
       total,
@@ -102,24 +125,36 @@ export class ProductsService {
   }
 
   async getOne(id: number) {
-    return await this.db.producto.findUnique({
+    const product = await this.db.producto.findUnique({
+      omit: { archivado: true },
       where: {
         id,
         archivado: false,
       },
     })
+
+    return {
+      ...product,
+      creado: formatDate(product.creado),
+      actualizado: formatDate(product.actualizado),
+    }
   }
 
   async update(id: number, updateProductDto: UpdateProductDto) {
     try {
       const producto = await this.db.producto.update({
+        omit: { archivado: true },
         where: {
           id,
           archivado: false,
         },
         data: updateProductDto,
       })
-      return producto
+      return {
+        ...producto,
+        creado: formatDate(producto.creado),
+        actualizado: formatDate(producto.actualizado),
+      }
     } catch (e) {
       if (e.code) throw new PrismaException(e)
       throw new InternalServerErrorException(
@@ -138,7 +173,7 @@ export class ProductsService {
         data: { archivado: true, habilitado: false },
       })
       if (producto) {
-        return { message: 'Producto archivado correctamente' }
+        return { id: producto.id, message: 'Producto archivado correctamente' }
       }
     } catch (e) {
       if (e.code) throw new PrismaException(e)
@@ -153,6 +188,7 @@ export class ProductsService {
 
     try {
       const newStock = await this.db.producto.update({
+        omit: { archivado: true },
         where: {
           id: productId,
           archivado: false,
