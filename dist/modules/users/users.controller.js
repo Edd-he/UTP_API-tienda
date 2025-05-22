@@ -64,7 +64,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "createUser", null);
 __decorate([
-    (0, common_1.Get)('obtener-todos-los-usuarios'),
+    (0, common_1.Get)('obtener-usuarios'),
     (0, swagger_1.ApiOperation)({
         summary: 'Obtiene todos los usuarios',
     }),

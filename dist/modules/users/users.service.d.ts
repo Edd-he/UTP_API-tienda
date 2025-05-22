@@ -21,17 +21,21 @@ export declare class UsersService {
         rol: import(".prisma/client").$Enums.Rol;
         archivado: boolean;
     }>;
-    findAll({ query, page, page_size, status, }: SearchStatusQueryParamsDto): Promise<{
-        dni: string;
-        correo: string;
-        habilitado: boolean;
-        id: number;
-        creado: Date;
-        actualizado: Date;
-        nombre: string;
-        apellidos: string;
-        rol: import(".prisma/client").$Enums.Rol;
-    }[]>;
+    findAll({ query, page, page_size, enable, }: SearchStatusQueryParamsDto): Promise<{
+        data: {
+            dni: string;
+            correo: string;
+            habilitado: boolean;
+            id: number;
+            creado: Date;
+            actualizado: Date;
+            nombre: string;
+            apellidos: string;
+            rol: import(".prisma/client").$Enums.Rol;
+        }[];
+        total: number;
+        totalPages: number;
+    }>;
     getOne(id: number): Promise<{
         dni: string;
         correo: string;

@@ -16,14 +16,14 @@ const class_transformer_1 = require("class-transformer");
 const paginated_params_1 = require("./paginated-params");
 var StatusEnum;
 (function (StatusEnum) {
-    StatusEnum["en"] = "en";
-    StatusEnum["dis"] = "dis";
+    StatusEnum["true"] = "true";
+    StatusEnum["false"] = "false";
     StatusEnum["all"] = "all";
 })(StatusEnum || (StatusEnum = {}));
 class StatusParamsDto extends paginated_params_1.PaginatedParamsDto {
     constructor() {
         super(...arguments);
-        this.status = null;
+        this.enable = null;
     }
 }
 exports.StatusParamsDto = StatusParamsDto;
@@ -36,20 +36,20 @@ __decorate([
     }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsBoolean)({
-        message: 'el status debe ser uno de los siguientes valores = en, dis, all',
+        message: 'el estado habilitado debe ser uno de los siguientes valores = true, false, all',
     }),
     (0, class_transformer_1.Transform)(({ value }) => {
         if (value === undefined || value === null || value === '') {
             return null;
         }
-        if (value === 'en')
+        if (value === 'true')
             return true;
-        if (value === 'dis')
+        if (value === 'false')
             return false;
         if (value === 'all')
             return null;
         return value;
     }),
     __metadata("design:type", Boolean)
-], StatusParamsDto.prototype, "status", void 0);
+], StatusParamsDto.prototype, "enable", void 0);
 //# sourceMappingURL=status-params.js.map

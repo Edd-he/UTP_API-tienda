@@ -13,6 +13,7 @@ exports.ProductsService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../../providers/prisma/prisma.service");
 const prisma_exception_1 = require("../../providers/prisma/exceptions/prisma.exception");
+const client_1 = require("@prisma/client");
 let ProductsService = class ProductsService {
     constructor(db) {
         this.db = db;
@@ -30,20 +31,64 @@ let ProductsService = class ProductsService {
             throw new common_1.InternalServerErrorException('Hubo un error al crear el producto');
         }
     }
-    async getAll() {
-        return await this.db.producto.findMany({
-            where: {
-                archivado: false,
-            },
-        });
+    async getAll({ query, page, page_size, enable }) {
+        const pages = page || 1;
+        const skip = (pages - 1) * page_size;
+        const where = {
+            AND: [
+                query
+                    ? {
+                        nombre: { contains: query, mode: client_1.Prisma.QueryMode.insensitive },
+                    }
+                    : {},
+                enable !== null && enable !== undefined ? { habilitado: enable } : {},
+            ],
+            archivado: false,
+        };
+        const [data, total] = await Promise.all([
+            this.db.producto.findMany({
+                where,
+                skip,
+                take: page_size,
+            }),
+            this.db.producto.count({ where }),
+        ]);
+        const totalPages = Math.ceil(total / page_size);
+        return {
+            data,
+            total,
+            totalPages,
+        };
     }
-    async getActiveProducts() {
-        return await this.db.producto.findMany({
-            where: {
-                habilitado: true,
-                archivado: false,
-            },
-        });
+    async getActiveProducts({ query, page, page_size, order, max_price, category, }) {
+        const pages = page || 1;
+        const skip = (pages - 1) * page_size;
+        const where = {
+            nombre: query
+                ? { contains: query, mode: client_1.Prisma.QueryMode.insensitive }
+                : undefined,
+            ...(max_price && { precio: { lte: max_price } }),
+            ...(category && { categoria: category }),
+            habilitado: true,
+            archivado: false,
+        };
+        const [data, total] = await Promise.all([
+            this.db.producto.findMany({
+                where,
+                skip,
+                take: page_size,
+                orderBy: order
+                    ? { precio: order === 'asc' ? 'asc' : 'desc' }
+                    : undefined,
+            }),
+            this.db.producto.count({ where }),
+        ]);
+        const totalPages = Math.ceil(total / page_size);
+        return {
+            data,
+            total,
+            totalPages,
+        };
     }
     async getOne(id) {
         return await this.db.producto.findUnique({

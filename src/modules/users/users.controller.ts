@@ -37,7 +37,7 @@ export class UsersController {
     return admin
   }
 
-  @Get('obtener-todos-los-usuarios')
+  @Get('obtener-usuarios')
   @ApiOperation({
     summary: 'Obtiene todos los usuarios',
   })

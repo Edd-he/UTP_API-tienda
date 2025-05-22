@@ -20,16 +20,20 @@ export declare class UsersController {
         archivado: boolean;
     }>;
     getAllUsers(query: SearchStatusQueryParamsDto): Promise<{
-        dni: string;
-        correo: string;
-        habilitado: boolean;
-        id: number;
-        creado: Date;
-        actualizado: Date;
-        nombre: string;
-        apellidos: string;
-        rol: import(".prisma/client").$Enums.Rol;
-    }[]>;
+        data: {
+            dni: string;
+            correo: string;
+            habilitado: boolean;
+            id: number;
+            creado: Date;
+            actualizado: Date;
+            nombre: string;
+            apellidos: string;
+            rol: import(".prisma/client").$Enums.Rol;
+        }[];
+        total: number;
+        totalPages: number;
+    }>;
     verifyDni(dni: string): Promise<import("../../providers/reniec/interfaces/reniec-response.interface").IReniecResponse>;
     getOneUser(userId: number): Promise<{
         dni: string;

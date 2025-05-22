@@ -33,7 +33,7 @@ __decorate([
             return value;
         const date = (0, date_fns_1.parse)(value, 'yyyy-MM-dd', new Date());
         if (!(0, date_fns_1.isValid)(date)) {
-            throw new common_1.BadRequestException(`El parámetro start_date no es una fecha válida. Usa el formato yyyy-MM-dd.`);
+            throw new common_1.BadRequestException(`El parámetro de fecha inicial no es una fecha válida. Usa el formato yyyy-MM-dd.`);
         }
         return date;
     }),
@@ -53,7 +53,7 @@ __decorate([
             return value;
         const date = (0, date_fns_1.parse)(value, 'yyyy-MM-dd', new Date());
         if (!(0, date_fns_1.isValid)(date)) {
-            throw new common_1.BadRequestException(`El parámetro start_date no es una fecha válida. Usa el formato yyyy-MM-dd.`);
+            throw new common_1.BadRequestException(`El parámetro fecha final no es una fecha válida. Usa el formato yyyy-MM-dd.`);
         }
         return date;
     }),

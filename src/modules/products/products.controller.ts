@@ -6,13 +6,16 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common'
 import { ApiOperation, ApiTags } from '@nestjs/swagger'
 import { ValidateId } from '@common/pipes/validate-id.pipe'
+import { SearchStatusQueryParamsDto } from '@common/query-params/search-status-query-params'
 
 import { ProductsService } from './products.service'
 import { CreateProductDto } from './dto/create-product.dto'
 import { UpdateProductDto } from './dto/update-product.dto'
+import { ProductsQueryParams } from './query-params/products-query-params'
 
 @ApiTags('Productos')
 @Controller('productos')
@@ -35,12 +38,20 @@ export class ProductsController {
     return this.productsService.getOne(productoId)
   }
 
+  @Get('obtener-productos')
+  @ApiOperation({
+    summary: 'Obtiene todos los productos',
+  })
+  async getAll(@Query() params: SearchStatusQueryParamsDto) {
+    return this.productsService.getAll(params)
+  }
+
   @Get('obtener-productos-disponibles')
   @ApiOperation({
     summary: 'Obtiene todos los productos disponibles',
   })
-  async getActives() {
-    return this.productsService.getActiveProducts()
+  async getActives(@Query() params: ProductsQueryParams) {
+    return this.productsService.getActiveProducts(params)
   }
 
   @Patch(':productoID/actualizar-producto')

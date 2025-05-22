@@ -1,7 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { Categoria } from '@prisma/client'
 import { Type } from 'class-transformer'
-import { IsEnum, IsInt, IsNumber, IsPositive, IsString } from 'class-validator'
+import {
+  IsBoolean,
+  IsEnum,
+  IsInt,
+  IsNumber,
+  IsOptional,
+  IsPositive,
+  IsString,
+} from 'class-validator'
 
 export class CreateProductDto {
   @IsString({ message: 'El nombre del producto debe ser una cadena de texto' })
@@ -19,10 +27,6 @@ export class CreateProductDto {
   )
   precio: number
 
-  @IsPositive({ message: 'El stock del producto debe ser un número positivo' })
-  @IsInt({ message: 'El stock del producto debe ser un número entero' })
-  stock: number
-
   @IsPositive({
     message: 'El limite de orden del producto debe ser un número positivo',
   })
@@ -34,4 +38,9 @@ export class CreateProductDto {
   @ApiProperty({ enum: Categoria })
   @IsEnum(Categoria, { message: 'La categoria no es válida' })
   categoria: Categoria
+
+  @Type(() => Boolean)
+  @IsBoolean({ message: 'El estado habilitado debe ser un valor booleano.' })
+  @IsOptional()
+  habilitado?: boolean
 }

@@ -17,7 +17,7 @@ const class_transformer_1 = require("class-transformer");
 const class_validator_1 = require("class-validator");
 class CreateProductDto {
     static _OPENAPI_METADATA_FACTORY() {
-        return { nombre: { required: true, type: () => String }, descripcion: { required: true, type: () => String }, precio: { required: true, type: () => Number }, stock: { required: true, type: () => Number, minimum: 1 }, limite_de_orden: { required: true, type: () => Number, minimum: 1 }, categoria: { required: true, type: () => Object } };
+        return { nombre: { required: true, type: () => String }, descripcion: { required: true, type: () => String }, precio: { required: true, type: () => Number }, limite_de_orden: { required: true, type: () => Number, minimum: 1 }, categoria: { required: true, type: () => Object }, habilitado: { required: false, type: () => Boolean } };
     }
 }
 exports.CreateProductDto = CreateProductDto;
@@ -37,11 +37,6 @@ __decorate([
     __metadata("design:type", Number)
 ], CreateProductDto.prototype, "precio", void 0);
 __decorate([
-    (0, class_validator_1.IsPositive)({ message: 'El stock del producto debe ser un número positivo' }),
-    (0, class_validator_1.IsInt)({ message: 'El stock del producto debe ser un número entero' }),
-    __metadata("design:type", Number)
-], CreateProductDto.prototype, "stock", void 0);
-__decorate([
     (0, class_validator_1.IsPositive)({
         message: 'El limite de orden del producto debe ser un número positivo',
     }),
@@ -55,4 +50,10 @@ __decorate([
     (0, class_validator_1.IsEnum)(client_1.Categoria, { message: 'La categoria no es válida' }),
     __metadata("design:type", String)
 ], CreateProductDto.prototype, "categoria", void 0);
+__decorate([
+    (0, class_transformer_1.Type)(() => Boolean),
+    (0, class_validator_1.IsBoolean)({ message: 'El estado habilitado debe ser un valor booleano.' }),
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", Boolean)
+], CreateProductDto.prototype, "habilitado", void 0);
 //# sourceMappingURL=create-product.dto.js.map

@@ -17,9 +17,11 @@ const openapi = require("@nestjs/swagger");
 const common_1 = require("@nestjs/common");
 const swagger_1 = require("@nestjs/swagger");
 const validate_id_pipe_1 = require("../../common/pipes/validate-id.pipe");
+const search_status_query_params_1 = require("../../common/query-params/search-status-query-params");
 const products_service_1 = require("./products.service");
 const create_product_dto_1 = require("./dto/create-product.dto");
 const update_product_dto_1 = require("./dto/update-product.dto");
+const products_query_params_1 = require("./query-params/products-query-params");
 let ProductsController = class ProductsController {
     constructor(productsService) {
         this.productsService = productsService;
@@ -30,8 +32,11 @@ let ProductsController = class ProductsController {
     async getOne(productoId) {
         return this.productsService.getOne(productoId);
     }
-    async getActives() {
-        return this.productsService.getActiveProducts();
+    async getAll(params) {
+        return this.productsService.getAll(params);
+    }
+    async getActives(params) {
+        return this.productsService.getActiveProducts(params);
     }
     async update(productId, updateProductDto) {
         const admin = await this.productsService.update(productId, updateProductDto);
@@ -66,13 +71,25 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ProductsController.prototype, "getOne", null);
 __decorate([
+    (0, common_1.Get)('obtener-productos'),
+    (0, swagger_1.ApiOperation)({
+        summary: 'Obtiene todos los productos',
+    }),
+    openapi.ApiResponse({ status: 200 }),
+    __param(0, (0, common_1.Query)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [search_status_query_params_1.SearchStatusQueryParamsDto]),
+    __metadata("design:returntype", Promise)
+], ProductsController.prototype, "getAll", null);
+__decorate([
     (0, common_1.Get)('obtener-productos-disponibles'),
     (0, swagger_1.ApiOperation)({
         summary: 'Obtiene todos los productos disponibles',
     }),
     openapi.ApiResponse({ status: 200 }),
+    __param(0, (0, common_1.Query)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [products_query_params_1.ProductsQueryParams]),
     __metadata("design:returntype", Promise)
 ], ProductsController.prototype, "getActives", null);
 __decorate([

@@ -20,7 +20,7 @@ export class RangeDateQueryParams extends PaginatedParamsDto {
 
     if (!isValid(date)) {
       throw new BadRequestException(
-        `El parámetro start_date no es una fecha válida. Usa el formato yyyy-MM-dd.`,
+        `El parámetro de fecha inicial no es una fecha válida. Usa el formato yyyy-MM-dd.`,
       )
     }
 
@@ -41,7 +41,7 @@ export class RangeDateQueryParams extends PaginatedParamsDto {
 
     if (!isValid(date)) {
       throw new BadRequestException(
-        `El parámetro start_date no es una fecha válida. Usa el formato yyyy-MM-dd.`,
+        `El parámetro fecha final no es una fecha válida. Usa el formato yyyy-MM-dd.`,
       )
     }
 

@@ -42,28 +42,34 @@ let UsersService = class UsersService {
             throw new common_1.InternalServerErrorException('Hubo un error al crear el usuario');
         }
     }
-    async findAll({ query, page, page_size, status, }) {
+    async findAll({ query, page, page_size, enable, }) {
         const pages = page || 1;
         const skip = (pages - 1) * page_size;
-        return await this.db.usuario.findMany({
-            omit: {
-                contraseña: true,
-                archivado: true,
-            },
-            where: {
-                AND: [
-                    query
-                        ? {
-                            nombre: { contains: query, mode: client_1.Prisma.QueryMode.insensitive },
-                        }
-                        : {},
-                    status !== null && status !== undefined ? { habilitado: status } : {},
-                ],
-                archivado: false,
-            },
-            skip: skip,
-            take: page_size,
-        });
+        const where = {
+            AND: [
+                query
+                    ? {
+                        nombre: { contains: query, mode: client_1.Prisma.QueryMode.insensitive },
+                    }
+                    : {},
+                enable !== null && enable !== undefined ? { habilitado: enable } : {},
+            ],
+            archivado: false,
+        };
+        const [data, total] = await Promise.all([
+            this.db.usuario.findMany({
+                omit: {
+                    contraseña: true,
+                    archivado: true,
+                },
+                where,
+                skip: skip,
+                take: page_size,
+            }),
+            this.db.usuario.count({ where }),
+        ]);
+        const totalPages = Math.ceil(total / page_size);
+        return { data, total, totalPages };
     }
     async getOne(id) {
         return await this.db.usuario.findFirst({
@@ -89,6 +95,13 @@ let UsersService = class UsersService {
         });
     }
     async update(id, updateUserDto) {
+        let nombre = null;
+        let apellidos = null;
+        if (updateUserDto.dni) {
+            const reniec = await this.reniecService.getInfoDNI(updateUserDto.dni);
+            nombre = reniec.nombres;
+            apellidos = reniec.apellidoPaterno + ' ' + reniec.apellidoMaterno;
+        }
         try {
             const updatedUser = await this.db.usuario.update({
                 where: {
@@ -97,6 +110,8 @@ let UsersService = class UsersService {
                 },
                 data: {
                     ...updateUserDto,
+                    ...(nombre && { nombre }),
+                    ...(apellidos && { apellidos }),
                 },
             });
             return updatedUser;

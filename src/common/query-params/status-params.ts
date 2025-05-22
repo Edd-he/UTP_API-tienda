@@ -5,8 +5,8 @@ import { Transform } from 'class-transformer'
 import { PaginatedParamsDto } from './paginated-params'
 
 enum StatusEnum {
-  en = 'en',
-  dis = 'dis',
+  true = 'true',
+  false = 'false',
   all = 'all',
 }
 
@@ -19,18 +19,19 @@ export class StatusParamsDto extends PaginatedParamsDto {
   })
   @IsOptional()
   @IsBoolean({
-    message: 'el status debe ser uno de los siguientes valores = en, dis, all',
+    message:
+      'el estado habilitado debe ser uno de los siguientes valores = true, false, all',
   })
   @Transform(({ value }) => {
     if (value === undefined || value === null || value === '') {
       return null
     }
 
-    if (value === 'en') return true
-    if (value === 'dis') return false
+    if (value === 'true') return true
+    if (value === 'false') return false
     if (value === 'all') return null
 
     return value
   })
-  status?: boolean | null = null
+  enable?: boolean | null = null
 }

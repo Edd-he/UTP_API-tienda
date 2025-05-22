@@ -14,7 +14,7 @@ const openapi = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
 class SignInDto {
     static _OPENAPI_METADATA_FACTORY() {
-        return { correo: { required: true, type: () => String, format: "email" }, contraseña: { required: true, type: () => String, minLength: 8, maxLength: 20 } };
+        return { correo: { required: true, type: () => String, format: "email" }, contraseña: { required: true, type: () => String, minLength: 5, maxLength: 20 } };
     }
 }
 exports.SignInDto = SignInDto;
@@ -24,7 +24,7 @@ __decorate([
 ], SignInDto.prototype, "correo", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),
-    (0, class_validator_1.Length)(8, 20, {
+    (0, class_validator_1.Length)(5, 20, {
         message: 'La contraseña debe tener entre 8 y 20 caracteres.',
     }),
     __metadata("design:type", String)
