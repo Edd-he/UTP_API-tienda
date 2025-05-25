@@ -24,9 +24,9 @@ export class InventoryController {
     return this.inventoryService.getInventoryToday(params)
   }
 
-  @Get('cron/generate-inventory')
+  @Get('generar-inventario')
   @ApiExcludeEndpoint()
-  async generateInventory(@Headers('Authorization') auth: string) {
+  async generateInventory(@Headers('authorization') auth: string) {
     if (auth !== `Bearer ${envs.cronSecret}`) throw new UnauthorizedException()
 
     await this.inventoryService.generateInventory()

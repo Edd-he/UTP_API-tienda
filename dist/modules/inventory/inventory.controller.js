@@ -27,7 +27,7 @@ let InventoryController = class InventoryController {
         return this.inventoryService.getInventoryToday(params);
     }
     async generateInventory(auth) {
-        if (auth !== envs_1.envs.cronSecret)
+        if (auth !== `Bearer ${envs_1.envs.cronSecret}`)
             throw new common_1.UnauthorizedException();
         await this.inventoryService.generateInventory();
     }
@@ -45,10 +45,10 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], InventoryController.prototype, "findAll", null);
 __decorate([
-    (0, common_1.Get)('cron/generate-inventory'),
+    (0, common_1.Get)('generar-inventario'),
     (0, swagger_1.ApiExcludeEndpoint)(),
     openapi.ApiResponse({ status: 200 }),
-    __param(0, (0, common_1.Headers)('Authorization')),
+    __param(0, (0, common_1.Headers)('authorization')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
