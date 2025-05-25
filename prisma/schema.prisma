@@ -37,19 +37,32 @@ model Orden_Item {
 }
 
 model Producto {
-  id              Int          @id @default(autoincrement())
-  creado          DateTime     @default(now())
-  actualizado     DateTime     @updatedAt
-  nombre          String       @db.VarChar(100)
-  descripcion     String       @db.VarChar(1000)
-  precio          Decimal      @db.Decimal(10, 2)
-  stock           Int          @default(0)
-  limite_de_orden Int          @default(0)
+  id              Int            @id @default(autoincrement())
+  creado          DateTime       @default(now())
+  actualizado     DateTime       @updatedAt
+  nombre          String         @db.VarChar(100)
+  descripcion     String         @db.VarChar(1000)
+  precio          Decimal        @db.Decimal(10, 2)
+  limite_de_orden Int            @default(0)
   categoria       Categoria
-  url             String       @default("PENDIENTE")
-  habilitado      Boolean      @default(true)
-  archivado       Boolean      @default(false)
+  url             String         @default("PENDIENTE")
+  habilitado      Boolean        @default(true)
+  archivado       Boolean        @default(false)
   Orden_Item      Orden_Item[]
+  Stock_Diario    Stock_Diario[]
+}
+
+model Stock_Diario {
+  id             Int       @id @default(autoincrement())
+  producto       Producto  @relation(fields: [producto_id], references: [id])
+  producto_id    Int
+  fecha          DateTime
+  stock_inicial  Int       @default(0)
+  stock          Int       @default(0)
+  ultima_salida  DateTime? 
+  ultima_entrada DateTime?
+
+  @@unique([producto_id, fecha])
 }
 
 model Usuario {

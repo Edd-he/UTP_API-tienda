@@ -1,4 +1,8 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common'
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common'
 import { PrismaService } from '@providers/prisma/prisma.service'
 import { PrismaException } from '@providers/prisma/exceptions/prisma.exception'
 import { SearchStatusQueryParamsDto } from '@common/query-params/search-status-query-params'
@@ -132,6 +136,8 @@ export class ProductsService {
         archivado: false,
       },
     })
+    if (!product)
+      throw new NotFoundException(`El producto con el id ${id} no existe`)
 
     return {
       ...product,
@@ -205,5 +211,21 @@ export class ProductsService {
         'Hubo un error al actualizar el stock',
       )
     }
+  }
+  async getProductsByIds(ids: number[]) {
+    return await this.db.producto.findMany({
+      where: {
+        id: {
+          in: ids,
+        },
+      },
+      omit: {
+        creado: true,
+        actualizado: true,
+        url: true,
+        descripcion: true,
+        categoria: true,
+      },
+    })
   }
 }

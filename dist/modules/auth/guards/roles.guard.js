@@ -30,7 +30,7 @@ let RolesGuard = class RolesGuard {
             context.getClass(),
         ]);
         const { user } = context.switchToHttp().getRequest();
-        const isValidRole = requiredRoles.includes(user.role);
+        const isValidRole = requiredRoles.includes(user.rol);
         if (!isValidRole)
             throw new common_1.UnauthorizedException('No tienes permisos para acceder a este recurso');
         return isValidRole;

@@ -97,4 +97,13 @@ export declare class ProductsService {
         stock: number;
         url: string;
     }>;
+    getProductsByIds(ids: number[]): Promise<{
+        habilitado: boolean;
+        id: number;
+        nombre: string;
+        archivado: boolean;
+        precio: Prisma.Decimal;
+        limite_de_orden: number;
+        stock: number;
+    }[]>;
 }

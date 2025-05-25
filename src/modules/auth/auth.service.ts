@@ -18,9 +18,6 @@ export class AuthService {
 
   async signIn({ correo, contraseña }: SignInDto) {
     const user = await this.userService.getOneByEmail(correo)
-    if (!user) {
-      throw new UnauthorizedException('El usuario no existe')
-    }
 
     const match = await bcrypt.compare(contraseña, user.contraseña)
 

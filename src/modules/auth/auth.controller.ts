@@ -31,7 +31,7 @@ export class AuthController {
   }
 
   @ApiBearerAuth()
-  @Auth(['ADMINISTRADOR'])
+  @Auth(['ADMINISTRADOR', 'ESTUDIANTE'])
   @Get('/perfil')
   @ApiOperation({
     summary: 'Obtiene información del usuario mediante el token de acceso',

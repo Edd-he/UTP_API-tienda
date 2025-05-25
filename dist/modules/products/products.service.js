@@ -121,6 +121,8 @@ let ProductsService = class ProductsService {
                 archivado: false,
             },
         });
+        if (!product)
+            throw new common_1.NotFoundException(`El producto con el id ${id} no existe`);
         return {
             ...product,
             creado: (0, format_date_1.formatDate)(product.creado),
@@ -188,6 +190,22 @@ let ProductsService = class ProductsService {
                 throw new prisma_exception_1.PrismaException(e);
             throw new common_1.InternalServerErrorException('Hubo un error al actualizar el stock');
         }
+    }
+    async getProductsByIds(ids) {
+        return await this.db.producto.findMany({
+            where: {
+                id: {
+                    in: ids,
+                },
+            },
+            omit: {
+                creado: true,
+                actualizado: true,
+                url: true,
+                descripcion: true,
+                categoria: true,
+            },
+        });
     }
 };
 exports.ProductsService = ProductsService;

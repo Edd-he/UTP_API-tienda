@@ -23,9 +23,6 @@ let AuthService = class AuthService {
     async register() { }
     async signIn({ correo, contraseña }) {
         const user = await this.userService.getOneByEmail(correo);
-        if (!user) {
-            throw new common_1.UnauthorizedException('El usuario no existe');
-        }
         const match = await bcrypt.compare(contraseña, user.contraseña);
         if (!match)
             throw new common_1.UnauthorizedException('La contraseña es incorrecta');

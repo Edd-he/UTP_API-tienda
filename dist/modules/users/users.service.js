@@ -95,6 +95,8 @@ let UsersService = class UsersService {
                 archivado: false,
             },
         });
+        if (!user)
+            throw new common_1.NotFoundException(`El usuario del id ${id} no existe`);
         return {
             ...user,
             creado: (0, format_date_1.formatDate)(user.creado),
@@ -102,7 +104,7 @@ let UsersService = class UsersService {
         };
     }
     async getOneByEmail(correo) {
-        return await this.db.usuario.findFirst({
+        const user = await this.db.usuario.findFirst({
             omit: {
                 archivado: true,
             },
@@ -111,6 +113,9 @@ let UsersService = class UsersService {
                 archivado: false,
             },
         });
+        if (!user)
+            throw new common_1.NotFoundException(`El usuario con el correo ${correo} no existe`);
+        return user;
     }
     async update(id, updateUserDto) {
         let nombre = null;

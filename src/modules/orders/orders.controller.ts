@@ -1,21 +1,22 @@
 import { Controller, Get, Post, Body, Param, Query } from '@nestjs/common'
-import { ApiOperation, ApiTags } from '@nestjs/swagger'
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger'
 import { UserSession } from '@modules/auth/decorators/user-session.decorator'
 import { IUserSession } from '@modules/auth/interfaces/user-session.interface'
-import { SearchQueryParamsDto } from '@common/query-params/search-query-params'
 import { ValidateId } from '@common/pipes/validate-id.pipe'
+import { Estado } from '@prisma/client'
 import { Auth } from '@modules/auth/decorators/auth.decorator'
-import { Estado, Rol } from '@prisma/client'
 
 import { OrdersService } from './orders.service'
 import { CreateOrderDto } from './dto/create-order.dto'
+import { OrdersQueryParams } from './query-params/orders-query-params'
 
 @ApiTags('Ordenes')
 @Controller('ordenes')
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
 
-  @Auth([Rol.ESTUDIANTE, Rol.PROFESOR])
+  @ApiBearerAuth()
+  @Auth(['ADMINISTRADOR', 'ESTUDIANTE'])
   @Post('crear-orden')
   @ApiOperation({
     summary: 'Crea una orden',
@@ -31,8 +32,29 @@ export class OrdersController {
   @ApiOperation({
     summary: 'Obtiene todas las ordenes',
   })
-  findAll(@Query() params: SearchQueryParamsDto) {
+  findAll(@Query() params: OrdersQueryParams) {
     return this.ordersService.findAll(params)
+  }
+
+  @Get('obtener-ordenes-hoy')
+  @ApiOperation({
+    summary: 'Obtiene todas las ordenes del dia',
+  })
+  findAllToday(@Query() params: OrdersQueryParams) {
+    return this.ordersService.findAllToday(params)
+  }
+
+  @ApiBearerAuth()
+  @Auth(['ESTUDIANTE', 'PROFESOR'])
+  @Get('obtener-ordenes-usuario')
+  @ApiOperation({
+    summary: 'Obtiene todas las ordenes por usuario',
+  })
+  findAllByUser(
+    @UserSession() user: IUserSession,
+    @Query() params: OrdersQueryParams,
+  ) {
+    return this.ordersService.findAllByUser(user.id, params)
   }
 
   @Get(':id/obtener-orden')

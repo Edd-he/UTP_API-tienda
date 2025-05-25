@@ -51,7 +51,7 @@ __decorate([
 ], AuthController.prototype, "signIn", null);
 __decorate([
     (0, swagger_1.ApiBearerAuth)(),
-    (0, auth_decorator_1.Auth)(['ADMINISTRADOR']),
+    (0, auth_decorator_1.Auth)(['ADMINISTRADOR', 'ESTUDIANTE']),
     (0, common_1.Get)('/perfil'),
     (0, swagger_1.ApiOperation)({
         summary: 'Obtiene información del usuario mediante el token de acceso',

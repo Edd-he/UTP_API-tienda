@@ -1,4 +1,8 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common'
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common'
 import { PrismaService } from '@providers/prisma/prisma.service'
 import { ReniecService } from '@providers/reniec/reniec.service'
 import { IReniecResponse } from '@providers/reniec/interfaces/reniec-response.interface'
@@ -104,6 +108,8 @@ export class UsersService {
       },
     })
 
+    if (!user) throw new NotFoundException(`El usuario del id ${id} no existe`)
+
     return {
       ...user,
       creado: formatDate(user.creado),
@@ -112,7 +118,7 @@ export class UsersService {
   }
 
   async getOneByEmail(correo: string) {
-    return await this.db.usuario.findFirst({
+    const user = await this.db.usuario.findFirst({
       omit: {
         archivado: true,
       },
@@ -121,6 +127,12 @@ export class UsersService {
         archivado: false,
       },
     })
+    if (!user)
+      throw new NotFoundException(
+        `El usuario con el correo ${correo} no existe`,
+      )
+
+    return user
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
