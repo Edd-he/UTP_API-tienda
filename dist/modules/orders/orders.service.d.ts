@@ -2,12 +2,14 @@ import { PrismaService } from '@providers/prisma/prisma.service';
 import { IUserSession } from '@auth/interfaces/user-session.interface';
 import { Estado, Prisma } from '@prisma/client';
 import { ProductsService } from '@modules/products/products.service';
+import { InventoryService } from '@modules/inventory/inventory.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { OrdersQueryParams } from './query-params/orders-query-params';
 export declare class OrdersService {
     private readonly db;
     private readonly productService;
-    constructor(db: PrismaService, productService: ProductsService);
+    private readonly inventoryService;
+    constructor(db: PrismaService, productService: ProductsService, inventoryService: InventoryService);
     create(createOrderDto: CreateOrderDto, session: IUserSession): Promise<{
         creado: string;
         hora_programada: string;
@@ -20,22 +22,22 @@ export declare class OrdersService {
     findAll({ page_size, page, query, status }: OrdersQueryParams): Promise<{
         creado: string;
         hora_programada: string;
-        Usuario: {
-            dni: string;
-            correo: string;
-            id: number;
-            nombre: string;
-            apellidos: string;
-            rol: import(".prisma/client").$Enums.Rol;
-        };
         Orden_Item: {
-            id: number;
             precio: Prisma.Decimal;
+            id: number;
             producto_id: number;
             nombre_producto: string;
             cantidad: number;
             orden_id: number;
         }[];
+        Usuario: {
+            nombre: string;
+            id: number;
+            dni: string;
+            apellidos: string;
+            correo: string;
+            rol: import(".prisma/client").$Enums.Rol;
+        };
         id: number;
         monto_total: Prisma.Decimal;
         transaccion: string;
@@ -45,22 +47,22 @@ export declare class OrdersService {
     findAllToday({ page_size, page, query, status }: OrdersQueryParams): Promise<{
         creado: string;
         hora_programada: string;
-        Usuario: {
-            dni: string;
-            correo: string;
-            id: number;
-            nombre: string;
-            apellidos: string;
-            rol: import(".prisma/client").$Enums.Rol;
-        };
         Orden_Item: {
-            id: number;
             precio: Prisma.Decimal;
+            id: number;
             producto_id: number;
             nombre_producto: string;
             cantidad: number;
             orden_id: number;
         }[];
+        Usuario: {
+            nombre: string;
+            id: number;
+            dni: string;
+            apellidos: string;
+            correo: string;
+            rol: import(".prisma/client").$Enums.Rol;
+        };
         id: number;
         monto_total: Prisma.Decimal;
         transaccion: string;
@@ -71,8 +73,8 @@ export declare class OrdersService {
         creado: string;
         hora_programada: string;
         Orden_Item: {
-            id: number;
             precio: Prisma.Decimal;
+            id: number;
             producto_id: number;
             nombre_producto: string;
             cantidad: number;
@@ -87,22 +89,22 @@ export declare class OrdersService {
     findOne(id: number): Promise<{
         creado: string;
         hora_programada: string;
-        Usuario: {
-            dni: string;
-            correo: string;
-            id: number;
-            nombre: string;
-            apellidos: string;
-            rol: import(".prisma/client").$Enums.Rol;
-        };
         Orden_Item: {
-            id: number;
             precio: Prisma.Decimal;
+            id: number;
             producto_id: number;
             nombre_producto: string;
             cantidad: number;
             orden_id: number;
         }[];
+        Usuario: {
+            nombre: string;
+            id: number;
+            dni: string;
+            apellidos: string;
+            correo: string;
+            rol: import(".prisma/client").$Enums.Rol;
+        };
         id: number;
         monto_total: Prisma.Decimal;
         transaccion: string;

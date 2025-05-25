@@ -9,24 +9,24 @@ export declare class UsersController {
     createUser(session: IUserSession, createUserDto: CreateUserDto): Promise<{
         creado: string;
         actualizado: string;
-        dni: string;
-        correo: string;
+        nombre: string;
         habilitado: boolean;
         id: number;
-        nombre: string;
+        dni: string;
         apellidos: string;
+        correo: string;
         rol: import(".prisma/client").$Enums.Rol;
     }>;
     getAllUsers(query: SearchStatusQueryParamsDto): Promise<{
         data: {
             creado: string;
             actualizado: string;
-            dni: string;
-            correo: string;
+            nombre: string;
             habilitado: boolean;
             id: number;
-            nombre: string;
+            dni: string;
             apellidos: string;
+            correo: string;
             rol: import(".prisma/client").$Enums.Rol;
         }[];
         total: number;
@@ -36,23 +36,23 @@ export declare class UsersController {
     getOneUser(userId: number): Promise<{
         creado: string;
         actualizado: string;
-        dni: string;
-        correo: string;
+        nombre: string;
         habilitado: boolean;
         id: number;
-        nombre: string;
+        dni: string;
         apellidos: string;
+        correo: string;
         rol: import(".prisma/client").$Enums.Rol;
     }>;
     updateUser(userId: number, session: IUserSession, updateUserDto: UpdateUserDto): Promise<{
         creado: string;
         actualizado: string;
-        dni: string;
-        correo: string;
+        nombre: string;
         habilitado: boolean;
         id: number;
-        nombre: string;
+        dni: string;
         apellidos: string;
+        correo: string;
         rol: import(".prisma/client").$Enums.Rol;
     }>;
     removeUser(userId: number): Promise<{

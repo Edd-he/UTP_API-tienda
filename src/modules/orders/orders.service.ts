@@ -10,6 +10,8 @@ import { generateUUIDV7 } from '@common/utils/uuid'
 import { Estado, Prisma } from '@prisma/client'
 import { ProductsService } from '@modules/products/products.service'
 import { formatDate } from '@common/utils/format-date'
+import { InventoryService } from '@modules/inventory/inventory.service'
+import { DateTime } from 'luxon'
 
 import { CreateOrderDto } from './dto/create-order.dto'
 import { OrdersQueryParams } from './query-params/orders-query-params'
@@ -20,6 +22,7 @@ export class OrdersService {
   constructor(
     private readonly db: PrismaService,
     private readonly productService: ProductsService,
+    private readonly inventoryService: InventoryService,
   ) {}
   async create(createOrderDto: CreateOrderDto, session: IUserSession) {
     return await this.db.$transaction(async (prisma) => {
@@ -42,7 +45,7 @@ export class OrdersService {
 
       await Promise.all(
         createOrderDto.orderItems.map(async (item) => {
-          await this.productService.updateProductStock(
+          await this.inventoryService.updateProductStock(
             item.producto_id,
             item.cantidad,
             'SALIDA',
@@ -101,15 +104,9 @@ export class OrdersService {
   }
 
   async findAllToday({ page_size, page, query, status }: OrdersQueryParams) {
-    const now = new Date()
-    console.log(now)
-    const today = new Date(
-      Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()),
-    )
-    console.log(today)
-    const tomorrow = new Date(today)
-    tomorrow.setUTCDate(tomorrow.getUTCDate() + 1)
-    console.log(tomorrow)
+    const today = DateTime.now().setZone('America/Lima').startOf('day')
+
+    const tomorrow = today.plus({ days: 1 })
     const pages = page || 1
     const skip = (pages - 1) * page_size
     const orders = await this.db.orden.findMany({
@@ -125,8 +122,8 @@ export class OrdersService {
             : {},
         ],
         hora_programada: {
-          gte: today,
-          lt: tomorrow,
+          gte: today.toJSDate(),
+          lt: tomorrow.toJSDate(),
         },
         estado: status as Estado,
       },
@@ -238,13 +235,14 @@ export class OrdersService {
   ) {
     const productIds = orderItems.map((item) => item.producto_id)
     const products = await this.productService.getProductsByIds(productIds)
-
+    const stocks = await this.inventoryService.getStocksByIds(productIds)
     const productMap = new Map(products.map((p) => [p.id, p]))
-
+    const inventoryMap = new Map(stocks.map((s) => [s.producto_id, s]))
     let total = 0
 
     for (const item of orderItems) {
       const product = productMap.get(item.producto_id)
+      const stock = inventoryMap.get(item.producto_id)
       if (!product)
         throw new NotFoundException(
           `El producto con ID ${item.producto_id} no fue encontrado`,
@@ -260,11 +258,11 @@ export class OrdersService {
           `El precio no coincide para el producto con ID ${item.producto_id}`,
         )
 
-      if (item.cantidad > product.stock)
+      if (item.cantidad > stock.stock) {
         throw new BadRequestException(
-          `La cantidad solicitada excede el stock del producto con ID ${item.producto_id}`,
+          `La cantidad solicitada excede stock actual del producto con ID ${item.producto_id}`,
         )
-
+      }
       if (item.cantidad > product.limite_de_orden)
         throw new BadRequestException(
           `La cantidad solicitada excede el límite de orden del producto con ID ${item.producto_id}`,

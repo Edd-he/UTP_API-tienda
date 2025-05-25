@@ -6,20 +6,20 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.OrdersModule = void 0;
+exports.InventoryModule = void 0;
 const common_1 = require("@nestjs/common");
 const products_module_1 = require("../products/products.module");
-const inventory_module_1 = require("../inventory/inventory.module");
-const orders_service_1 = require("./orders.service");
-const orders_controller_1 = require("./orders.controller");
-let OrdersModule = class OrdersModule {
+const inventory_service_1 = require("./inventory.service");
+const inventory_controller_1 = require("./inventory.controller");
+let InventoryModule = class InventoryModule {
 };
-exports.OrdersModule = OrdersModule;
-exports.OrdersModule = OrdersModule = __decorate([
+exports.InventoryModule = InventoryModule;
+exports.InventoryModule = InventoryModule = __decorate([
     (0, common_1.Module)({
-        imports: [products_module_1.ProductsModule, inventory_module_1.InventoryModule],
-        controllers: [orders_controller_1.OrdersController],
-        providers: [orders_service_1.OrdersService],
+        exports: [inventory_service_1.InventoryService],
+        imports: [products_module_1.ProductsModule],
+        controllers: [inventory_controller_1.InventoryController],
+        providers: [inventory_service_1.InventoryService],
     })
-], OrdersModule);
-//# sourceMappingURL=orders.module.js.map
+], InventoryModule);
+//# sourceMappingURL=inventory.module.js.map

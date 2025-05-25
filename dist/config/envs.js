@@ -13,11 +13,12 @@ const envSchema = joi
     CLOUDINARY_NAME: joi.string().required(),
     CLOUDINARY_API_KEY: joi.string().required(),
     CLOUDINARY_API_SECRET: joi.string().required(),
+    CRON_SECRET: joi.string().required(),
 })
     .unknown(true);
 const { error, value } = envSchema.validate(process.env);
 if (error) {
-    throw new Error(`Config validation error: ${error.message}`);
+    throw new Error(`Config error: ${error.message}`);
 }
 const envVariables = value;
 exports.envs = {
@@ -29,5 +30,6 @@ exports.envs = {
     cloudinaryName: envVariables.CLOUDINARY_NAME,
     cloudinaryApiKey: envVariables.CLOUDINARY_API_KEY,
     cloudinaryApiSecret: envVariables.CLOUDINARY_API_SECRET,
+    cronSecret: envVariables.CRON_SECRET,
 };
 //# sourceMappingURL=envs.js.map

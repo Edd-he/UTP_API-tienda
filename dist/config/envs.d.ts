@@ -8,4 +8,5 @@ export declare const envs: {
     cloudinaryName: string;
     cloudinaryApiKey: string;
     cloudinaryApiSecret: string;
+    cronSecret: string;
 };

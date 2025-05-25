@@ -10,28 +10,26 @@ export declare class ProductsService {
     create(createProductDto: CreateProductDto): Promise<{
         creado: string;
         actualizado: string;
-        habilitado: boolean;
-        id: number;
         nombre: string;
         descripcion: string;
         precio: Prisma.Decimal;
         limite_de_orden: number;
         categoria: import(".prisma/client").$Enums.Categoria;
-        stock: number;
+        habilitado: boolean;
+        id: number;
         url: string;
     }>;
     getAll({ query, page, page_size, enable }: SearchStatusQueryParamsDto): Promise<{
         data: {
             creado: string;
             actualizado: string;
-            habilitado: boolean;
-            id: number;
             nombre: string;
             descripcion: string;
             precio: Prisma.Decimal;
             limite_de_orden: number;
             categoria: import(".prisma/client").$Enums.Categoria;
-            stock: number;
+            habilitado: boolean;
+            id: number;
             url: string;
         }[];
         total: number;
@@ -41,14 +39,13 @@ export declare class ProductsService {
         data: {
             creado: string;
             actualizado: string;
-            habilitado: boolean;
-            id: number;
             nombre: string;
             descripcion: string;
             precio: Prisma.Decimal;
             limite_de_orden: number;
             categoria: import(".prisma/client").$Enums.Categoria;
-            stock: number;
+            habilitado: boolean;
+            id: number;
             url: string;
         }[];
         total: number;
@@ -57,53 +54,40 @@ export declare class ProductsService {
     getOne(id: number): Promise<{
         creado: string;
         actualizado: string;
-        habilitado: boolean;
-        id: number;
         nombre: string;
         descripcion: string;
         precio: Prisma.Decimal;
         limite_de_orden: number;
         categoria: import(".prisma/client").$Enums.Categoria;
-        stock: number;
+        habilitado: boolean;
+        id: number;
         url: string;
     }>;
     update(id: number, updateProductDto: UpdateProductDto): Promise<{
         creado: string;
         actualizado: string;
-        habilitado: boolean;
-        id: number;
         nombre: string;
         descripcion: string;
         precio: Prisma.Decimal;
         limite_de_orden: number;
         categoria: import(".prisma/client").$Enums.Categoria;
-        stock: number;
+        habilitado: boolean;
+        id: number;
         url: string;
     }>;
     remove(id: number): Promise<{
         id: number;
         message: string;
     }>;
-    updateProductStock(productId: number, quantity: number, type: string): Promise<{
-        habilitado: boolean;
-        id: number;
-        creado: Date;
-        actualizado: Date;
-        nombre: string;
-        descripcion: string;
-        precio: Prisma.Decimal;
-        limite_de_orden: number;
-        categoria: import(".prisma/client").$Enums.Categoria;
-        stock: number;
-        url: string;
-    }>;
     getProductsByIds(ids: number[]): Promise<{
-        habilitado: boolean;
-        id: number;
         nombre: string;
-        archivado: boolean;
         precio: Prisma.Decimal;
         limite_de_orden: number;
-        stock: number;
+        habilitado: boolean;
+        id: number;
+        archivado: boolean;
+    }[]>;
+    getActiveProductsIds(): Promise<{
+        id: number;
     }[]>;
 }

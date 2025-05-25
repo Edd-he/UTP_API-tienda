@@ -17,22 +17,22 @@ export declare class OrdersController {
     findAll(params: OrdersQueryParams): Promise<{
         creado: string;
         hora_programada: string;
-        Usuario: {
-            dni: string;
-            correo: string;
-            id: number;
-            nombre: string;
-            apellidos: string;
-            rol: import(".prisma/client").$Enums.Rol;
-        };
         Orden_Item: {
-            id: number;
             precio: import("@prisma/client/runtime/library").Decimal;
+            id: number;
             producto_id: number;
             nombre_producto: string;
             cantidad: number;
             orden_id: number;
         }[];
+        Usuario: {
+            nombre: string;
+            id: number;
+            dni: string;
+            apellidos: string;
+            correo: string;
+            rol: import(".prisma/client").$Enums.Rol;
+        };
         id: number;
         monto_total: import("@prisma/client/runtime/library").Decimal;
         transaccion: string;
@@ -42,22 +42,22 @@ export declare class OrdersController {
     findAllToday(params: OrdersQueryParams): Promise<{
         creado: string;
         hora_programada: string;
-        Usuario: {
-            dni: string;
-            correo: string;
-            id: number;
-            nombre: string;
-            apellidos: string;
-            rol: import(".prisma/client").$Enums.Rol;
-        };
         Orden_Item: {
-            id: number;
             precio: import("@prisma/client/runtime/library").Decimal;
+            id: number;
             producto_id: number;
             nombre_producto: string;
             cantidad: number;
             orden_id: number;
         }[];
+        Usuario: {
+            nombre: string;
+            id: number;
+            dni: string;
+            apellidos: string;
+            correo: string;
+            rol: import(".prisma/client").$Enums.Rol;
+        };
         id: number;
         monto_total: import("@prisma/client/runtime/library").Decimal;
         transaccion: string;
@@ -68,8 +68,8 @@ export declare class OrdersController {
         creado: string;
         hora_programada: string;
         Orden_Item: {
-            id: number;
             precio: import("@prisma/client/runtime/library").Decimal;
+            id: number;
             producto_id: number;
             nombre_producto: string;
             cantidad: number;
@@ -84,22 +84,22 @@ export declare class OrdersController {
     findOne(id: number): Promise<{
         creado: string;
         hora_programada: string;
-        Usuario: {
-            dni: string;
-            correo: string;
-            id: number;
-            nombre: string;
-            apellidos: string;
-            rol: import(".prisma/client").$Enums.Rol;
-        };
         Orden_Item: {
-            id: number;
             precio: import("@prisma/client/runtime/library").Decimal;
+            id: number;
             producto_id: number;
             nombre_producto: string;
             cantidad: number;
             orden_id: number;
         }[];
+        Usuario: {
+            nombre: string;
+            id: number;
+            dni: string;
+            apellidos: string;
+            correo: string;
+            rol: import(".prisma/client").$Enums.Rol;
+        };
         id: number;
         monto_total: import("@prisma/client/runtime/library").Decimal;
         transaccion: string;

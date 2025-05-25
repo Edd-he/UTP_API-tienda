@@ -9,41 +9,38 @@ export declare class ProductsController {
     create(createProductDto: CreateProductDto): Promise<{
         creado: string;
         actualizado: string;
-        habilitado: boolean;
-        id: number;
         nombre: string;
         descripcion: string;
         precio: import("@prisma/client/runtime/library").Decimal;
         limite_de_orden: number;
         categoria: import(".prisma/client").$Enums.Categoria;
-        stock: number;
+        habilitado: boolean;
+        id: number;
         url: string;
     }>;
     getOne(productoId: number): Promise<{
         creado: string;
         actualizado: string;
-        habilitado: boolean;
-        id: number;
         nombre: string;
         descripcion: string;
         precio: import("@prisma/client/runtime/library").Decimal;
         limite_de_orden: number;
         categoria: import(".prisma/client").$Enums.Categoria;
-        stock: number;
+        habilitado: boolean;
+        id: number;
         url: string;
     }>;
     getAll(params: SearchStatusQueryParamsDto): Promise<{
         data: {
             creado: string;
             actualizado: string;
-            habilitado: boolean;
-            id: number;
             nombre: string;
             descripcion: string;
             precio: import("@prisma/client/runtime/library").Decimal;
             limite_de_orden: number;
             categoria: import(".prisma/client").$Enums.Categoria;
-            stock: number;
+            habilitado: boolean;
+            id: number;
             url: string;
         }[];
         total: number;
@@ -53,14 +50,13 @@ export declare class ProductsController {
         data: {
             creado: string;
             actualizado: string;
-            habilitado: boolean;
-            id: number;
             nombre: string;
             descripcion: string;
             precio: import("@prisma/client/runtime/library").Decimal;
             limite_de_orden: number;
             categoria: import(".prisma/client").$Enums.Categoria;
-            stock: number;
+            habilitado: boolean;
+            id: number;
             url: string;
         }[];
         total: number;
@@ -69,14 +65,13 @@ export declare class ProductsController {
     update(productId: number, updateProductDto: UpdateProductDto): Promise<{
         creado: string;
         actualizado: string;
-        habilitado: boolean;
-        id: number;
         nombre: string;
         descripcion: string;
         precio: import("@prisma/client/runtime/library").Decimal;
         limite_de_orden: number;
         categoria: import(".prisma/client").$Enums.Categoria;
-        stock: number;
+        habilitado: boolean;
+        id: number;
         url: string;
     }>;
     remove(productoId: number): Promise<{

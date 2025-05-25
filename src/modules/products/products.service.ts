@@ -189,29 +189,6 @@ export class ProductsService {
     }
   }
 
-  async updateProductStock(productId: number, quantity: number, type: string) {
-    const movementQuantity = type === 'ENTRADA' ? quantity : -quantity
-
-    try {
-      const newStock = await this.db.producto.update({
-        omit: { archivado: true },
-        where: {
-          id: productId,
-          archivado: false,
-        },
-        data: {
-          stock: { increment: movementQuantity },
-        },
-      })
-      return newStock
-    } catch (e) {
-      if (e.code) throw new PrismaException(e)
-
-      throw new InternalServerErrorException(
-        'Hubo un error al actualizar el stock',
-      )
-    }
-  }
   async getProductsByIds(ids: number[]) {
     return await this.db.producto.findMany({
       where: {
@@ -225,6 +202,18 @@ export class ProductsService {
         url: true,
         descripcion: true,
         categoria: true,
+      },
+    })
+  }
+
+  async getActiveProductsIds() {
+    return await this.db.producto.findMany({
+      where: {
+        habilitado: true,
+        archivado: false,
+      },
+      select: {
+        id: true,
       },
     })
   }

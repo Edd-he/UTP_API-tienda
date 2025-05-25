@@ -11,24 +11,24 @@ export declare class UsersService {
     create(createUserDto: CreateUserDto): Promise<{
         creado: string;
         actualizado: string;
-        dni: string;
-        correo: string;
+        nombre: string;
         habilitado: boolean;
         id: number;
-        nombre: string;
+        dni: string;
         apellidos: string;
+        correo: string;
         rol: import(".prisma/client").$Enums.Rol;
     }>;
     findAll({ query, page, page_size, enable, }: SearchStatusQueryParamsDto): Promise<{
         data: {
             creado: string;
             actualizado: string;
-            dni: string;
-            correo: string;
+            nombre: string;
             habilitado: boolean;
             id: number;
-            nombre: string;
+            dni: string;
             apellidos: string;
+            correo: string;
             rol: import(".prisma/client").$Enums.Rol;
         }[];
         total: number;
@@ -37,35 +37,35 @@ export declare class UsersService {
     getOne(id: number): Promise<{
         creado: string;
         actualizado: string;
-        dni: string;
-        correo: string;
+        nombre: string;
         habilitado: boolean;
         id: number;
-        nombre: string;
+        dni: string;
         apellidos: string;
+        correo: string;
         rol: import(".prisma/client").$Enums.Rol;
     }>;
     getOneByEmail(correo: string): Promise<{
-        dni: string;
-        correo: string;
-        contraseña: string;
+        nombre: string;
         habilitado: boolean;
         id: number;
         creado: Date;
         actualizado: Date;
-        nombre: string;
+        dni: string;
         apellidos: string;
+        correo: string;
+        contraseña: string;
         rol: import(".prisma/client").$Enums.Rol;
     }>;
     update(id: number, updateUserDto: UpdateUserDto): Promise<{
         creado: string;
         actualizado: string;
-        dni: string;
-        correo: string;
+        nombre: string;
         habilitado: boolean;
         id: number;
-        nombre: string;
+        dni: string;
         apellidos: string;
+        correo: string;
         rol: import(".prisma/client").$Enums.Rol;
     }>;
     remove(id: number): Promise<{

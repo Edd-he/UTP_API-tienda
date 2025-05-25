@@ -16,10 +16,13 @@ const uuid_1 = require("../../common/utils/uuid");
 const client_1 = require("@prisma/client");
 const products_service_1 = require("../products/products.service");
 const format_date_1 = require("../../common/utils/format-date");
+const inventory_service_1 = require("../inventory/inventory.service");
+const luxon_1 = require("luxon");
 let OrdersService = class OrdersService {
-    constructor(db, productService) {
+    constructor(db, productService, inventoryService) {
         this.db = db;
         this.productService = productService;
+        this.inventoryService = inventoryService;
     }
     async create(createOrderDto, session) {
         return await this.db.$transaction(async (prisma) => {
@@ -39,7 +42,7 @@ let OrdersService = class OrdersService {
                 },
             });
             await Promise.all(createOrderDto.orderItems.map(async (item) => {
-                await this.productService.updateProductStock(item.producto_id, item.cantidad, 'SALIDA');
+                await this.inventoryService.updateProductStock(item.producto_id, item.cantidad, 'SALIDA');
             }));
             return {
                 ...order,
@@ -90,13 +93,8 @@ let OrdersService = class OrdersService {
         return data;
     }
     async findAllToday({ page_size, page, query, status }) {
-        const now = new Date();
-        console.log(now);
-        const today = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
-        console.log(today);
-        const tomorrow = new Date(today);
-        tomorrow.setUTCDate(tomorrow.getUTCDate() + 1);
-        console.log(tomorrow);
+        const today = luxon_1.DateTime.now().setZone('America/Lima').startOf('day');
+        const tomorrow = today.plus({ days: 1 });
         const pages = page || 1;
         const skip = (pages - 1) * page_size;
         const orders = await this.db.orden.findMany({
@@ -112,8 +110,8 @@ let OrdersService = class OrdersService {
                         : {},
                 ],
                 hora_programada: {
-                    gte: today,
-                    lt: tomorrow,
+                    gte: today.toJSDate(),
+                    lt: tomorrow.toJSDate(),
                 },
                 estado: status,
             },
@@ -213,18 +211,22 @@ let OrdersService = class OrdersService {
     async validateOrderItems(monto_total, orderItems) {
         const productIds = orderItems.map((item) => item.producto_id);
         const products = await this.productService.getProductsByIds(productIds);
+        const stocks = await this.inventoryService.getStocksByIds(productIds);
         const productMap = new Map(products.map((p) => [p.id, p]));
+        const inventoryMap = new Map(stocks.map((s) => [s.producto_id, s]));
         let total = 0;
         for (const item of orderItems) {
             const product = productMap.get(item.producto_id);
+            const stock = inventoryMap.get(item.producto_id);
             if (!product)
                 throw new common_1.NotFoundException(`El producto con ID ${item.producto_id} no fue encontrado`);
             if (product.nombre !== item.nombre_producto)
                 throw new common_1.BadRequestException(`El nombre del producto no coincide para el producto con ID ${item.producto_id}`);
             if (Number(product.precio) !== item.precio)
                 throw new common_1.BadRequestException(`El precio no coincide para el producto con ID ${item.producto_id}`);
-            if (item.cantidad > product.stock)
-                throw new common_1.BadRequestException(`La cantidad solicitada excede el stock del producto con ID ${item.producto_id}`);
+            if (item.cantidad > stock.stock) {
+                throw new common_1.BadRequestException(`La cantidad solicitada excede stock actual del producto con ID ${item.producto_id}`);
+            }
             if (item.cantidad > product.limite_de_orden)
                 throw new common_1.BadRequestException(`La cantidad solicitada excede el límite de orden del producto con ID ${item.producto_id}`);
             if (product.archivado)
@@ -241,6 +243,7 @@ exports.OrdersService = OrdersService;
 exports.OrdersService = OrdersService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [prisma_service_1.PrismaService,
-        products_service_1.ProductsService])
+        products_service_1.ProductsService,
+        inventory_service_1.InventoryService])
 ], OrdersService);
 //# sourceMappingURL=orders.service.js.map

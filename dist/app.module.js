@@ -10,10 +10,12 @@ exports.AppModule = void 0;
 const common_1 = require("@nestjs/common");
 const reniec_module_1 = require("./providers/reniec/reniec.module");
 const prisma_module_1 = require("./providers/prisma/prisma.module");
-const users_module_1 = require("./modules/users/users.module");
+const schedule_1 = require("@nestjs/schedule");
 const orders_module_1 = require("./modules/orders/orders.module");
+const users_module_1 = require("./modules/users/users.module");
 const products_module_1 = require("./modules/products/products.module");
 const auth_module_1 = require("./modules/auth/auth.module");
+const inventory_module_1 = require("./modules/inventory/inventory.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -26,6 +28,8 @@ exports.AppModule = AppModule = __decorate([
             orders_module_1.OrdersModule,
             products_module_1.ProductsModule,
             auth_module_1.AuthModule,
+            inventory_module_1.InventoryModule,
+            schedule_1.ScheduleModule.forRoot(),
         ],
         controllers: [],
         providers: [],

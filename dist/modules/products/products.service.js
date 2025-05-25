@@ -170,27 +170,6 @@ let ProductsService = class ProductsService {
             throw new common_1.InternalServerErrorException('Hubo un error al archivar el producto');
         }
     }
-    async updateProductStock(productId, quantity, type) {
-        const movementQuantity = type === 'ENTRADA' ? quantity : -quantity;
-        try {
-            const newStock = await this.db.producto.update({
-                omit: { archivado: true },
-                where: {
-                    id: productId,
-                    archivado: false,
-                },
-                data: {
-                    stock: { increment: movementQuantity },
-                },
-            });
-            return newStock;
-        }
-        catch (e) {
-            if (e.code)
-                throw new prisma_exception_1.PrismaException(e);
-            throw new common_1.InternalServerErrorException('Hubo un error al actualizar el stock');
-        }
-    }
     async getProductsByIds(ids) {
         return await this.db.producto.findMany({
             where: {
@@ -204,6 +183,17 @@ let ProductsService = class ProductsService {
                 url: true,
                 descripcion: true,
                 categoria: true,
+            },
+        });
+    }
+    async getActiveProductsIds() {
+        return await this.db.producto.findMany({
+            where: {
+                habilitado: true,
+                archivado: false,
+            },
+            select: {
+                id: true,
             },
         });
     }
