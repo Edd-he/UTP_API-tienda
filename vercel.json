@@ -31,7 +31,7 @@
     "crons": [
     {
       "path": "/api/v1/inventory/cron/generate-inventory",
-      "schedule": "0 4 * * *"
+      "schedule": "0 17 * * *"
     }
   ],
     "buildCommand": "npm run build "
