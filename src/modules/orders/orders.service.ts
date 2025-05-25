@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common'
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common'
 import { PrismaService } from '@providers/prisma/prisma.service'
 import { IUserSession } from '@auth/interfaces/user-session.interface'
 import { generateUUIDV7 } from '@common/utils/uuid'
@@ -19,7 +24,7 @@ export class OrdersService {
   async create(createOrderDto: CreateOrderDto, session: IUserSession) {
     return await this.db.$transaction(async (prisma) => {
       const { orderItems, ...orderDto } = createOrderDto
-      await this.validateOrderItems(orderItems)
+      await this.validateOrderItems(orderDto.monto_total, orderItems)
 
       const order = await prisma.orden.create({
         data: {
@@ -97,14 +102,14 @@ export class OrdersService {
 
   async findAllToday({ page_size, page, query, status }: OrdersQueryParams) {
     const now = new Date()
-
+    console.log(now)
     const today = new Date(
       Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()),
     )
-
+    console.log(today)
     const tomorrow = new Date(today)
     tomorrow.setUTCDate(tomorrow.getUTCDate() + 1)
-
+    console.log(tomorrow)
     const pages = page || 1
     const skip = (pages - 1) * page_size
     const orders = await this.db.orden.findMany({
@@ -227,42 +232,60 @@ export class OrdersService {
     })
   }
 
-  private async validateOrderItems(orderItems: CreateOrderItem[]) {
+  private async validateOrderItems(
+    monto_total: number,
+    orderItems: CreateOrderItem[],
+  ) {
     const productIds = orderItems.map((item) => item.producto_id)
     const products = await this.productService.getProductsByIds(productIds)
 
     const productMap = new Map(products.map((p) => [p.id, p]))
 
+    let total = 0
+
     for (const item of orderItems) {
       const product = productMap.get(item.producto_id)
       if (!product)
-        throw new Error(`Producto ID ${item.producto_id} no encontrado`)
+        throw new NotFoundException(
+          `El producto con ID ${item.producto_id} no fue encontrado`,
+        )
 
       if (product.nombre !== item.nombre_producto)
-        throw new Error(
-          `Nombre del producto no coincide para ID ${item.producto_id}`,
+        throw new BadRequestException(
+          `El nombre del producto no coincide para el producto con ID ${item.producto_id}`,
         )
 
       if (Number(product.precio) !== item.precio)
-        throw new Error(
-          `Precio no coincide para producto ID ${item.producto_id}`,
+        throw new BadRequestException(
+          `El precio no coincide para el producto con ID ${item.producto_id}`,
         )
 
       if (item.cantidad > product.stock)
-        throw new Error(
-          `Cantidad solicitada excede el stock para producto ID ${item.producto_id}`,
+        throw new BadRequestException(
+          `La cantidad solicitada excede el stock del producto con ID ${item.producto_id}`,
         )
 
       if (item.cantidad > product.limite_de_orden)
-        throw new Error(
-          `Cantidad excede el límite de orden para producto ID ${item.producto_id}`,
+        throw new BadRequestException(
+          `La cantidad solicitada excede el límite de orden del producto con ID ${item.producto_id}`,
         )
 
       if (product.archivado)
-        throw new Error(`Producto ID ${item.producto_id} no existe`)
+        throw new ForbiddenException(
+          `El producto con ID ${item.producto_id} está archivado`,
+        )
 
       if (!product.habilitado)
-        throw new Error(`Producto ID ${item.producto_id} no está habilitado`)
+        throw new ForbiddenException(
+          `El producto con ID ${item.producto_id} no está habilitado`,
+        )
+
+      total += Number(product.precio) * item.cantidad
     }
+
+    if (Number(total.toFixed(2)) !== Number(monto_total.toFixed(2)))
+      throw new BadRequestException(
+        `El monto total ${monto_total} no coincide con el total calculado ${total}`,
+      )
   }
 }

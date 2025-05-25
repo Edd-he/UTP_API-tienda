@@ -13,8 +13,8 @@ exports.ProductsService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../../providers/prisma/prisma.service");
 const prisma_exception_1 = require("../../providers/prisma/exceptions/prisma.exception");
-const client_1 = require("@prisma/client");
 const format_date_1 = require("../../common/utils/format-date");
+const client_1 = require("@prisma/client");
 let ProductsService = class ProductsService {
     constructor(db) {
         this.db = db;

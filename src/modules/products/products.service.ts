@@ -6,8 +6,8 @@ import {
 import { PrismaService } from '@providers/prisma/prisma.service'
 import { PrismaException } from '@providers/prisma/exceptions/prisma.exception'
 import { SearchStatusQueryParamsDto } from '@common/query-params/search-status-query-params'
-import { Categoria, Prisma } from '@prisma/client'
 import { formatDate } from '@common/utils/format-date'
+import { Categoria, Prisma } from '@prisma/client'
 
 import { CreateProductDto } from './dto/create-product.dto'
 import { UpdateProductDto } from './dto/update-product.dto'
