@@ -54,123 +54,150 @@ let OrdersService = class OrdersService {
     async findAll({ page_size, page, query, status }) {
         const pages = page || 1;
         const skip = (pages - 1) * page_size;
-        const orders = await this.db.orden.findMany({
-            where: {
-                AND: [
-                    query
-                        ? {
-                            transaccion: {
-                                contains: query,
-                                mode: client_1.Prisma.QueryMode.insensitive,
-                            },
-                        }
-                        : {},
-                ],
-                estado: status,
-            },
-            include: {
-                Usuario: {
-                    omit: {
-                        contraseña: true,
-                        creado: true,
-                        actualizado: true,
-                        habilitado: true,
-                        archivado: true,
+        const where = {
+            AND: [
+                query
+                    ? {
+                        transaccion: {
+                            contains: query,
+                            mode: client_1.Prisma.QueryMode.insensitive,
+                        },
+                    }
+                    : {},
+            ],
+            estado: status,
+        };
+        const [orders, total] = await Promise.all([
+            this.db.orden.findMany({
+                where,
+                include: {
+                    Usuario: {
+                        omit: {
+                            contraseña: true,
+                            creado: true,
+                            actualizado: true,
+                            habilitado: true,
+                            archivado: true,
+                        },
                     },
+                    Orden_Item: {},
                 },
-                Orden_Item: {},
-            },
-            skip: skip,
-            take: page_size,
-        });
-        const data = orders.map((order) => {
-            return {
-                ...order,
-                creado: (0, format_date_1.formatDate)(order.creado),
-                hora_programada: (0, format_date_1.formatDate)(order.hora_programada),
-            };
-        });
-        return data;
+                skip: skip,
+                take: page_size,
+            }),
+            this.db.orden.count({
+                where,
+            }),
+        ]);
+        const data = orders.map((order) => ({
+            ...order,
+            creado: (0, format_date_1.formatDate)(order.creado),
+            hora_programada: (0, format_date_1.formatDate)(order.hora_programada),
+        }));
+        const totalPages = Math.ceil(total / page_size);
+        return {
+            data,
+            total,
+            totalPages,
+        };
     }
     async findAllToday({ page_size, page, query, status }) {
         const today = luxon_1.DateTime.now().setZone('America/Lima').startOf('day');
         const tomorrow = today.plus({ days: 1 });
         const pages = page || 1;
         const skip = (pages - 1) * page_size;
-        const orders = await this.db.orden.findMany({
-            where: {
-                AND: [
-                    query
-                        ? {
-                            transaccion: {
-                                contains: query,
-                                mode: client_1.Prisma.QueryMode.insensitive,
-                            },
-                        }
-                        : {},
-                ],
-                hora_programada: {
-                    gte: today.toJSDate(),
-                    lt: tomorrow.toJSDate(),
-                },
-                estado: status,
+        const where = {
+            AND: [
+                query
+                    ? {
+                        transaccion: {
+                            contains: query,
+                            mode: client_1.Prisma.QueryMode.insensitive,
+                        },
+                    }
+                    : {},
+            ],
+            hora_programada: {
+                gte: today.toJSDate(),
+                lt: tomorrow.toJSDate(),
             },
-            include: {
-                Usuario: {
-                    omit: {
-                        contraseña: true,
-                        creado: true,
-                        actualizado: true,
-                        habilitado: true,
-                        archivado: true,
+            estado: status,
+        };
+        const [orders, total] = await Promise.all([
+            this.db.orden.findMany({
+                where,
+                include: {
+                    Usuario: {
+                        omit: {
+                            contraseña: true,
+                            creado: true,
+                            actualizado: true,
+                            habilitado: true,
+                            archivado: true,
+                        },
                     },
+                    Orden_Item: {},
                 },
-                Orden_Item: {},
-            },
-            skip: skip,
-            take: page_size,
-        });
-        const data = orders.map((order) => {
-            return {
-                ...order,
-                creado: (0, format_date_1.formatDate)(order.creado),
-                hora_programada: (0, format_date_1.formatDate)(order.hora_programada),
-            };
-        });
-        return data;
+                skip: skip,
+                take: page_size,
+            }),
+            this.db.orden.count({
+                where,
+            }),
+        ]);
+        const data = orders.map((order) => ({
+            ...order,
+            creado: (0, format_date_1.formatDate)(order.creado),
+            hora_programada: (0, format_date_1.formatDate)(order.hora_programada),
+        }));
+        const totalPages = Math.ceil(total / page_size);
+        return {
+            data,
+            total,
+            totalPages,
+        };
     }
     async findAllByUser(userId, { page_size, page, query, status }) {
         const pages = page || 1;
         const skip = (pages - 1) * page_size;
-        const orders = await this.db.orden.findMany({
-            where: {
-                AND: [
-                    query
-                        ? {
-                            transaccion: {
-                                contains: query,
-                                mode: client_1.Prisma.QueryMode.insensitive,
-                            },
-                        }
-                        : {},
-                ],
-                estado: status,
-                usuario_id: userId,
-            },
-            include: {
-                Orden_Item: {},
-            },
-            skip: skip,
-            take: page_size,
-        });
-        const data = orders.map((order) => {
-            return {
-                ...order,
-                creado: (0, format_date_1.formatDate)(order.creado),
-                hora_programada: (0, format_date_1.formatDate)(order.hora_programada),
-            };
-        });
-        return data;
+        const where = {
+            AND: [
+                query
+                    ? {
+                        transaccion: {
+                            contains: query,
+                            mode: client_1.Prisma.QueryMode.insensitive,
+                        },
+                    }
+                    : {},
+            ],
+            estado: status,
+            usuario_id: userId,
+        };
+        const [orders, total] = await Promise.all([
+            this.db.orden.findMany({
+                where,
+                include: {
+                    Orden_Item: {},
+                },
+                skip: skip,
+                take: page_size,
+            }),
+            this.db.orden.count({
+                where,
+            }),
+        ]);
+        const data = orders.map((order) => ({
+            ...order,
+            creado: (0, format_date_1.formatDate)(order.creado),
+            hora_programada: (0, format_date_1.formatDate)(order.hora_programada),
+        }));
+        const totalPages = Math.ceil(total / page_size);
+        return {
+            data,
+            total,
+            totalPages,
+        };
     }
     async findOne(id) {
         const orden = await this.db.orden.findFirst({

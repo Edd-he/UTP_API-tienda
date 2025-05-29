@@ -15,72 +15,84 @@ export declare class OrdersController {
         usuario_id: number;
     }>;
     findAll(params: OrdersQueryParams): Promise<{
-        creado: string;
-        hora_programada: string;
-        Orden_Item: {
-            precio: import("@prisma/client/runtime/library").Decimal;
+        data: {
+            creado: string;
+            hora_programada: string;
+            Orden_Item: {
+                precio: import("@prisma/client/runtime/library").Decimal;
+                id: number;
+                producto_id: number;
+                nombre_producto: string;
+                cantidad: number;
+                orden_id: number;
+            }[];
+            Usuario: {
+                nombre: string;
+                id: number;
+                dni: string;
+                apellidos: string;
+                correo: string;
+                rol: import(".prisma/client").$Enums.Rol;
+            };
             id: number;
-            producto_id: number;
-            nombre_producto: string;
-            cantidad: number;
-            orden_id: number;
+            monto_total: import("@prisma/client/runtime/library").Decimal;
+            transaccion: string;
+            estado: import(".prisma/client").$Enums.Estado;
+            usuario_id: number;
         }[];
-        Usuario: {
-            nombre: string;
-            id: number;
-            dni: string;
-            apellidos: string;
-            correo: string;
-            rol: import(".prisma/client").$Enums.Rol;
-        };
-        id: number;
-        monto_total: import("@prisma/client/runtime/library").Decimal;
-        transaccion: string;
-        estado: import(".prisma/client").$Enums.Estado;
-        usuario_id: number;
-    }[]>;
+        total: number;
+        totalPages: number;
+    }>;
     findAllToday(params: OrdersQueryParams): Promise<{
-        creado: string;
-        hora_programada: string;
-        Orden_Item: {
-            precio: import("@prisma/client/runtime/library").Decimal;
+        data: {
+            creado: string;
+            hora_programada: string;
+            Orden_Item: {
+                precio: import("@prisma/client/runtime/library").Decimal;
+                id: number;
+                producto_id: number;
+                nombre_producto: string;
+                cantidad: number;
+                orden_id: number;
+            }[];
+            Usuario: {
+                nombre: string;
+                id: number;
+                dni: string;
+                apellidos: string;
+                correo: string;
+                rol: import(".prisma/client").$Enums.Rol;
+            };
             id: number;
-            producto_id: number;
-            nombre_producto: string;
-            cantidad: number;
-            orden_id: number;
+            monto_total: import("@prisma/client/runtime/library").Decimal;
+            transaccion: string;
+            estado: import(".prisma/client").$Enums.Estado;
+            usuario_id: number;
         }[];
-        Usuario: {
-            nombre: string;
-            id: number;
-            dni: string;
-            apellidos: string;
-            correo: string;
-            rol: import(".prisma/client").$Enums.Rol;
-        };
-        id: number;
-        monto_total: import("@prisma/client/runtime/library").Decimal;
-        transaccion: string;
-        estado: import(".prisma/client").$Enums.Estado;
-        usuario_id: number;
-    }[]>;
+        total: number;
+        totalPages: number;
+    }>;
     findAllByUser(user: IUserSession, params: OrdersQueryParams): Promise<{
-        creado: string;
-        hora_programada: string;
-        Orden_Item: {
-            precio: import("@prisma/client/runtime/library").Decimal;
+        data: {
+            creado: string;
+            hora_programada: string;
+            Orden_Item: {
+                precio: import("@prisma/client/runtime/library").Decimal;
+                id: number;
+                producto_id: number;
+                nombre_producto: string;
+                cantidad: number;
+                orden_id: number;
+            }[];
             id: number;
-            producto_id: number;
-            nombre_producto: string;
-            cantidad: number;
-            orden_id: number;
+            monto_total: import("@prisma/client/runtime/library").Decimal;
+            transaccion: string;
+            estado: import(".prisma/client").$Enums.Estado;
+            usuario_id: number;
         }[];
-        id: number;
-        monto_total: import("@prisma/client/runtime/library").Decimal;
-        transaccion: string;
-        estado: import(".prisma/client").$Enums.Estado;
-        usuario_id: number;
-    }[]>;
+        total: number;
+        totalPages: number;
+    }>;
     findOne(id: number): Promise<{
         creado: string;
         hora_programada: string;
