@@ -19,6 +19,7 @@ const search_query_params_1 = require("../../common/query-params/search-query-pa
 const swagger_1 = require("@nestjs/swagger");
 const envs_1 = require("../../config/envs");
 const inventory_service_1 = require("./inventory.service");
+const update_stock_dto_1 = require("./dto/update-stock.dto");
 let InventoryController = class InventoryController {
     constructor(inventoryService) {
         this.inventoryService = inventoryService;
@@ -38,6 +39,11 @@ let InventoryController = class InventoryController {
         catch (e) {
             return { message: 'Ya se genero el inventario diario' };
         }
+    }
+    async updateStock(updateStockDto) {
+        const { productId, quantity, type } = updateStockDto;
+        await this.inventoryService.updateProductStock(productId, quantity, type);
+        return { message: 'Stock actualizado del producto ' + productId };
     }
 };
 exports.InventoryController = InventoryController;
@@ -68,6 +74,14 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], InventoryController.prototype, "generateManualInventory", null);
+__decorate([
+    (0, common_1.Patch)('actualizar-stock'),
+    openapi.ApiResponse({ status: 200 }),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [update_stock_dto_1.UpdateStockDto]),
+    __metadata("design:returntype", Promise)
+], InventoryController.prototype, "updateStock", null);
 exports.InventoryController = InventoryController = __decorate([
     (0, swagger_1.ApiTags)('Inventario'),
     (0, common_1.Controller)('inventory'),

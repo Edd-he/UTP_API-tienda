@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Injectable,
   InternalServerErrorException,
   Logger,
@@ -125,12 +126,41 @@ export class InventoryService {
   }
 
   async updateProductStock(productId: number, quantity: number, type: string) {
-    const movementQuantity = type === 'ENTRADA' ? quantity : -quantity
-    const now = new Date()
+    const now = DateTime.now().setZone('America/Lima').startOf('day')
+    const today = now.toJSDate()
+
     try {
+      const currentInventory = await this.db.inventario_Diario.findFirst({
+        where: {
+          fecha: today,
+          producto_id: productId,
+          producto: {
+            archivado: false,
+          },
+        },
+        select: { stock: true },
+      })
+
+      if (!currentInventory)
+        throw new BadRequestException(
+          'No hay inventario registrado para este producto hoy',
+        )
+
+      let movementQuantity = 0
+      if (type === 'ENTRADA') {
+        movementQuantity = quantity
+      }
+
+      if (type === 'SALIDA') {
+        movementQuantity =
+          quantity > currentInventory.stock
+            ? -currentInventory.stock
+            : -quantity
+      }
+
       const newStock = await this.db.inventario_Diario.updateMany({
         where: {
-          fecha: now,
+          fecha: today,
           producto_id: productId,
           producto: {
             archivado: false,
@@ -139,10 +169,11 @@ export class InventoryService {
         data: {
           stock: { increment: movementQuantity },
           ...(type === 'ENTRADA'
-            ? { ultima_entrada: now }
-            : { ultima_salida: now }),
+            ? { ultima_entrada: new Date() }
+            : { ultima_salida: new Date() }),
         },
       })
+
       return newStock
     } catch (e) {
       if (e.code) throw new PrismaException(e)

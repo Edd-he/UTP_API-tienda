@@ -1,5 +1,6 @@
 import { SearchQueryParamsDto } from '@common/query-params/search-query-params';
 import { InventoryService } from './inventory.service';
+import { UpdateStockDto } from './dto/update-stock.dto';
 export declare class InventoryController {
     private readonly inventoryService;
     constructor(inventoryService: InventoryService);
@@ -21,6 +22,9 @@ export declare class InventoryController {
     }>;
     generateInventory(auth: string): Promise<void>;
     generateManualInventory(): Promise<{
+        message: string;
+    }>;
+    updateStock(updateStockDto: UpdateStockDto): Promise<{
         message: string;
     }>;
 }

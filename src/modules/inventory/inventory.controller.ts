@@ -1,7 +1,9 @@
 import {
+  Body,
   Controller,
   Get,
   Headers,
+  Patch,
   Query,
   UnauthorizedException,
 } from '@nestjs/common'
@@ -10,6 +12,7 @@ import { ApiExcludeEndpoint, ApiOperation, ApiTags } from '@nestjs/swagger'
 import { envs } from '@config/envs'
 
 import { InventoryService } from './inventory.service'
+import { UpdateStockDto } from './dto/update-stock.dto'
 
 @ApiTags('Inventario')
 @Controller('inventory')
@@ -40,5 +43,12 @@ export class InventoryController {
     } catch (e) {
       return { message: 'Ya se genero el inventario diario' }
     }
+  }
+
+  @Patch('actualizar-stock')
+  async updateStock(@Body() updateStockDto: UpdateStockDto) {
+    const { productId, quantity, type } = updateStockDto
+    await this.inventoryService.updateProductStock(productId, quantity, type)
+    return { message: 'Stock actualizado del producto ' + productId }
   }
 }
