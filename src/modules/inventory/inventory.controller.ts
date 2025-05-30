@@ -31,4 +31,14 @@ export class InventoryController {
 
     await this.inventoryService.generateInventory()
   }
+
+  @Get('generar-inventario-productos')
+  async generateManualInventory() {
+    try {
+      await this.inventoryService.generateInventory()
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (e) {
+      return { message: 'Ya se genero el inventario diario' }
+    }
+  }
 }

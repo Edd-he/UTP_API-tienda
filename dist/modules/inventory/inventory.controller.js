@@ -31,6 +31,14 @@ let InventoryController = class InventoryController {
             throw new common_1.UnauthorizedException();
         await this.inventoryService.generateInventory();
     }
+    async generateManualInventory() {
+        try {
+            await this.inventoryService.generateInventory();
+        }
+        catch (e) {
+            return { message: 'Ya se genero el inventario diario' };
+        }
+    }
 };
 exports.InventoryController = InventoryController;
 __decorate([
@@ -53,6 +61,13 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], InventoryController.prototype, "generateInventory", null);
+__decorate([
+    (0, common_1.Get)('generar-inventario-productos'),
+    openapi.ApiResponse({ status: 200 }),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], InventoryController.prototype, "generateManualInventory", null);
 exports.InventoryController = InventoryController = __decorate([
     (0, swagger_1.ApiTags)('Inventario'),
     (0, common_1.Controller)('inventory'),

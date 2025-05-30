@@ -20,9 +20,8 @@ export declare class InventoryService {
                 nombre: string;
             };
             id: number;
-            stock: number;
             producto_id: number;
-            stock_inicial: number;
+            stock: number;
         }[];
         total: number;
         totalPages: number;
@@ -31,7 +30,7 @@ export declare class InventoryService {
     remove(id: number): string;
     updateProductStock(productId: number, quantity: number, type: string): Promise<Prisma.BatchPayload>;
     getStocksByIds(ids: number[]): Promise<{
-        stock: number;
         producto_id: number;
+        stock: number;
     }[]>;
 }

@@ -87,6 +87,7 @@ export class InventoryService {
         where,
         skip,
         take: page_size,
+        omit: { stock_inicial: true },
         include: {
           producto: {
             select: {

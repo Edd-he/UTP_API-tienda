@@ -13,12 +13,14 @@ export declare class InventoryController {
                 nombre: string;
             };
             id: number;
-            stock: number;
             producto_id: number;
-            stock_inicial: number;
+            stock: number;
         }[];
         total: number;
         totalPages: number;
     }>;
     generateInventory(auth: string): Promise<void>;
+    generateManualInventory(): Promise<{
+        message: string;
+    }>;
 }

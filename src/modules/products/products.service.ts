@@ -8,6 +8,7 @@ import { PrismaException } from '@providers/prisma/exceptions/prisma.exception'
 import { SearchStatusQueryParamsDto } from '@common/query-params/search-status-query-params'
 import { formatDate } from '@common/utils/format-date'
 import { Categoria, Prisma } from '@prisma/client'
+import { DateTime } from 'luxon'
 
 import { CreateProductDto } from './dto/create-product.dto'
 import { UpdateProductDto } from './dto/update-product.dto'
@@ -88,15 +89,26 @@ export class ProductsService {
     const pages = page || 1
     const skip = (pages - 1) * page_size
 
+    const now = DateTime.now().setZone('America/Lima').startOf('day')
+
+    const today = now.toJSDate()
     const where = {
       nombre: query
         ? { contains: query, mode: Prisma.QueryMode.insensitive }
         : undefined,
       ...(max_price && { precio: { lte: max_price } }),
       ...(category && { categoria: category as Categoria }),
-      stock: { gt: 0 },
       habilitado: true,
       archivado: false,
+      Inventario_Diario: {
+        some: {
+          stock: { gt: 0 },
+          fecha: {
+            gte: today,
+            lt: now.plus({ days: 1 }).toJSDate(),
+          },
+        },
+      },
     }
 
     const [products, total] = await Promise.all([

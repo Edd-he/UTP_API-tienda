@@ -15,6 +15,7 @@ const prisma_service_1 = require("../../providers/prisma/prisma.service");
 const prisma_exception_1 = require("../../providers/prisma/exceptions/prisma.exception");
 const format_date_1 = require("../../common/utils/format-date");
 const client_1 = require("@prisma/client");
+const luxon_1 = require("luxon");
 let ProductsService = class ProductsService {
     constructor(db) {
         this.db = db;
@@ -77,15 +78,25 @@ let ProductsService = class ProductsService {
     async getActiveProducts({ query, page, page_size, order, max_price, category, }) {
         const pages = page || 1;
         const skip = (pages - 1) * page_size;
+        const now = luxon_1.DateTime.now().setZone('America/Lima').startOf('day');
+        const today = now.toJSDate();
         const where = {
             nombre: query
                 ? { contains: query, mode: client_1.Prisma.QueryMode.insensitive }
                 : undefined,
             ...(max_price && { precio: { lte: max_price } }),
             ...(category && { categoria: category }),
-            stock: { gt: 0 },
             habilitado: true,
             archivado: false,
+            Inventario_Diario: {
+                some: {
+                    stock: { gt: 0 },
+                    fecha: {
+                        gte: today,
+                        lt: now.plus({ days: 1 }).toJSDate(),
+                    },
+                },
+            },
         };
         const [products, total] = await Promise.all([
             this.db.producto.findMany({
