@@ -104,6 +104,17 @@ let ProductsService = class ProductsService {
                 skip,
                 omit: { archivado: true },
                 take: page_size,
+                include: {
+                    Inventario_Diario: {
+                        where: {
+                            fecha: {
+                                gte: today,
+                                lt: now.plus({ days: 1 }).toJSDate(),
+                            },
+                        },
+                        select: { stock: true },
+                    },
+                },
                 orderBy: order
                     ? { precio: order === 'asc' ? 'asc' : 'desc' }
                     : undefined,
@@ -114,6 +125,7 @@ let ProductsService = class ProductsService {
         const data = products.map((product) => {
             return {
                 ...product,
+                stock: product.Inventario_Diario[0].stock,
                 creado: (0, format_date_1.formatDate)(product.creado),
                 actualizado: (0, format_date_1.formatDate)(product.actualizado),
             };

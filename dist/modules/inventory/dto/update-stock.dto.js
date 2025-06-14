@@ -20,7 +20,7 @@ var StockMovementType;
 })(StockMovementType || (exports.StockMovementType = StockMovementType = {}));
 class UpdateStockDto {
     static _OPENAPI_METADATA_FACTORY() {
-        return { productId: { required: true, type: () => Number, minimum: 1 }, quantity: { required: true, type: () => Number, minimum: 1 }, type: { required: true, enum: require("./update-stock.dto").StockMovementType } };
+        return { producto_id: { required: true, type: () => Number, minimum: 1 }, cantidad: { required: true, type: () => Number, minimum: 1 }, type: { required: true, enum: require("./update-stock.dto").StockMovementType } };
     }
 }
 exports.UpdateStockDto = UpdateStockDto;
@@ -29,13 +29,13 @@ __decorate([
     (0, class_validator_1.IsInt)({ message: 'El ID del producto debe ser un número entero' }),
     (0, class_validator_1.IsPositive)({ message: 'El ID del producto debe ser mayor a 0' }),
     __metadata("design:type", Number)
-], UpdateStockDto.prototype, "productId", void 0);
+], UpdateStockDto.prototype, "producto_id", void 0);
 __decorate([
     (0, class_transformer_1.Type)(() => Number),
     (0, class_validator_1.IsInt)({ message: 'La cantidad debe ser un número entero' }),
     (0, class_validator_1.IsPositive)({ message: 'La cantidad debe ser mayor a 0' }),
     __metadata("design:type", Number)
-], UpdateStockDto.prototype, "quantity", void 0);
+], UpdateStockDto.prototype, "cantidad", void 0);
 __decorate([
     (0, class_validator_1.IsEnum)(StockMovementType, {
         message: 'El tipo debe ser ENTRADA o SALIDA',

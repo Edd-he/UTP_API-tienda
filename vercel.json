@@ -28,12 +28,6 @@
         ]
       }
     ],
-    "crons": [
-    {
-      "path": "/api/v1/inventory/generar-inventario",
-      "schedule": "0 20 * * *"
-    }
-  ],
     "buildCommand": "npm run build "
   }
   

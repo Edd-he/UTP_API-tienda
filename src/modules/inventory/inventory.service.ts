@@ -28,9 +28,9 @@ export class InventoryService {
   }
 
   async generateInventory() {
-    this.logger.log('Generando Inventario 2:00 AM ')
-
     const now = DateTime.now().setZone('America/Lima').startOf('day')
+
+    this.logger.log('Generando Inventario:' + now)
 
     const date = now.toJSDate()
 
@@ -40,7 +40,9 @@ export class InventoryService {
       this.logger.warn(
         'No hay productos habilitados y no archivados para generar inventario.',
       )
-      return
+      throw new BadRequestException(
+        'No hay productos habilitados y no archivados para generar inventario.',
+      )
     }
 
     const data = products.map((p) => ({
@@ -49,10 +51,18 @@ export class InventoryService {
       stock: 0,
       stock_inicial: 0,
     }))
-
-    await this.db.inventario_Diario.createMany({ data })
+    try {
+      await this.db.inventario_Diario.createMany({ data })
+    } catch (e) {
+      console.warn((e as Error).message)
+      throw new BadRequestException('Error: Ya se generó el inventario de hoy')
+    }
 
     this.logger.log(`Inventario diario generado para ${data.length} productos.`)
+
+    return {
+      message: `Inventario diario generado para ${data.length} productos.`,
+    }
   }
 
   async getInventoryToday({
@@ -116,15 +126,6 @@ export class InventoryService {
       totalPages,
     }
   }
-
-  findOne(id: number) {
-    return `This action returns a #${id} inventory`
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} inventory`
-  }
-
   async updateProductStock(productId: number, quantity: number, type: string) {
     const now = DateTime.now().setZone('America/Lima').startOf('day')
     const today = now.toJSDate()

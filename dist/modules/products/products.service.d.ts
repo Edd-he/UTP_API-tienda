@@ -37,8 +37,12 @@ export declare class ProductsService {
     }>;
     getActiveProducts({ query, page, page_size, order, max_price, category, }: ProductsQueryParams): Promise<{
         data: {
+            stock: number;
             creado: string;
             actualizado: string;
+            Inventario_Diario: {
+                stock: number;
+            }[];
             nombre: string;
             descripcion: string;
             precio: Prisma.Decimal;

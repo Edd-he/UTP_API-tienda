@@ -10,12 +10,12 @@ export class UpdateStockDto {
   @Type(() => Number)
   @IsInt({ message: 'El ID del producto debe ser un número entero' })
   @IsPositive({ message: 'El ID del producto debe ser mayor a 0' })
-  productId: number
+  producto_id: number
 
   @Type(() => Number)
   @IsInt({ message: 'La cantidad debe ser un número entero' })
   @IsPositive({ message: 'La cantidad debe ser mayor a 0' })
-  quantity: number
+  cantidad: number
 
   @IsEnum(StockMovementType, {
     message: 'El tipo debe ser ENTRADA o SALIDA',

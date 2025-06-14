@@ -9,7 +9,9 @@ export declare class InventoryService {
     logger: Logger;
     constructor(productService: ProductsService, db: PrismaService);
     testCron(): void;
-    generateInventory(): Promise<void>;
+    generateInventory(): Promise<{
+        message: string;
+    }>;
     getInventoryToday({ query, page, page_size, }: SearchStatusQueryParamsDto): Promise<{
         data: {
             fecha: string;
@@ -26,8 +28,6 @@ export declare class InventoryService {
         total: number;
         totalPages: number;
     }>;
-    findOne(id: number): string;
-    remove(id: number): string;
     updateProductStock(productId: number, quantity: number, type: string): Promise<Prisma.BatchPayload>;
     getStocksByIds(ids: number[]): Promise<{
         producto_id: number;

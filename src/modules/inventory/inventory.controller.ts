@@ -1,21 +1,12 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Headers,
-  Patch,
-  Query,
-  UnauthorizedException,
-} from '@nestjs/common'
+import { Body, Controller, Get, Patch, Post, Query } from '@nestjs/common'
 import { SearchQueryParamsDto } from '@common/query-params/search-query-params'
-import { ApiExcludeEndpoint, ApiOperation, ApiTags } from '@nestjs/swagger'
-import { envs } from '@config/envs'
+import { ApiOperation, ApiTags } from '@nestjs/swagger'
 
 import { InventoryService } from './inventory.service'
 import { UpdateStockDto } from './dto/update-stock.dto'
 
 @ApiTags('Inventario')
-@Controller('inventory')
+@Controller('inventario')
 export class InventoryController {
   constructor(private readonly inventoryService: InventoryService) {}
 
@@ -27,27 +18,18 @@ export class InventoryController {
     return this.inventoryService.getInventoryToday(params)
   }
 
-  @Get('generar-inventario')
-  @ApiExcludeEndpoint()
-  async generateInventory(@Headers('authorization') auth: string) {
-    if (auth !== `Bearer ${envs.cronSecret}`) throw new UnauthorizedException()
-
-    await this.inventoryService.generateInventory()
-  }
-
-  @Get('generar-inventario-productos')
+  @Post('generar-inventario')
   async generateManualInventory() {
-    try {
-      await this.inventoryService.generateInventory()
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (e) {
-      return { message: 'Ya se genero el inventario diario' }
-    }
+    await this.inventoryService.generateInventory()
   }
 
   @Patch('actualizar-stock')
   async updateStock(@Body() updateStockDto: UpdateStockDto) {
-    const { productId, quantity, type } = updateStockDto
+    const {
+      producto_id: productId,
+      cantidad: quantity,
+      type: type,
+    } = updateStockDto
     await this.inventoryService.updateProductStock(productId, quantity, type)
     return { message: 'Stock actualizado del producto ' + productId }
   }

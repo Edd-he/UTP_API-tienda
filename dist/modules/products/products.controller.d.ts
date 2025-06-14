@@ -48,8 +48,12 @@ export declare class ProductsController {
     }>;
     getActives(params: ProductsQueryParams): Promise<{
         data: {
+            stock: number;
             creado: string;
             actualizado: string;
+            Inventario_Diario: {
+                stock: number;
+            }[];
             nombre: string;
             descripcion: string;
             precio: import("@prisma/client/runtime/library").Decimal;

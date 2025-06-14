@@ -3,7 +3,7 @@ export declare enum StockMovementType {
     SALIDA = "SALIDA"
 }
 export declare class UpdateStockDto {
-    productId: number;
-    quantity: number;
+    producto_id: number;
+    cantidad: number;
     type: StockMovementType;
 }

@@ -20,10 +20,7 @@ export declare class InventoryController {
         total: number;
         totalPages: number;
     }>;
-    generateInventory(auth: string): Promise<void>;
-    generateManualInventory(): Promise<{
-        message: string;
-    }>;
+    generateManualInventory(): Promise<void>;
     updateStock(updateStockDto: UpdateStockDto): Promise<{
         message: string;
     }>;

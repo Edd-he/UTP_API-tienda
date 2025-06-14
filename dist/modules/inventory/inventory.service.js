@@ -28,13 +28,13 @@ let InventoryService = class InventoryService {
         this.logger.log('Ejecutando cron a las 10:00 AM');
     }
     async generateInventory() {
-        this.logger.log('Generando Inventario 2:00 AM ');
         const now = luxon_1.DateTime.now().setZone('America/Lima').startOf('day');
+        this.logger.log('Generando Inventario:' + now);
         const date = now.toJSDate();
         const products = await this.productService.getActiveProductsIds();
         if (!products.length) {
             this.logger.warn('No hay productos habilitados y no archivados para generar inventario.');
-            return;
+            throw new common_1.BadRequestException('No hay productos habilitados y no archivados para generar inventario.');
         }
         const data = products.map((p) => ({
             producto_id: p.id,
@@ -42,8 +42,17 @@ let InventoryService = class InventoryService {
             stock: 0,
             stock_inicial: 0,
         }));
-        await this.db.inventario_Diario.createMany({ data });
+        try {
+            await this.db.inventario_Diario.createMany({ data });
+        }
+        catch (e) {
+            console.warn(e.message);
+            throw new common_1.BadRequestException('Error: Ya se generó el inventario de hoy');
+        }
         this.logger.log(`Inventario diario generado para ${data.length} productos.`);
+        return {
+            message: `Inventario diario generado para ${data.length} productos.`,
+        };
     }
     async getInventoryToday({ query, page, page_size, }) {
         const now = luxon_1.DateTime.now().setZone('America/Lima').startOf('day');
@@ -94,12 +103,6 @@ let InventoryService = class InventoryService {
             total,
             totalPages,
         };
-    }
-    findOne(id) {
-        return `This action returns a #${id} inventory`;
-    }
-    remove(id) {
-        return `This action removes a #${id} inventory`;
     }
     async updateProductStock(productId, quantity, type) {
         const now = luxon_1.DateTime.now().setZone('America/Lima').startOf('day');

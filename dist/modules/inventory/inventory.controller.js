@@ -17,7 +17,6 @@ const openapi = require("@nestjs/swagger");
 const common_1 = require("@nestjs/common");
 const search_query_params_1 = require("../../common/query-params/search-query-params");
 const swagger_1 = require("@nestjs/swagger");
-const envs_1 = require("../../config/envs");
 const inventory_service_1 = require("./inventory.service");
 const update_stock_dto_1 = require("./dto/update-stock.dto");
 let InventoryController = class InventoryController {
@@ -27,21 +26,11 @@ let InventoryController = class InventoryController {
     findAll(params) {
         return this.inventoryService.getInventoryToday(params);
     }
-    async generateInventory(auth) {
-        if (auth !== `Bearer ${envs_1.envs.cronSecret}`)
-            throw new common_1.UnauthorizedException();
+    async generateManualInventory() {
         await this.inventoryService.generateInventory();
     }
-    async generateManualInventory() {
-        try {
-            await this.inventoryService.generateInventory();
-        }
-        catch (e) {
-            return { message: 'Ya se genero el inventario diario' };
-        }
-    }
     async updateStock(updateStockDto) {
-        const { productId, quantity, type } = updateStockDto;
+        const { producto_id: productId, cantidad: quantity, type: type, } = updateStockDto;
         await this.inventoryService.updateProductStock(productId, quantity, type);
         return { message: 'Stock actualizado del producto ' + productId };
     }
@@ -59,17 +48,8 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], InventoryController.prototype, "findAll", null);
 __decorate([
-    (0, common_1.Get)('generar-inventario'),
-    (0, swagger_1.ApiExcludeEndpoint)(),
-    openapi.ApiResponse({ status: 200 }),
-    __param(0, (0, common_1.Headers)('authorization')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", Promise)
-], InventoryController.prototype, "generateInventory", null);
-__decorate([
-    (0, common_1.Get)('generar-inventario-productos'),
-    openapi.ApiResponse({ status: 200 }),
+    (0, common_1.Post)('generar-inventario'),
+    openapi.ApiResponse({ status: 201 }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
@@ -84,7 +64,7 @@ __decorate([
 ], InventoryController.prototype, "updateStock", null);
 exports.InventoryController = InventoryController = __decorate([
     (0, swagger_1.ApiTags)('Inventario'),
-    (0, common_1.Controller)('inventory'),
+    (0, common_1.Controller)('inventario'),
     __metadata("design:paramtypes", [inventory_service_1.InventoryService])
 ], InventoryController);
 //# sourceMappingURL=inventory.controller.js.map
