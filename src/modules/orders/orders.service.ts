@@ -12,6 +12,7 @@ import { ProductsService } from '@modules/products/products.service'
 import { formatDate } from '@common/utils/format-date'
 import { InventoryService } from '@modules/inventory/inventory.service'
 import { DateTime } from 'luxon'
+import { StockMovementType } from '@modules/inventory/dto/update-stock.dto'
 
 import { CreateOrderDto } from './dto/create-order.dto'
 import { OrdersQueryParams } from './query-params/orders-query-params'
@@ -45,11 +46,11 @@ export class OrdersService {
 
       await Promise.all(
         createOrderDto.orderItems.map(async (item) => {
-          await this.inventoryService.updateProductStock(
-            item.producto_id,
-            item.cantidad,
-            'SALIDA',
-          )
+          await this.inventoryService.updateProductStock({
+            producto_id: item.producto_id,
+            cantidad: item.cantidad,
+            tipo: 'SALIDA' as StockMovementType,
+          })
         }),
       )
 

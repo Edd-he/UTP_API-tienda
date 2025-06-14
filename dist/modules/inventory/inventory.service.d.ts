@@ -3,6 +3,7 @@ import { ProductsService } from '@modules/products/products.service';
 import { PrismaService } from '@providers/prisma/prisma.service';
 import { SearchStatusQueryParamsDto } from '@common/query-params/search-status-query-params';
 import { Prisma } from '@prisma/client';
+import { UpdateStockDto } from './dto/update-stock.dto';
 export declare class InventoryService {
     private readonly productService;
     private readonly db;
@@ -28,7 +29,7 @@ export declare class InventoryService {
         total: number;
         totalPages: number;
     }>;
-    updateProductStock(productId: number, quantity: number, type: string): Promise<Prisma.BatchPayload>;
+    updateProductStock({ producto_id, cantidad, tipo }: UpdateStockDto): Promise<Prisma.BatchPayload>;
     getStocksByIds(ids: number[]): Promise<{
         producto_id: number;
         stock: number;

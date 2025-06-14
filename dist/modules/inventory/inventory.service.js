@@ -104,14 +104,14 @@ let InventoryService = class InventoryService {
             totalPages,
         };
     }
-    async updateProductStock(productId, quantity, type) {
+    async updateProductStock({ producto_id, cantidad, tipo }) {
         const now = luxon_1.DateTime.now().setZone('America/Lima').startOf('day');
         const today = now.toJSDate();
         try {
             const currentInventory = await this.db.inventario_Diario.findFirst({
                 where: {
                     fecha: today,
-                    producto_id: productId,
+                    producto_id: producto_id,
                     producto: {
                         archivado: false,
                     },
@@ -121,26 +121,26 @@ let InventoryService = class InventoryService {
             if (!currentInventory)
                 throw new common_1.BadRequestException('No hay inventario registrado para este producto hoy');
             let movementQuantity = 0;
-            if (type === 'ENTRADA') {
-                movementQuantity = quantity;
+            if (tipo === 'ENTRADA') {
+                movementQuantity = cantidad;
             }
-            if (type === 'SALIDA') {
+            if (tipo === 'SALIDA') {
                 movementQuantity =
-                    quantity > currentInventory.stock
+                    cantidad > currentInventory.stock
                         ? -currentInventory.stock
-                        : -quantity;
+                        : -cantidad;
             }
             const newStock = await this.db.inventario_Diario.updateMany({
                 where: {
                     fecha: today,
-                    producto_id: productId,
+                    producto_id: producto_id,
                     producto: {
                         archivado: false,
                     },
                 },
                 data: {
                     stock: { increment: movementQuantity },
-                    ...(type === 'ENTRADA'
+                    ...(tipo === 'ENTRADA'
                         ? { ultima_entrada: new Date() }
                         : { ultima_salida: new Date() }),
                 },

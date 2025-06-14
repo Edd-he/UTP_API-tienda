@@ -22,8 +22,8 @@ export declare class OrdersController {
                 precio: import("@prisma/client/runtime/library").Decimal;
                 id: number;
                 producto_id: number;
-                nombre_producto: string;
                 cantidad: number;
+                nombre_producto: string;
                 orden_id: number;
             }[];
             Usuario: {
@@ -51,8 +51,8 @@ export declare class OrdersController {
                 precio: import("@prisma/client/runtime/library").Decimal;
                 id: number;
                 producto_id: number;
-                nombre_producto: string;
                 cantidad: number;
+                nombre_producto: string;
                 orden_id: number;
             }[];
             Usuario: {
@@ -80,8 +80,8 @@ export declare class OrdersController {
                 precio: import("@prisma/client/runtime/library").Decimal;
                 id: number;
                 producto_id: number;
-                nombre_producto: string;
                 cantidad: number;
+                nombre_producto: string;
                 orden_id: number;
             }[];
             id: number;
@@ -100,8 +100,8 @@ export declare class OrdersController {
             precio: import("@prisma/client/runtime/library").Decimal;
             id: number;
             producto_id: number;
-            nombre_producto: string;
             cantidad: number;
+            nombre_producto: string;
             orden_id: number;
         }[];
         Usuario: {

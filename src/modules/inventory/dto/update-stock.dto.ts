@@ -20,5 +20,5 @@ export class UpdateStockDto {
   @IsEnum(StockMovementType, {
     message: 'El tipo debe ser ENTRADA o SALIDA',
   })
-  type: StockMovementType
+  tipo: StockMovementType
 }

@@ -25,12 +25,9 @@ export class InventoryController {
 
   @Patch('actualizar-stock')
   async updateStock(@Body() updateStockDto: UpdateStockDto) {
-    const {
-      producto_id: productId,
-      cantidad: quantity,
-      type: type,
-    } = updateStockDto
-    await this.inventoryService.updateProductStock(productId, quantity, type)
-    return { message: 'Stock actualizado del producto ' + productId }
+    await this.inventoryService.updateProductStock(updateStockDto)
+    return {
+      message: 'Stock actualizado del producto ' + updateStockDto.producto_id,
+    }
   }
 }

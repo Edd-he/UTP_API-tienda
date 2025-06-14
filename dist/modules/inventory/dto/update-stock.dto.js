@@ -20,7 +20,7 @@ var StockMovementType;
 })(StockMovementType || (exports.StockMovementType = StockMovementType = {}));
 class UpdateStockDto {
     static _OPENAPI_METADATA_FACTORY() {
-        return { producto_id: { required: true, type: () => Number, minimum: 1 }, cantidad: { required: true, type: () => Number, minimum: 1 }, type: { required: true, enum: require("./update-stock.dto").StockMovementType } };
+        return { producto_id: { required: true, type: () => Number, minimum: 1 }, cantidad: { required: true, type: () => Number, minimum: 1 }, tipo: { required: true, enum: require("./update-stock.dto").StockMovementType } };
     }
 }
 exports.UpdateStockDto = UpdateStockDto;
@@ -41,5 +41,5 @@ __decorate([
         message: 'El tipo debe ser ENTRADA o SALIDA',
     }),
     __metadata("design:type", String)
-], UpdateStockDto.prototype, "type", void 0);
+], UpdateStockDto.prototype, "tipo", void 0);
 //# sourceMappingURL=update-stock.dto.js.map

@@ -5,5 +5,5 @@ export declare enum StockMovementType {
 export declare class UpdateStockDto {
     producto_id: number;
     cantidad: number;
-    type: StockMovementType;
+    tipo: StockMovementType;
 }

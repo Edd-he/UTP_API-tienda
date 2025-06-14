@@ -42,7 +42,11 @@ let OrdersService = class OrdersService {
                 },
             });
             await Promise.all(createOrderDto.orderItems.map(async (item) => {
-                await this.inventoryService.updateProductStock(item.producto_id, item.cantidad, 'SALIDA');
+                await this.inventoryService.updateProductStock({
+                    producto_id: item.producto_id,
+                    cantidad: item.cantidad,
+                    tipo: 'SALIDA',
+                });
             }));
             return {
                 ...order,

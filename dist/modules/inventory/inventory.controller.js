@@ -30,9 +30,10 @@ let InventoryController = class InventoryController {
         await this.inventoryService.generateInventory();
     }
     async updateStock(updateStockDto) {
-        const { producto_id: productId, cantidad: quantity, type: type, } = updateStockDto;
-        await this.inventoryService.updateProductStock(productId, quantity, type);
-        return { message: 'Stock actualizado del producto ' + productId };
+        await this.inventoryService.updateProductStock(updateStockDto);
+        return {
+            message: 'Stock actualizado del producto ' + updateStockDto.producto_id,
+        };
     }
 };
 exports.InventoryController = InventoryController;

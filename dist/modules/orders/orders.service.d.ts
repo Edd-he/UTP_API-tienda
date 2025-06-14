@@ -27,8 +27,8 @@ export declare class OrdersService {
                 precio: Prisma.Decimal;
                 id: number;
                 producto_id: number;
-                nombre_producto: string;
                 cantidad: number;
+                nombre_producto: string;
                 orden_id: number;
             }[];
             Usuario: {
@@ -56,8 +56,8 @@ export declare class OrdersService {
                 precio: Prisma.Decimal;
                 id: number;
                 producto_id: number;
-                nombre_producto: string;
                 cantidad: number;
+                nombre_producto: string;
                 orden_id: number;
             }[];
             Usuario: {
@@ -85,8 +85,8 @@ export declare class OrdersService {
                 precio: Prisma.Decimal;
                 id: number;
                 producto_id: number;
-                nombre_producto: string;
                 cantidad: number;
+                nombre_producto: string;
                 orden_id: number;
             }[];
             id: number;
@@ -105,8 +105,8 @@ export declare class OrdersService {
             precio: Prisma.Decimal;
             id: number;
             producto_id: number;
-            nombre_producto: string;
             cantidad: number;
+            nombre_producto: string;
             orden_id: number;
         }[];
         Usuario: {
