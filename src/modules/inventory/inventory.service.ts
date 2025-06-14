@@ -188,10 +188,11 @@ export class InventoryService {
   }
 
   async getStocksByIds(ids: number[]) {
-    const now = new Date()
+    const now = DateTime.now().setZone('America/Lima').startOf('day')
+    const today = now.toJSDate()
     return await this.db.inventario_Diario.findMany({
       where: {
-        fecha: now,
+        fecha: today,
         producto_id: {
           in: ids,
         },

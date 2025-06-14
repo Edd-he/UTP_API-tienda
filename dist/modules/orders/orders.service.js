@@ -245,11 +245,15 @@ let OrdersService = class OrdersService {
         const productMap = new Map(products.map((p) => [p.id, p]));
         const inventoryMap = new Map(stocks.map((s) => [s.producto_id, s]));
         let total = 0;
+        console.warn(products);
+        console.warn(stocks);
         for (const item of orderItems) {
             const product = productMap.get(item.producto_id);
             const stock = inventoryMap.get(item.producto_id);
             if (!product)
                 throw new common_1.NotFoundException(`El producto con ID ${item.producto_id} no fue encontrado`);
+            if (!stock)
+                throw new common_1.NotFoundException(`No se encontró stock para el producto con ID ${item.producto_id}`);
             if (product.nombre !== item.nombre_producto)
                 throw new common_1.BadRequestException(`El nombre del producto no coincide para el producto con ID ${item.producto_id}`);
             if (Number(product.precio) !== item.precio)

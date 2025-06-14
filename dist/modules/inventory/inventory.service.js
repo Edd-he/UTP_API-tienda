@@ -154,10 +154,11 @@ let InventoryService = class InventoryService {
         }
     }
     async getStocksByIds(ids) {
-        const now = new Date();
+        const now = luxon_1.DateTime.now().setZone('America/Lima').startOf('day');
+        const today = now.toJSDate();
         return await this.db.inventario_Diario.findMany({
             where: {
-                fecha: now,
+                fecha: today,
                 producto_id: {
                     in: ids,
                 },
