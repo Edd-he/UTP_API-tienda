@@ -20,6 +20,7 @@ const user_session_decorator_1 = require("../auth/decorators/user-session.decora
 const validate_id_pipe_1 = require("../../common/pipes/validate-id.pipe");
 const client_1 = require("@prisma/client");
 const auth_decorator_1 = require("../auth/decorators/auth.decorator");
+const search_query_params_1 = require("../../common/query-params/search-query-params");
 const orders_service_1 = require("./orders.service");
 const create_order_dto_1 = require("./dto/create-order.dto");
 const orders_query_params_1 = require("./query-params/orders-query-params");
@@ -106,7 +107,7 @@ __decorate([
     __param(0, (0, user_session_decorator_1.UserSession)()),
     __param(1, (0, common_1.Query)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, orders_query_params_1.OrdersQueryParams]),
+    __metadata("design:paramtypes", [Object, search_query_params_1.SearchQueryParamsDto]),
     __metadata("design:returntype", void 0)
 ], OrdersController.prototype, "findAllByUser", null);
 __decorate([

@@ -6,7 +6,29 @@ import { UsersService } from './users.service';
 export declare class UsersController {
     private readonly usersService;
     constructor(usersService: UsersService);
-    createUser(session: IUserSession, createUserDto: CreateUserDto): Promise<{
+    createAdmin(session: IUserSession, createUserDto: CreateUserDto): Promise<{
+        creado: string;
+        actualizado: string;
+        nombre: string;
+        habilitado: boolean;
+        id: number;
+        dni: string;
+        apellidos: string;
+        correo: string;
+        rol: import(".prisma/client").$Enums.Rol;
+    }>;
+    crearStudent(session: IUserSession, createUserDto: CreateUserDto): Promise<{
+        creado: string;
+        actualizado: string;
+        nombre: string;
+        habilitado: boolean;
+        id: number;
+        dni: string;
+        apellidos: string;
+        correo: string;
+        rol: import(".prisma/client").$Enums.Rol;
+    }>;
+    createTeacher(session: IUserSession, createUserDto: CreateUserDto): Promise<{
         creado: string;
         actualizado: string;
         nombre: string;

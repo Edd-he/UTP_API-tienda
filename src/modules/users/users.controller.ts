@@ -25,16 +25,40 @@ import { UsersService } from './users.service'
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Post('crear-usuario')
+  @Post('crear-administrador')
   @ApiOperation({
-    summary: 'Crea un usuario del sistema',
+    summary: 'Crea un administrador del sistema',
   })
-  async createUser(
+  async createAdmin(
     @UserSession() session: IUserSession,
     @Body() createUserDto: CreateUserDto,
   ) {
-    const admin = await this.usersService.create(createUserDto)
+    const admin = await this.usersService.create(createUserDto, 'ADMINISTRADOR')
     return admin
+  }
+
+  @Post('crear-estudiante')
+  @ApiOperation({
+    summary: 'Crea un estudiante del sistema',
+  })
+  async crearStudent(
+    @UserSession() session: IUserSession,
+    @Body() createUserDto: CreateUserDto,
+  ) {
+    const user = await this.usersService.create(createUserDto, 'ESTUDIANTE')
+    return user
+  }
+
+  @Post('crear-profesor')
+  @ApiOperation({
+    summary: 'Crea un profesor del sistema',
+  })
+  async createTeacher(
+    @UserSession() session: IUserSession,
+    @Body() createUserDto: CreateUserDto,
+  ) {
+    const teacher = await this.usersService.create(createUserDto, 'PROFESOR')
+    return teacher
   }
 
   @Get('obtener-usuarios')

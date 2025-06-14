@@ -1,4 +1,5 @@
 import { IUserSession } from '@modules/auth/interfaces/user-session.interface';
+import { SearchQueryParamsDto } from '@common/query-params/search-query-params';
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { OrdersQueryParams } from './query-params/orders-query-params';
@@ -72,7 +73,7 @@ export declare class OrdersController {
         total: number;
         totalPages: number;
     }>;
-    findAllByUser(user: IUserSession, params: OrdersQueryParams): Promise<{
+    findAllByUser(user: IUserSession, params: SearchQueryParamsDto): Promise<{
         data: {
             creado: string;
             hora_programada: string;

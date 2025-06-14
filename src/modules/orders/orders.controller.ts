@@ -5,6 +5,7 @@ import { IUserSession } from '@modules/auth/interfaces/user-session.interface'
 import { ValidateId } from '@common/pipes/validate-id.pipe'
 import { Estado } from '@prisma/client'
 import { Auth } from '@modules/auth/decorators/auth.decorator'
+import { SearchQueryParamsDto } from '@common/query-params/search-query-params'
 
 import { OrdersService } from './orders.service'
 import { CreateOrderDto } from './dto/create-order.dto'
@@ -52,7 +53,7 @@ export class OrdersController {
   })
   findAllByUser(
     @UserSession() user: IUserSession,
-    @Query() params: OrdersQueryParams,
+    @Query() params: SearchQueryParamsDto,
   ) {
     return this.ordersService.findAllByUser(user.id, params)
   }

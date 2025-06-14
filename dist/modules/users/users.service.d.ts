@@ -1,6 +1,7 @@
 import { PrismaService } from '@providers/prisma/prisma.service';
 import { ReniecService } from '@providers/reniec/reniec.service';
 import { IReniecResponse } from '@providers/reniec/interfaces/reniec-response.interface';
+import { Rol } from '@prisma/client';
 import { SearchStatusQueryParamsDto } from '@common/query-params/search-status-query-params';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -8,7 +9,7 @@ export declare class UsersService {
     private readonly db;
     private reniecService;
     constructor(db: PrismaService, reniecService: ReniecService);
-    create(createUserDto: CreateUserDto): Promise<{
+    create(createUserDto: CreateUserDto, role: Rol): Promise<{
         creado: string;
         actualizado: string;
         nombre: string;

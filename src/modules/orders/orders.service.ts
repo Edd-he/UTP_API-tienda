@@ -13,6 +13,7 @@ import { formatDate } from '@common/utils/format-date'
 import { InventoryService } from '@modules/inventory/inventory.service'
 import { DateTime } from 'luxon'
 import { StockMovementType } from '@modules/inventory/dto/update-stock.dto'
+import { SearchQueryParamsDto } from '@common/query-params/search-query-params'
 
 import { CreateOrderDto } from './dto/create-order.dto'
 import { OrdersQueryParams } from './query-params/orders-query-params'
@@ -180,7 +181,7 @@ export class OrdersService {
 
   async findAllByUser(
     userId: number,
-    { page_size, page, query, status }: OrdersQueryParams,
+    { page_size, page, query }: SearchQueryParamsDto,
   ) {
     const pages = page || 1
     const skip = (pages - 1) * page_size
@@ -196,7 +197,6 @@ export class OrdersService {
             }
           : {},
       ],
-      estado: status as Estado,
       usuario_id: userId,
     }
 

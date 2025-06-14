@@ -20,7 +20,7 @@ export class InventoryController {
 
   @Post('generar-inventario')
   async generateManualInventory() {
-    await this.inventoryService.generateInventory()
+    return await this.inventoryService.generateInventory()
   }
 
   @Patch('actualizar-stock')

@@ -20,7 +20,7 @@ export class UsersService {
     private readonly db: PrismaService,
     private reniecService: ReniecService,
   ) {}
-  async create(createUserDto: CreateUserDto) {
+  async create(createUserDto: CreateUserDto, role: Rol) {
     const { contraseña, ...rest } = createUserDto
 
     const { nombres, apellidoMaterno, apellidoPaterno }: IReniecResponse =
@@ -32,7 +32,7 @@ export class UsersService {
           nombre: nombres,
           apellidos: apellidoPaterno + ' ' + apellidoMaterno,
           contraseña: await bcrypt.hash(contraseña, 10),
-          rol: Rol.ADMINISTRADOR,
+          rol: role,
           ...rest,
         },
       })

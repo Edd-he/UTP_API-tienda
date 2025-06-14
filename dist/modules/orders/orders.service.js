@@ -161,7 +161,7 @@ let OrdersService = class OrdersService {
             totalPages,
         };
     }
-    async findAllByUser(userId, { page_size, page, query, status }) {
+    async findAllByUser(userId, { page_size, page, query }) {
         const pages = page || 1;
         const skip = (pages - 1) * page_size;
         const where = {
@@ -175,7 +175,6 @@ let OrdersService = class OrdersService {
                     }
                     : {},
             ],
-            estado: status,
             usuario_id: userId,
         };
         const [orders, total] = await Promise.all([

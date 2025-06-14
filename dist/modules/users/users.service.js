@@ -22,7 +22,7 @@ let UsersService = class UsersService {
         this.db = db;
         this.reniecService = reniecService;
     }
-    async create(createUserDto) {
+    async create(createUserDto, role) {
         const { contraseña, ...rest } = createUserDto;
         const { nombres, apellidoMaterno, apellidoPaterno } = await this.reniecService.getInfoDNI(createUserDto.dni);
         try {
@@ -32,7 +32,7 @@ let UsersService = class UsersService {
                     nombre: nombres,
                     apellidos: apellidoPaterno + ' ' + apellidoMaterno,
                     contraseña: await bcrypt.hash(contraseña, 10),
-                    rol: client_1.Rol.ADMINISTRADOR,
+                    rol: role,
                     ...rest,
                 },
             });

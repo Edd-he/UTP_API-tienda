@@ -28,9 +28,17 @@ let UsersController = class UsersController {
     constructor(usersService) {
         this.usersService = usersService;
     }
-    async createUser(session, createUserDto) {
-        const admin = await this.usersService.create(createUserDto);
+    async createAdmin(session, createUserDto) {
+        const admin = await this.usersService.create(createUserDto, 'ADMINISTRADOR');
         return admin;
+    }
+    async crearStudent(session, createUserDto) {
+        const user = await this.usersService.create(createUserDto, 'ESTUDIANTE');
+        return user;
+    }
+    async createTeacher(session, createUserDto) {
+        const teacher = await this.usersService.create(createUserDto, 'PROFESOR');
+        return teacher;
     }
     async getAllUsers(query) {
         return this.usersService.findAll(query);
@@ -52,9 +60,9 @@ let UsersController = class UsersController {
 };
 exports.UsersController = UsersController;
 __decorate([
-    (0, common_1.Post)('crear-usuario'),
+    (0, common_1.Post)('crear-administrador'),
     (0, swagger_1.ApiOperation)({
-        summary: 'Crea un usuario del sistema',
+        summary: 'Crea un administrador del sistema',
     }),
     openapi.ApiResponse({ status: 201 }),
     __param(0, (0, user_session_decorator_1.UserSession)()),
@@ -62,7 +70,31 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, create_user_dto_1.CreateUserDto]),
     __metadata("design:returntype", Promise)
-], UsersController.prototype, "createUser", null);
+], UsersController.prototype, "createAdmin", null);
+__decorate([
+    (0, common_1.Post)('crear-estudiante'),
+    (0, swagger_1.ApiOperation)({
+        summary: 'Crea un estudiante del sistema',
+    }),
+    openapi.ApiResponse({ status: 201 }),
+    __param(0, (0, user_session_decorator_1.UserSession)()),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, create_user_dto_1.CreateUserDto]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "crearStudent", null);
+__decorate([
+    (0, common_1.Post)('crear-profesor'),
+    (0, swagger_1.ApiOperation)({
+        summary: 'Crea un profesor del sistema',
+    }),
+    openapi.ApiResponse({ status: 201 }),
+    __param(0, (0, user_session_decorator_1.UserSession)()),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, create_user_dto_1.CreateUserDto]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "createTeacher", null);
 __decorate([
     (0, common_1.Get)('obtener-usuarios'),
     (0, swagger_1.ApiOperation)({

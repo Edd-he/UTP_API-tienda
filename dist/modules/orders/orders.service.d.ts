@@ -3,6 +3,7 @@ import { IUserSession } from '@auth/interfaces/user-session.interface';
 import { Estado, Prisma } from '@prisma/client';
 import { ProductsService } from '@modules/products/products.service';
 import { InventoryService } from '@modules/inventory/inventory.service';
+import { SearchQueryParamsDto } from '@common/query-params/search-query-params';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { OrdersQueryParams } from './query-params/orders-query-params';
 export declare class OrdersService {
@@ -77,7 +78,7 @@ export declare class OrdersService {
         total: number;
         totalPages: number;
     }>;
-    findAllByUser(userId: number, { page_size, page, query, status }: OrdersQueryParams): Promise<{
+    findAllByUser(userId: number, { page_size, page, query }: SearchQueryParamsDto): Promise<{
         data: {
             creado: string;
             hora_programada: string;

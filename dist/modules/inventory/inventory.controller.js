@@ -27,7 +27,7 @@ let InventoryController = class InventoryController {
         return this.inventoryService.getInventoryToday(params);
     }
     async generateManualInventory() {
-        await this.inventoryService.generateInventory();
+        return await this.inventoryService.generateInventory();
     }
     async updateStock(updateStockDto) {
         await this.inventoryService.updateProductStock(updateStockDto);
