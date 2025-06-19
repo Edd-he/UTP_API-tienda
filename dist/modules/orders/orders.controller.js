@@ -122,7 +122,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], OrdersController.prototype, "findOne", null);
 __decorate([
-    (0, common_1.Get)(':id/procesar-orden'),
+    (0, common_1.Patch)(':id/procesar-orden'),
     (0, swagger_1.ApiOperation)({
         summary: 'Marca como en proceso una orden',
     }),
@@ -133,7 +133,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], OrdersController.prototype, "processOrder", null);
 __decorate([
-    (0, common_1.Get)(':id/recoger-orden'),
+    (0, common_1.Patch)(':id/recoger-orden'),
     (0, swagger_1.ApiOperation)({
         summary: 'Marca como disponible para recoger una orden',
     }),
@@ -144,7 +144,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], OrdersController.prototype, "pickupOrder", null);
 __decorate([
-    (0, common_1.Get)(':id/abandonar-orden'),
+    (0, common_1.Patch)(':id/abandonar-orden'),
     (0, swagger_1.ApiOperation)({
         summary: 'Marca como abandonada una orden',
     }),
@@ -155,7 +155,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], OrdersController.prototype, "abandonOrder", null);
 __decorate([
-    (0, common_1.Get)(':id/completar-orden'),
+    (0, common_1.Patch)(':id/completar-orden'),
     (0, swagger_1.ApiOperation)({
         summary: 'Marca como completada una orden',
     }),
@@ -166,7 +166,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], OrdersController.prototype, "completeOrder", null);
 __decorate([
-    (0, common_1.Get)(':id/cancelar-orden'),
+    (0, common_1.Patch)(':id/cancelar-orden'),
     (0, swagger_1.ApiOperation)({
         summary: 'Marca como cancelada una orden',
     }),

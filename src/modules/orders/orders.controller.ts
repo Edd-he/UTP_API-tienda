@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Param, Query } from '@nestjs/common'
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Query,
+  Patch,
+} from '@nestjs/common'
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger'
 import { UserSession } from '@modules/auth/decorators/user-session.decorator'
 import { IUserSession } from '@modules/auth/interfaces/user-session.interface'
@@ -66,7 +74,7 @@ export class OrdersController {
     return this.ordersService.findOne(id)
   }
 
-  @Get(':id/procesar-orden')
+  @Patch(':id/procesar-orden')
   @ApiOperation({
     summary: 'Marca como en proceso una orden',
   })
@@ -74,7 +82,7 @@ export class OrdersController {
     return this.ordersService.changeStatusOrder(id, Estado.EN_PROCESO)
   }
 
-  @Get(':id/recoger-orden')
+  @Patch(':id/recoger-orden')
   @ApiOperation({
     summary: 'Marca como disponible para recoger una orden',
   })
@@ -82,7 +90,7 @@ export class OrdersController {
     return this.ordersService.changeStatusOrder(id, Estado.RECOGER)
   }
 
-  @Get(':id/abandonar-orden')
+  @Patch(':id/abandonar-orden')
   @ApiOperation({
     summary: 'Marca como abandonada una orden',
   })
@@ -90,7 +98,7 @@ export class OrdersController {
     return this.ordersService.changeStatusOrder(id, Estado.ABANDONADA)
   }
 
-  @Get(':id/completar-orden')
+  @Patch(':id/completar-orden')
   @ApiOperation({
     summary: 'Marca como completada una orden',
   })
@@ -98,7 +106,7 @@ export class OrdersController {
     return this.ordersService.changeStatusOrder(id, Estado.COMPLETADA)
   }
 
-  @Get(':id/cancelar-orden')
+  @Patch(':id/cancelar-orden')
   @ApiOperation({
     summary: 'Marca como cancelada una orden',
   })
