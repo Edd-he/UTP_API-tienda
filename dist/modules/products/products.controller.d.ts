@@ -6,7 +6,7 @@ import { ProductsQueryParams } from './query-params/products-query-params';
 export declare class ProductsController {
     private readonly productsService;
     constructor(productsService: ProductsService);
-    create(createProductDto: CreateProductDto): Promise<{
+    create(createProductDto: CreateProductDto, file?: Express.Multer.File): Promise<{
         creado: string;
         actualizado: string;
         nombre: string;
@@ -66,7 +66,7 @@ export declare class ProductsController {
         total: number;
         totalPages: number;
     }>;
-    update(productId: number, updateProductDto: UpdateProductDto): Promise<{
+    update(productId: number, updateProductDto: UpdateProductDto, file?: Express.Multer.File): Promise<{
         creado: string;
         actualizado: string;
         nombre: string;

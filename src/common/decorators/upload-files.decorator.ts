@@ -2,6 +2,7 @@ import {
   UploadedFiles,
   ParseFilePipe,
   MaxFileSizeValidator,
+  FileTypeValidator,
   UploadedFile,
 } from '@nestjs/common'
 
@@ -18,7 +19,10 @@ export const UploadFile = () => {
   return UploadedFile(
     new ParseFilePipe({
       fileIsRequired: false,
-      validators: [new MaxFileSizeValidator({ maxSize: 1024 * 1024 * 5 })],
+      validators: [
+        new MaxFileSizeValidator({ maxSize: 1024 * 1024 * 5 }),
+        new FileTypeValidator({ fileType: 'image/*' }), // Solo permite imágenes
+      ],
     }),
   )
 }

@@ -1,13 +1,15 @@
 import { PrismaService } from '@providers/prisma/prisma.service';
 import { SearchStatusQueryParamsDto } from '@common/query-params/search-status-query-params';
 import { Prisma } from '@prisma/client';
+import { CloudinaryService } from '@providers/cloudinary/cloudinary.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { ProductsQueryParams } from './query-params/products-query-params';
 export declare class ProductsService {
     private readonly db;
-    constructor(db: PrismaService);
-    create(createProductDto: CreateProductDto): Promise<{
+    private readonly cloudinary;
+    constructor(db: PrismaService, cloudinary: CloudinaryService);
+    create(createProductDto: CreateProductDto, file?: Express.Multer.File): Promise<{
         creado: string;
         actualizado: string;
         nombre: string;
@@ -67,7 +69,7 @@ export declare class ProductsService {
         id: number;
         url: string;
     }>;
-    update(id: number, updateProductDto: UpdateProductDto): Promise<{
+    update(id: number, updateProductDto: UpdateProductDto, file?: Express.Multer.File): Promise<{
         creado: string;
         actualizado: string;
         nombre: string;

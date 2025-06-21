@@ -27,6 +27,7 @@ export class CreateProductDto {
   )
   precio: number
 
+  @Type(() => Number)
   @IsPositive({
     message: 'El limite de orden del producto debe ser un número positivo',
   })

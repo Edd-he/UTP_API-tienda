@@ -28,6 +28,9 @@ let OrdersService = class OrdersService {
         return await this.db.$transaction(async (prisma) => {
             const { orderItems, ...orderDto } = createOrderDto;
             await this.validateOrderItems(orderDto.monto_total, orderItems);
+            const activeOrder = await this.hasActiveOrder(session.id);
+            if (activeOrder)
+                throw new common_1.BadRequestException(`Ya tiene una orden activa para hoy`);
             const order = await prisma.orden.create({
                 data: {
                     usuario_id: session.id,
@@ -179,12 +182,15 @@ let OrdersService = class OrdersService {
         };
         const [orders, total] = await Promise.all([
             this.db.orden.findMany({
-                where,
+                where: where,
                 include: {
                     Orden_Item: {},
                 },
                 skip: skip,
                 take: page_size,
+                orderBy: {
+                    hora_programada: 'desc',
+                },
             }),
             this.db.orden.count({
                 where,
@@ -203,7 +209,7 @@ let OrdersService = class OrdersService {
         };
     }
     async findOne(id) {
-        const orden = await this.db.orden.findFirst({
+        const order = await this.db.orden.findFirst({
             where: {
                 id,
             },
@@ -220,12 +226,12 @@ let OrdersService = class OrdersService {
                 Orden_Item: {},
             },
         });
-        if (!orden)
+        if (!order)
             throw new common_1.NotFoundException(`La orden del id ${id} no existe`);
         return {
-            ...orden,
-            creado: (0, format_date_1.formatDate)(orden.creado),
-            hora_programada: (0, format_date_1.formatDate)(orden.hora_programada),
+            ...order,
+            creado: (0, format_date_1.formatDate)(order.creado),
+            hora_programada: (0, format_date_1.formatDate)(order.hora_programada),
         };
     }
     async changeStatusOrder(id, estado) {
@@ -235,6 +241,20 @@ let OrdersService = class OrdersService {
             },
             data: {
                 estado: estado,
+            },
+        });
+    }
+    async hasActiveOrder(userId) {
+        const today = luxon_1.DateTime.now().setZone('America/Lima').startOf('day');
+        const tomorrow = today.plus({ days: 1 });
+        return await this.db.orden.findFirst({
+            where: {
+                usuario_id: userId,
+                estado: client_1.Estado.EN_PROCESO || client_1.Estado.RECOGER,
+                hora_programada: {
+                    gte: today.toJSDate(),
+                    lt: tomorrow.toJSDate(),
+                },
             },
         });
     }

@@ -9,6 +9,7 @@ import { SearchStatusQueryParamsDto } from '@common/query-params/search-status-q
 import { formatDate } from '@common/utils/format-date'
 import { Categoria, Prisma } from '@prisma/client'
 import { DateTime } from 'luxon'
+import { CloudinaryService } from '@providers/cloudinary/cloudinary.service'
 
 import { CreateProductDto } from './dto/create-product.dto'
 import { UpdateProductDto } from './dto/update-product.dto'
@@ -16,12 +17,19 @@ import { ProductsQueryParams } from './query-params/products-query-params'
 
 @Injectable()
 export class ProductsService {
-  constructor(private readonly db: PrismaService) {}
-  async create(createProductDto: CreateProductDto) {
+  constructor(
+    private readonly db: PrismaService,
+    private readonly cloudinary: CloudinaryService,
+  ) {}
+  async create(createProductDto: CreateProductDto, file?: Express.Multer.File) {
+    const url = await this.cloudinary.uploadFileToCloudinary(file)
     try {
       const producto = await this.db.producto.create({
         omit: { archivado: true },
-        data: createProductDto,
+        data: {
+          ...createProductDto,
+          url: url,
+        },
       })
       return {
         ...producto,
@@ -170,7 +178,15 @@ export class ProductsService {
     }
   }
 
-  async update(id: number, updateProductDto: UpdateProductDto) {
+  async update(
+    id: number,
+    updateProductDto: UpdateProductDto,
+    file?: Express.Multer.File,
+  ) {
+    let url = null
+    if (file) {
+      url = await this.cloudinary.uploadFileToCloudinary(file)
+    }
     try {
       const producto = await this.db.producto.update({
         omit: { archivado: true },
@@ -178,7 +194,10 @@ export class ProductsService {
           id,
           archivado: false,
         },
-        data: updateProductDto,
+        data: {
+          ...updateProductDto,
+          ...(url ? { url } : {}),
+        },
       })
       return {
         ...producto,

@@ -37,6 +37,7 @@ __decorate([
     __metadata("design:type", Number)
 ], CreateProductDto.prototype, "precio", void 0);
 __decorate([
+    (0, class_transformer_1.Type)(() => Number),
     (0, class_validator_1.IsPositive)({
         message: 'El limite de orden del producto debe ser un número positivo',
     }),

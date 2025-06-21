@@ -133,5 +133,6 @@ export declare class OrdersService {
         estado: import(".prisma/client").$Enums.Estado;
         usuario_id: number;
     }>;
+    private hasActiveOrder;
     private validateOrderItems;
 }

@@ -16,15 +16,21 @@ const prisma_exception_1 = require("../../providers/prisma/exceptions/prisma.exc
 const format_date_1 = require("../../common/utils/format-date");
 const client_1 = require("@prisma/client");
 const luxon_1 = require("luxon");
+const cloudinary_service_1 = require("../../providers/cloudinary/cloudinary.service");
 let ProductsService = class ProductsService {
-    constructor(db) {
+    constructor(db, cloudinary) {
         this.db = db;
+        this.cloudinary = cloudinary;
     }
-    async create(createProductDto) {
+    async create(createProductDto, file) {
+        const url = await this.cloudinary.uploadFileToCloudinary(file);
         try {
             const producto = await this.db.producto.create({
                 omit: { archivado: true },
-                data: createProductDto,
+                data: {
+                    ...createProductDto,
+                    url: url,
+                },
             });
             return {
                 ...producto,
@@ -152,7 +158,11 @@ let ProductsService = class ProductsService {
             actualizado: (0, format_date_1.formatDate)(product.actualizado),
         };
     }
-    async update(id, updateProductDto) {
+    async update(id, updateProductDto, file) {
+        let url = null;
+        if (file) {
+            url = await this.cloudinary.uploadFileToCloudinary(file);
+        }
         try {
             const producto = await this.db.producto.update({
                 omit: { archivado: true },
@@ -160,7 +170,10 @@ let ProductsService = class ProductsService {
                     id,
                     archivado: false,
                 },
-                data: updateProductDto,
+                data: {
+                    ...updateProductDto,
+                    ...(url ? { url } : {}),
+                },
             });
             return {
                 ...producto,
@@ -224,6 +237,7 @@ let ProductsService = class ProductsService {
 exports.ProductsService = ProductsService;
 exports.ProductsService = ProductsService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [prisma_service_1.PrismaService])
+    __metadata("design:paramtypes", [prisma_service_1.PrismaService,
+        cloudinary_service_1.CloudinaryService])
 ], ProductsService);
 //# sourceMappingURL=products.service.js.map

@@ -31,6 +31,9 @@ export class OrdersService {
       const { orderItems, ...orderDto } = createOrderDto
       await this.validateOrderItems(orderDto.monto_total, orderItems)
 
+      const activeOrder = await this.hasActiveOrder(session.id)
+      if (activeOrder)
+        throw new BadRequestException(`Ya tiene una orden activa para hoy`)
       const order = await prisma.orden.create({
         data: {
           usuario_id: session.id,
@@ -202,12 +205,15 @@ export class OrdersService {
 
     const [orders, total] = await Promise.all([
       this.db.orden.findMany({
-        where,
+        where: where,
         include: {
           Orden_Item: {},
         },
         skip: skip,
         take: page_size,
+        orderBy: {
+          hora_programada: 'desc',
+        },
       }),
       this.db.orden.count({
         where,
@@ -230,7 +236,7 @@ export class OrdersService {
   }
 
   async findOne(id: number) {
-    const orden = await this.db.orden.findFirst({
+    const order = await this.db.orden.findFirst({
       where: {
         id,
       },
@@ -248,12 +254,12 @@ export class OrdersService {
       },
     })
 
-    if (!orden) throw new NotFoundException(`La orden del id ${id} no existe`)
+    if (!order) throw new NotFoundException(`La orden del id ${id} no existe`)
 
     return {
-      ...orden,
-      creado: formatDate(orden.creado),
-      hora_programada: formatDate(orden.hora_programada),
+      ...order,
+      creado: formatDate(order.creado),
+      hora_programada: formatDate(order.hora_programada),
     }
   }
 
@@ -264,6 +270,21 @@ export class OrdersService {
       },
       data: {
         estado: estado,
+      },
+    })
+  }
+
+  private async hasActiveOrder(userId: number) {
+    const today = DateTime.now().setZone('America/Lima').startOf('day')
+    const tomorrow = today.plus({ days: 1 })
+    return await this.db.orden.findFirst({
+      where: {
+        usuario_id: userId,
+        estado: Estado.EN_PROCESO || Estado.RECOGER,
+        hora_programada: {
+          gte: today.toJSDate(),
+          lt: tomorrow.toJSDate(),
+        },
       },
     })
   }

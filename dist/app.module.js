@@ -12,6 +12,7 @@ const reniec_module_1 = require("./providers/reniec/reniec.module");
 const prisma_module_1 = require("./providers/prisma/prisma.module");
 const schedule_1 = require("@nestjs/schedule");
 const orders_module_1 = require("./modules/orders/orders.module");
+const cloudinary_module_1 = require("./providers/cloudinary/cloudinary.module");
 const users_module_1 = require("./modules/users/users.module");
 const products_module_1 = require("./modules/products/products.module");
 const auth_module_1 = require("./modules/auth/auth.module");
@@ -27,6 +28,7 @@ exports.AppModule = AppModule = __decorate([
             users_module_1.UsersModule,
             orders_module_1.OrdersModule,
             products_module_1.ProductsModule,
+            cloudinary_module_1.CloudinaryModule,
             auth_module_1.AuthModule,
             inventory_module_1.InventoryModule,
             schedule_1.ScheduleModule.forRoot(),

@@ -42,7 +42,7 @@ export class CloudinaryService {
   }
 
   async uploadFileToCloudinary(file: Express.Multer.File): Promise<string> {
-    let fileUploaded = ''
+    let fileUploaded = 'PENDIENTE'
     if (file) {
       const upload = await this.uploadFile(file)
       fileUploaded = upload.secure_url

@@ -34,7 +34,7 @@ let CloudinaryService = class CloudinaryService {
         return filesUploaded;
     }
     async uploadFileToCloudinary(file) {
-        let fileUploaded = '';
+        let fileUploaded = 'PENDIENTE';
         if (file) {
             const upload = await this.uploadFile(file);
             fileUploaded = upload.secure_url;
