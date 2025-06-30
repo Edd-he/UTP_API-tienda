@@ -10,7 +10,10 @@ export const UploadFiles = () => {
   return UploadedFiles(
     new ParseFilePipe({
       fileIsRequired: false,
-      validators: [new MaxFileSizeValidator({ maxSize: 1024 * 1024 * 5 })],
+      validators: [
+        new MaxFileSizeValidator({ maxSize: 1024 * 1024 * 5 }),
+        new FileTypeValidator({ fileType: /^image\/(jpeg|png|gif|webp|bmp)$/ }),
+      ],
     }),
   )
 }
@@ -21,7 +24,7 @@ export const UploadFile = () => {
       fileIsRequired: false,
       validators: [
         new MaxFileSizeValidator({ maxSize: 1024 * 1024 * 5 }),
-        new FileTypeValidator({ fileType: 'image/*' }), // Solo permite imágenes
+        new FileTypeValidator({ fileType: /^image\/(jpeg|png|gif|webp|bmp)$/ }),
       ],
     }),
   )

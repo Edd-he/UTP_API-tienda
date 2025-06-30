@@ -61,12 +61,28 @@ export class UsersController {
     return teacher
   }
 
-  @Get('obtener-usuarios')
+  @Get('obtener-administradores')
   @ApiOperation({
-    summary: 'Obtiene todos los usuarios',
+    summary: 'Obtiene todos los administradores',
   })
-  async getAllUsers(@Query() query: SearchStatusQueryParamsDto) {
-    return this.usersService.findAll(query)
+  async getAllAdmins(@Query() query: SearchStatusQueryParamsDto) {
+    return this.usersService.findAllAdmins(query)
+  }
+
+  @Get('obtener-estudiantes')
+  @ApiOperation({
+    summary: 'Obtiene todos los estudiantes registrados',
+  })
+  async getAllStudents(@Query() query: SearchStatusQueryParamsDto) {
+    return this.usersService.findAllStudents(query)
+  }
+
+  @Get('obtener-profesores')
+  @ApiOperation({
+    summary: 'Obtiene todos los profesores registrados',
+  })
+  async getAllTeachers(@Query() query: SearchStatusQueryParamsDto) {
+    return this.usersService.findAllTeachers(query)
   }
 
   @PublicAccess()

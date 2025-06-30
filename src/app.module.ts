@@ -9,6 +9,7 @@ import { UsersModule } from './modules/users/users.module'
 import { ProductsModule } from './modules/products/products.module'
 import { AuthModule } from './modules/auth/auth.module'
 import { InventoryModule } from './modules/inventory/inventory.module'
+import { PaymentsModule } from './modules/payments/payments.module'
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { InventoryModule } from './modules/inventory/inventory.module'
     AuthModule,
     InventoryModule,
     ScheduleModule.forRoot(),
+    PaymentsModule,
   ],
   controllers: [],
   providers: [],

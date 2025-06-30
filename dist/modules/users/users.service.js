@@ -48,7 +48,7 @@ let UsersService = class UsersService {
             throw new common_1.InternalServerErrorException('Hubo un error al crear el usuario');
         }
     }
-    async findAll({ query, page, page_size, enable, }) {
+    async findAllAdmins({ query, page, page_size, enable, }) {
         const pages = page || 1;
         const skip = (pages - 1) * page_size;
         const where = {
@@ -61,6 +61,81 @@ let UsersService = class UsersService {
                 enable !== null && enable !== undefined ? { habilitado: enable } : {},
             ],
             archivado: false,
+            rol: client_1.Rol.ADMINISTRADOR,
+        };
+        const [users, total] = await Promise.all([
+            this.db.usuario.findMany({
+                omit: {
+                    contraseña: true,
+                    archivado: true,
+                },
+                where,
+                skip: skip,
+                take: page_size,
+            }),
+            this.db.usuario.count({ where }),
+        ]);
+        const data = users.map((user) => {
+            return {
+                ...user,
+                creado: (0, format_date_1.formatDate)(user.creado),
+                actualizado: (0, format_date_1.formatDate)(user.actualizado),
+            };
+        });
+        const totalPages = Math.ceil(total / page_size);
+        return { data, total, totalPages };
+    }
+    async findAllStudents({ query, page, page_size, enable, }) {
+        const pages = page || 1;
+        const skip = (pages - 1) * page_size;
+        const where = {
+            AND: [
+                query
+                    ? {
+                        nombre: { contains: query, mode: client_1.Prisma.QueryMode.insensitive },
+                    }
+                    : {},
+                enable !== null && enable !== undefined ? { habilitado: enable } : {},
+            ],
+            archivado: false,
+            rol: client_1.Rol.ESTUDIANTE,
+        };
+        const [users, total] = await Promise.all([
+            this.db.usuario.findMany({
+                omit: {
+                    contraseña: true,
+                    archivado: true,
+                },
+                where,
+                skip: skip,
+                take: page_size,
+            }),
+            this.db.usuario.count({ where }),
+        ]);
+        const data = users.map((user) => {
+            return {
+                ...user,
+                creado: (0, format_date_1.formatDate)(user.creado),
+                actualizado: (0, format_date_1.formatDate)(user.actualizado),
+            };
+        });
+        const totalPages = Math.ceil(total / page_size);
+        return { data, total, totalPages };
+    }
+    async findAllTeachers({ query, page, page_size, enable, }) {
+        const pages = page || 1;
+        const skip = (pages - 1) * page_size;
+        const where = {
+            AND: [
+                query
+                    ? {
+                        nombre: { contains: query, mode: client_1.Prisma.QueryMode.insensitive },
+                    }
+                    : {},
+                enable !== null && enable !== undefined ? { habilitado: enable } : {},
+            ],
+            archivado: false,
+            rol: client_1.Rol.PROFESOR,
         };
         const [users, total] = await Promise.all([
             this.db.usuario.findMany({
@@ -111,6 +186,9 @@ let UsersService = class UsersService {
             where: {
                 correo,
                 archivado: false,
+            },
+            include: {
+                webAuthnCredentials: true,
             },
         });
         if (!user)

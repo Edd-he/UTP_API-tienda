@@ -17,6 +17,7 @@ const users_module_1 = require("./modules/users/users.module");
 const products_module_1 = require("./modules/products/products.module");
 const auth_module_1 = require("./modules/auth/auth.module");
 const inventory_module_1 = require("./modules/inventory/inventory.module");
+const payments_module_1 = require("./modules/payments/payments.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -32,6 +33,7 @@ exports.AppModule = AppModule = __decorate([
             auth_module_1.AuthModule,
             inventory_module_1.InventoryModule,
             schedule_1.ScheduleModule.forRoot(),
+            payments_module_1.PaymentsModule,
         ],
         controllers: [],
         providers: [],

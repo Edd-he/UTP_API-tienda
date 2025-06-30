@@ -18,6 +18,7 @@ export declare class OrdersService {
         monto_total: Prisma.Decimal;
         transaccion: string;
         estado: import(".prisma/client").$Enums.Estado;
+        Metodo_Pago: import(".prisma/client").$Enums.MetodoPago;
         usuario_id: number;
     }>;
     findAll({ page_size, page, query, status }: OrdersQueryParams): Promise<{
@@ -44,6 +45,7 @@ export declare class OrdersService {
             monto_total: Prisma.Decimal;
             transaccion: string;
             estado: import(".prisma/client").$Enums.Estado;
+            Metodo_Pago: import(".prisma/client").$Enums.MetodoPago;
             usuario_id: number;
         }[];
         total: number;
@@ -73,6 +75,7 @@ export declare class OrdersService {
             monto_total: Prisma.Decimal;
             transaccion: string;
             estado: import(".prisma/client").$Enums.Estado;
+            Metodo_Pago: import(".prisma/client").$Enums.MetodoPago;
             usuario_id: number;
         }[];
         total: number;
@@ -94,6 +97,7 @@ export declare class OrdersService {
             monto_total: Prisma.Decimal;
             transaccion: string;
             estado: import(".prisma/client").$Enums.Estado;
+            Metodo_Pago: import(".prisma/client").$Enums.MetodoPago;
             usuario_id: number;
         }[];
         total: number;
@@ -122,6 +126,7 @@ export declare class OrdersService {
         monto_total: Prisma.Decimal;
         transaccion: string;
         estado: import(".prisma/client").$Enums.Estado;
+        Metodo_Pago: import(".prisma/client").$Enums.MetodoPago;
         usuario_id: number;
     }>;
     changeStatusOrder(id: number, estado: Estado): Promise<{
@@ -131,6 +136,7 @@ export declare class OrdersService {
         monto_total: Prisma.Decimal;
         transaccion: string;
         estado: import(".prisma/client").$Enums.Estado;
+        Metodo_Pago: import(".prisma/client").$Enums.MetodoPago;
         usuario_id: number;
     }>;
     private hasActiveOrder;

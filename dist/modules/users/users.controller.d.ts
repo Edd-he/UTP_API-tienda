@@ -39,7 +39,37 @@ export declare class UsersController {
         correo: string;
         rol: import(".prisma/client").$Enums.Rol;
     }>;
-    getAllUsers(query: SearchStatusQueryParamsDto): Promise<{
+    getAllAdmins(query: SearchStatusQueryParamsDto): Promise<{
+        data: {
+            creado: string;
+            actualizado: string;
+            nombre: string;
+            habilitado: boolean;
+            id: number;
+            dni: string;
+            apellidos: string;
+            correo: string;
+            rol: import(".prisma/client").$Enums.Rol;
+        }[];
+        total: number;
+        totalPages: number;
+    }>;
+    getAllStudents(query: SearchStatusQueryParamsDto): Promise<{
+        data: {
+            creado: string;
+            actualizado: string;
+            nombre: string;
+            habilitado: boolean;
+            id: number;
+            dni: string;
+            apellidos: string;
+            correo: string;
+            rol: import(".prisma/client").$Enums.Rol;
+        }[];
+        total: number;
+        totalPages: number;
+    }>;
+    getAllTeachers(query: SearchStatusQueryParamsDto): Promise<{
         data: {
             creado: string;
             actualizado: string;

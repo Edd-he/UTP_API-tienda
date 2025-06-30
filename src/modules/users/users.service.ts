@@ -51,7 +51,7 @@ export class UsersService {
     }
   }
 
-  async findAll({
+  async findAllAdmins({
     query,
     page,
     page_size,
@@ -69,6 +69,99 @@ export class UsersService {
         enable !== null && enable !== undefined ? { habilitado: enable } : {},
       ],
       archivado: false,
+      rol: Rol.ADMINISTRADOR,
+    }
+    const [users, total] = await Promise.all([
+      this.db.usuario.findMany({
+        omit: {
+          contraseña: true,
+          archivado: true,
+        },
+        where,
+        skip: skip,
+        take: page_size,
+      }),
+      this.db.usuario.count({ where }),
+    ])
+
+    const data = users.map((user) => {
+      return {
+        ...user,
+        creado: formatDate(user.creado),
+        actualizado: formatDate(user.actualizado),
+      }
+    })
+
+    const totalPages = Math.ceil(total / page_size)
+
+    return { data, total, totalPages }
+  }
+
+  async findAllStudents({
+    query,
+    page,
+    page_size,
+    enable,
+  }: SearchStatusQueryParamsDto) {
+    const pages = page || 1
+    const skip = (pages - 1) * page_size
+    const where = {
+      AND: [
+        query
+          ? {
+              nombre: { contains: query, mode: Prisma.QueryMode.insensitive },
+            }
+          : {},
+        enable !== null && enable !== undefined ? { habilitado: enable } : {},
+      ],
+      archivado: false,
+      rol: Rol.ESTUDIANTE,
+    }
+    const [users, total] = await Promise.all([
+      this.db.usuario.findMany({
+        omit: {
+          contraseña: true,
+          archivado: true,
+        },
+        where,
+        skip: skip,
+        take: page_size,
+      }),
+      this.db.usuario.count({ where }),
+    ])
+
+    const data = users.map((user) => {
+      return {
+        ...user,
+        creado: formatDate(user.creado),
+        actualizado: formatDate(user.actualizado),
+      }
+    })
+
+    const totalPages = Math.ceil(total / page_size)
+
+    return { data, total, totalPages }
+  }
+
+  async findAllTeachers({
+    query,
+    page,
+    page_size,
+    enable,
+  }: SearchStatusQueryParamsDto) {
+    const pages = page || 1
+    const skip = (pages - 1) * page_size
+    const where = {
+      AND: [
+        query
+          ? {
+              nombre: { contains: query, mode: Prisma.QueryMode.insensitive },
+            }
+          : {},
+        enable !== null && enable !== undefined ? { habilitado: enable } : {},
+      ],
+      archivado: false,
+      rol: Rol.PROFESOR,
     }
     const [users, total] = await Promise.all([
       this.db.usuario.findMany({
@@ -125,6 +218,9 @@ export class UsersService {
       where: {
         correo,
         archivado: false,
+      },
+      include: {
+        webAuthnCredentials: true,
       },
     })
     if (!user)

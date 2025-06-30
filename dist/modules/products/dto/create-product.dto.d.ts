@@ -5,5 +5,5 @@ export declare class CreateProductDto {
     precio: number;
     limite_de_orden: number;
     categoria: Categoria;
-    habilitado?: boolean;
+    habilitado: boolean;
 }

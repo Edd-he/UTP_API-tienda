@@ -17,7 +17,7 @@ const class_transformer_1 = require("class-transformer");
 const class_validator_1 = require("class-validator");
 class CreateProductDto {
     static _OPENAPI_METADATA_FACTORY() {
-        return { nombre: { required: true, type: () => String }, descripcion: { required: true, type: () => String }, precio: { required: true, type: () => Number }, limite_de_orden: { required: true, type: () => Number, minimum: 1 }, categoria: { required: true, type: () => Object }, habilitado: { required: false, type: () => Boolean } };
+        return { nombre: { required: true, type: () => String }, descripcion: { required: true, type: () => String }, precio: { required: true, type: () => Number }, limite_de_orden: { required: true, type: () => Number, minimum: 1 }, categoria: { required: true, type: () => Object }, habilitado: { required: true, type: () => Boolean } };
     }
 }
 exports.CreateProductDto = CreateProductDto;
@@ -52,7 +52,7 @@ __decorate([
     __metadata("design:type", String)
 ], CreateProductDto.prototype, "categoria", void 0);
 __decorate([
-    (0, class_transformer_1.Type)(() => Boolean),
+    (0, class_transformer_1.Transform)(({ value }) => value === 'true'),
     (0, class_validator_1.IsBoolean)({ message: 'El estado habilitado debe ser un valor booleano.' }),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", Boolean)

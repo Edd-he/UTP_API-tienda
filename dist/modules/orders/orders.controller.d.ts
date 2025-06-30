@@ -13,6 +13,7 @@ export declare class OrdersController {
         monto_total: import("@prisma/client/runtime/library").Decimal;
         transaccion: string;
         estado: import(".prisma/client").$Enums.Estado;
+        Metodo_Pago: import(".prisma/client").$Enums.MetodoPago;
         usuario_id: number;
     }>;
     findAll(params: OrdersQueryParams): Promise<{
@@ -39,6 +40,7 @@ export declare class OrdersController {
             monto_total: import("@prisma/client/runtime/library").Decimal;
             transaccion: string;
             estado: import(".prisma/client").$Enums.Estado;
+            Metodo_Pago: import(".prisma/client").$Enums.MetodoPago;
             usuario_id: number;
         }[];
         total: number;
@@ -68,6 +70,7 @@ export declare class OrdersController {
             monto_total: import("@prisma/client/runtime/library").Decimal;
             transaccion: string;
             estado: import(".prisma/client").$Enums.Estado;
+            Metodo_Pago: import(".prisma/client").$Enums.MetodoPago;
             usuario_id: number;
         }[];
         total: number;
@@ -89,6 +92,7 @@ export declare class OrdersController {
             monto_total: import("@prisma/client/runtime/library").Decimal;
             transaccion: string;
             estado: import(".prisma/client").$Enums.Estado;
+            Metodo_Pago: import(".prisma/client").$Enums.MetodoPago;
             usuario_id: number;
         }[];
         total: number;
@@ -117,6 +121,7 @@ export declare class OrdersController {
         monto_total: import("@prisma/client/runtime/library").Decimal;
         transaccion: string;
         estado: import(".prisma/client").$Enums.Estado;
+        Metodo_Pago: import(".prisma/client").$Enums.MetodoPago;
         usuario_id: number;
     }>;
     processOrder(id: number): Promise<{
@@ -126,6 +131,7 @@ export declare class OrdersController {
         monto_total: import("@prisma/client/runtime/library").Decimal;
         transaccion: string;
         estado: import(".prisma/client").$Enums.Estado;
+        Metodo_Pago: import(".prisma/client").$Enums.MetodoPago;
         usuario_id: number;
     }>;
     pickupOrder(id: number): Promise<{
@@ -135,6 +141,7 @@ export declare class OrdersController {
         monto_total: import("@prisma/client/runtime/library").Decimal;
         transaccion: string;
         estado: import(".prisma/client").$Enums.Estado;
+        Metodo_Pago: import(".prisma/client").$Enums.MetodoPago;
         usuario_id: number;
     }>;
     abandonOrder(id: number): Promise<{
@@ -144,6 +151,7 @@ export declare class OrdersController {
         monto_total: import("@prisma/client/runtime/library").Decimal;
         transaccion: string;
         estado: import(".prisma/client").$Enums.Estado;
+        Metodo_Pago: import(".prisma/client").$Enums.MetodoPago;
         usuario_id: number;
     }>;
     completeOrder(id: number): Promise<{
@@ -153,6 +161,7 @@ export declare class OrdersController {
         monto_total: import("@prisma/client/runtime/library").Decimal;
         transaccion: string;
         estado: import(".prisma/client").$Enums.Estado;
+        Metodo_Pago: import(".prisma/client").$Enums.MetodoPago;
         usuario_id: number;
     }>;
     cancelOrder(id: number): Promise<{
@@ -162,6 +171,7 @@ export declare class OrdersController {
         monto_total: import("@prisma/client/runtime/library").Decimal;
         transaccion: string;
         estado: import(".prisma/client").$Enums.Estado;
+        Metodo_Pago: import(".prisma/client").$Enums.MetodoPago;
         usuario_id: number;
     }>;
 }

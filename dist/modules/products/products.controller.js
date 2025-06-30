@@ -188,7 +188,7 @@ __decorate([
                 },
                 habilitado: {
                     type: 'boolean',
-                    description: 'Estado habilitado del producto (opcional)',
+                    description: 'Estado habilitado del producto',
                 },
             },
         },

@@ -20,7 +20,37 @@ export declare class UsersService {
         correo: string;
         rol: import(".prisma/client").$Enums.Rol;
     }>;
-    findAll({ query, page, page_size, enable, }: SearchStatusQueryParamsDto): Promise<{
+    findAllAdmins({ query, page, page_size, enable, }: SearchStatusQueryParamsDto): Promise<{
+        data: {
+            creado: string;
+            actualizado: string;
+            nombre: string;
+            habilitado: boolean;
+            id: number;
+            dni: string;
+            apellidos: string;
+            correo: string;
+            rol: import(".prisma/client").$Enums.Rol;
+        }[];
+        total: number;
+        totalPages: number;
+    }>;
+    findAllStudents({ query, page, page_size, enable, }: SearchStatusQueryParamsDto): Promise<{
+        data: {
+            creado: string;
+            actualizado: string;
+            nombre: string;
+            habilitado: boolean;
+            id: number;
+            dni: string;
+            apellidos: string;
+            correo: string;
+            rol: import(".prisma/client").$Enums.Rol;
+        }[];
+        total: number;
+        totalPages: number;
+    }>;
+    findAllTeachers({ query, page, page_size, enable, }: SearchStatusQueryParamsDto): Promise<{
         data: {
             creado: string;
             actualizado: string;
@@ -47,6 +77,18 @@ export declare class UsersService {
         rol: import(".prisma/client").$Enums.Rol;
     }>;
     getOneByEmail(correo: string): Promise<{
+        webAuthnCredentials: {
+            id: string;
+            creado: Date;
+            name: string | null;
+            usuario_id: number;
+            credential_id: Uint8Array;
+            public_key: Uint8Array;
+            counter: number;
+            transport: string | null;
+            aaguid: string | null;
+        }[];
+    } & {
         nombre: string;
         habilitado: boolean;
         id: number;

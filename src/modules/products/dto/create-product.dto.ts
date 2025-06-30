@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { Categoria } from '@prisma/client'
-import { Type } from 'class-transformer'
+import { Transform, Type } from 'class-transformer'
 import {
   IsBoolean,
   IsEnum,
@@ -40,8 +40,8 @@ export class CreateProductDto {
   @IsEnum(Categoria, { message: 'La categoria no es válida' })
   categoria: Categoria
 
-  @Type(() => Boolean)
+  @Transform(({ value }) => value === 'true')
   @IsBoolean({ message: 'El estado habilitado debe ser un valor booleano.' })
   @IsOptional()
-  habilitado?: boolean
+  habilitado: boolean
 }

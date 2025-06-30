@@ -40,8 +40,14 @@ let UsersController = class UsersController {
         const teacher = await this.usersService.create(createUserDto, 'PROFESOR');
         return teacher;
     }
-    async getAllUsers(query) {
-        return this.usersService.findAll(query);
+    async getAllAdmins(query) {
+        return this.usersService.findAllAdmins(query);
+    }
+    async getAllStudents(query) {
+        return this.usersService.findAllStudents(query);
+    }
+    async getAllTeachers(query) {
+        return this.usersService.findAllTeachers(query);
     }
     async verifyDni(dni) {
         return this.usersService.verifyDni(dni);
@@ -96,16 +102,38 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "createTeacher", null);
 __decorate([
-    (0, common_1.Get)('obtener-usuarios'),
+    (0, common_1.Get)('obtener-administradores'),
     (0, swagger_1.ApiOperation)({
-        summary: 'Obtiene todos los usuarios',
+        summary: 'Obtiene todos los administradores',
     }),
     openapi.ApiResponse({ status: 200 }),
     __param(0, (0, common_1.Query)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [search_status_query_params_1.SearchStatusQueryParamsDto]),
     __metadata("design:returntype", Promise)
-], UsersController.prototype, "getAllUsers", null);
+], UsersController.prototype, "getAllAdmins", null);
+__decorate([
+    (0, common_1.Get)('obtener-estudiantes'),
+    (0, swagger_1.ApiOperation)({
+        summary: 'Obtiene todos los estudiantes registrados',
+    }),
+    openapi.ApiResponse({ status: 200 }),
+    __param(0, (0, common_1.Query)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [search_status_query_params_1.SearchStatusQueryParamsDto]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "getAllStudents", null);
+__decorate([
+    (0, common_1.Get)('obtener-profesores'),
+    (0, swagger_1.ApiOperation)({
+        summary: 'Obtiene todos los profesores registrados',
+    }),
+    openapi.ApiResponse({ status: 200 }),
+    __param(0, (0, common_1.Query)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [search_status_query_params_1.SearchStatusQueryParamsDto]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "getAllTeachers", null);
 __decorate([
     (0, public_decorator_1.PublicAccess)(),
     (0, common_1.Get)(':usuarioDNI/verificar-dni'),

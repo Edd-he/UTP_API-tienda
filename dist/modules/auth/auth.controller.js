@@ -16,6 +16,7 @@ exports.AuthController = void 0;
 const openapi = require("@nestjs/swagger");
 const common_1 = require("@nestjs/common");
 const swagger_1 = require("@nestjs/swagger");
+const server_1 = require("@simplewebauthn/server");
 const auth_service_1 = require("./auth.service");
 const signIn_dto_1 = require("./dto/signIn.dto");
 const user_session_decorator_1 = require("./decorators/user-session.decorator");
@@ -35,6 +36,25 @@ let AuthController = class AuthController {
     }
     refreshToken(req) {
         return this.authService.refresh(req.user);
+    }
+    async generateAuthenticationOptions(session) {
+        const user = await this.authService.verifyUserbyEmail(session.correo);
+        if (!user || user.webAuthnCredentials.length === 0)
+            throw new common_1.NotFoundException('No hay credenciales registradas para este usuario');
+        const options = (0, server_1.generateAuthenticationOptions)({
+            allowCredentials: user.webAuthnCredentials.map((cred) => ({
+                id: Buffer.from(cred.credential_id).toString('base64'),
+                type: 'public-key',
+                transports: ['internal'],
+            })),
+            userVerification: 'preferred',
+            timeout: 60000,
+            rpID: '',
+        });
+        return {
+            options,
+            userId: user.id,
+        };
     }
 };
 exports.AuthController = AuthController;
@@ -74,6 +94,15 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "refreshToken", null);
+__decorate([
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, auth_decorator_1.Auth)(['ESTUDIANTE']),
+    (0, common_1.Post)('generate-authentication-options'),
+    __param(0, (0, user_session_decorator_1.UserSession)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "generateAuthenticationOptions", null);
 exports.AuthController = AuthController = __decorate([
     (0, swagger_1.ApiTags)('Autenticación'),
     (0, common_1.Controller)('auth'),

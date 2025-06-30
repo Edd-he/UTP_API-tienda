@@ -15,7 +15,7 @@ const class_transformer_1 = require("class-transformer");
 const class_validator_1 = require("class-validator");
 class CreateUserDto {
     static _OPENAPI_METADATA_FACTORY() {
-        return { dni: { required: true, type: () => String, minLength: 8, maxLength: 8 }, correo: { required: true, type: () => String, format: "email" }, contraseña: { required: true, type: () => String, minLength: 8, maxLength: 20 }, habilitado: { required: false, type: () => Boolean } };
+        return { dni: { required: true, type: () => String, minLength: 8, maxLength: 8 }, correo: { required: true, type: () => String, format: "email", pattern: "/^([AU]\\d{8})@utp\\.edu\\.pe$/i" }, contraseña: { required: true, type: () => String, minLength: 8, maxLength: 20 }, habilitado: { required: true, type: () => Boolean } };
     }
 }
 exports.CreateUserDto = CreateUserDto;
@@ -25,7 +25,10 @@ __decorate([
     __metadata("design:type", String)
 ], CreateUserDto.prototype, "dni", void 0);
 __decorate([
-    (0, class_validator_1.IsEmail)({}, { message: 'El correo electrónico debe ser uno válido' }),
+    (0, class_validator_1.IsEmail)({}, { message: 'El correo debe ser uno válido' }),
+    (0, class_validator_1.Matches)(/^([AU]\d{8})@utp\.edu\.pe$/i, {
+        message: 'El correo no posee el formato correcto',
+    }),
     __metadata("design:type", String)
 ], CreateUserDto.prototype, "correo", void 0);
 __decorate([

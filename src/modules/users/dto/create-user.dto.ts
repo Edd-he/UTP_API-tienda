@@ -5,6 +5,7 @@ import {
   IsEmail,
   IsBoolean,
   IsOptional,
+  Matches,
 } from 'class-validator'
 
 export class CreateUserDto {
@@ -12,7 +13,10 @@ export class CreateUserDto {
   @Length(8, 8, { message: 'El DNI debe tener exactamente 8 caracteres.' })
   dni: string
 
-  @IsEmail({}, { message: 'El correo electrónico debe ser uno válido' })
+  @IsEmail({}, { message: 'El correo debe ser uno válido' })
+  @Matches(/^([AU]\d{8})@utp\.edu\.pe$/i, {
+    message: 'El correo no posee el formato correcto',
+  })
   correo: string
 
   @IsString({ message: 'El DNI debe ser una cadena de texto' })
@@ -24,5 +28,5 @@ export class CreateUserDto {
   @Type(() => Boolean)
   @IsBoolean({ message: 'El estado habilitado debe ser un valor booleano.' })
   @IsOptional()
-  habilitado?: boolean
+  habilitado: boolean
 }
