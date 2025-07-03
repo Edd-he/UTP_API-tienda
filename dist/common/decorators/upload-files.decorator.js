@@ -5,20 +5,14 @@ const common_1 = require("@nestjs/common");
 const UploadFiles = () => {
     return (0, common_1.UploadedFiles)(new common_1.ParseFilePipe({
         fileIsRequired: false,
-        validators: [
-            new common_1.MaxFileSizeValidator({ maxSize: 1024 * 1024 * 5 }),
-            new common_1.FileTypeValidator({ fileType: /^image\/(jpeg|png|gif|webp|bmp)$/ }),
-        ],
+        validators: [new common_1.MaxFileSizeValidator({ maxSize: 1024 * 1024 * 5 })],
     }));
 };
 exports.UploadFiles = UploadFiles;
 const UploadFile = () => {
     return (0, common_1.UploadedFile)(new common_1.ParseFilePipe({
         fileIsRequired: false,
-        validators: [
-            new common_1.MaxFileSizeValidator({ maxSize: 1024 * 1024 * 5 }),
-            new common_1.FileTypeValidator({ fileType: /^image\/(jpeg|png|gif|webp|bmp)$/ }),
-        ],
+        validators: [new common_1.MaxFileSizeValidator({ maxSize: 1024 * 1024 * 5 })],
     }));
 };
 exports.UploadFile = UploadFile;
