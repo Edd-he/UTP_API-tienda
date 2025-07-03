@@ -8,13 +8,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.VapidService = void 0;
 const common_1 = require("@nestjs/common");
-const webPush = require("web-push");
 let VapidService = class VapidService {
-    onModuleInit() {
-        const keys = webPush.generateVAPIDKeys();
-        console.log('🔑 VAPID_PUBLIC_KEY:', keys.publicKey);
-        console.log('🔒 VAPID_PRIVATE_KEY:', keys.privateKey);
-    }
+    onModuleInit() { }
 };
 exports.VapidService = VapidService;
 exports.VapidService = VapidService = __decorate([
