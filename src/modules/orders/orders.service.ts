@@ -7,13 +7,15 @@ import {
 import { PrismaService } from '@providers/prisma/prisma.service'
 import { IUserSession } from '@auth/interfaces/user-session.interface'
 import { generateUUIDV7 } from '@common/utils/uuid'
-import { Estado, Prisma } from '@prisma/client'
+import { Estado, Orden, Prisma } from '@prisma/client'
 import { ProductsService } from '@modules/products/products.service'
 import { formatDate } from '@common/utils/format-date'
 import { InventoryService } from '@modules/inventory/inventory.service'
 import { DateTime } from 'luxon'
 import { StockMovementType } from '@modules/inventory/dto/update-stock.dto'
 import { SearchQueryParamsDto } from '@common/query-params/search-query-params'
+import { PusherService } from '@providers/pusher/pusher.service'
+import { EventsService } from '@modules/events/events.service'
 
 import { CreateOrderDto } from './dto/create-order.dto'
 import { OrdersQueryParams } from './query-params/orders-query-params'
@@ -25,6 +27,8 @@ export class OrdersService {
     private readonly db: PrismaService,
     private readonly productService: ProductsService,
     private readonly inventoryService: InventoryService,
+    private readonly pusherService: PusherService,
+    private readonly eventsService: EventsService,
   ) {}
   async create(createOrderDto: CreateOrderDto, session: IUserSession) {
     return await this.db.$transaction(async (prisma) => {
@@ -32,8 +36,10 @@ export class OrdersService {
       await this.validateOrderItems(orderDto.monto_total, orderItems)
 
       const activeOrder = await this.hasActiveOrder(session.id)
+
       if (activeOrder)
         throw new BadRequestException(`Ya tiene una orden activa para hoy`)
+
       const order = await prisma.orden.create({
         data: {
           usuario_id: session.id,
@@ -57,6 +63,8 @@ export class OrdersService {
           })
         }),
       )
+
+      await this.reportNewOrder()
 
       return {
         ...order,
@@ -264,7 +272,7 @@ export class OrdersService {
   }
 
   async changeStatusOrder(id: number, estado: Estado) {
-    return await this.db.orden.update({
+    const order = await this.db.orden.update({
       where: {
         id,
       },
@@ -272,6 +280,12 @@ export class OrdersService {
         estado: estado,
       },
     })
+
+    if (order.estado === 'RECOGER') {
+      await this.reportOrderReady(order.usuario_id)
+    }
+    await this.reportChangeOrderStatus(order)
+    return order
   }
 
   private async hasActiveOrder(userId: number) {
@@ -287,6 +301,31 @@ export class OrdersService {
         },
       },
     })
+  }
+
+  async reportOrderReady(userId: number) {
+    await this.eventsService.sendNotification(
+      userId,
+      'Orden lista para recoger',
+    )
+  }
+
+  async reportNewOrder() {
+    await this.pusherService.trigger('orders-channel', 'new-order', {
+      timestamp: new Date().toISOString(),
+    })
+  }
+
+  async reportChangeOrderStatus(order: Orden) {
+    await this.pusherService.trigger(
+      `user-channel-${order.usuario_id}`,
+      'new-order-status',
+      {
+        id: order.id,
+        estado: order.estado,
+        timestamp: formatDate(new Date()),
+      },
+    )
   }
 
   private async validateOrderItems(

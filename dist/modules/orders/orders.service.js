@@ -18,11 +18,15 @@ const products_service_1 = require("../products/products.service");
 const format_date_1 = require("../../common/utils/format-date");
 const inventory_service_1 = require("../inventory/inventory.service");
 const luxon_1 = require("luxon");
+const pusher_service_1 = require("../../providers/pusher/pusher.service");
+const events_service_1 = require("../events/events.service");
 let OrdersService = class OrdersService {
-    constructor(db, productService, inventoryService) {
+    constructor(db, productService, inventoryService, pusherService, eventsService) {
         this.db = db;
         this.productService = productService;
         this.inventoryService = inventoryService;
+        this.pusherService = pusherService;
+        this.eventsService = eventsService;
     }
     async create(createOrderDto, session) {
         return await this.db.$transaction(async (prisma) => {
@@ -51,6 +55,7 @@ let OrdersService = class OrdersService {
                     tipo: 'SALIDA',
                 });
             }));
+            await this.reportNewOrder();
             return {
                 ...order,
                 creado: (0, format_date_1.formatDate)(order.creado),
@@ -235,7 +240,7 @@ let OrdersService = class OrdersService {
         };
     }
     async changeStatusOrder(id, estado) {
-        return await this.db.orden.update({
+        const order = await this.db.orden.update({
             where: {
                 id,
             },
@@ -243,6 +248,11 @@ let OrdersService = class OrdersService {
                 estado: estado,
             },
         });
+        if (order.estado === 'RECOGER') {
+            await this.reportOrderReady(order.usuario_id);
+        }
+        await this.reportChangeOrderStatus(order);
+        return order;
     }
     async hasActiveOrder(userId) {
         const today = luxon_1.DateTime.now().setZone('America/Lima').startOf('day');
@@ -256,6 +266,21 @@ let OrdersService = class OrdersService {
                     lt: tomorrow.toJSDate(),
                 },
             },
+        });
+    }
+    async reportOrderReady(userId) {
+        await this.eventsService.sendNotification(userId, 'Orden lista para recoger');
+    }
+    async reportNewOrder() {
+        await this.pusherService.trigger('orders-channel', 'new-order', {
+            timestamp: new Date().toISOString(),
+        });
+    }
+    async reportChangeOrderStatus(order) {
+        await this.pusherService.trigger(`user-channel-${order.usuario_id}`, 'new-order-status', {
+            id: order.id,
+            estado: order.estado,
+            timestamp: (0, format_date_1.formatDate)(new Date()),
         });
     }
     async validateOrderItems(monto_total, orderItems) {
@@ -298,6 +323,8 @@ exports.OrdersService = OrdersService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [prisma_service_1.PrismaService,
         products_service_1.ProductsService,
-        inventory_service_1.InventoryService])
+        inventory_service_1.InventoryService,
+        pusher_service_1.PusherService,
+        events_service_1.EventsService])
 ], OrdersService);
 //# sourceMappingURL=orders.service.js.map

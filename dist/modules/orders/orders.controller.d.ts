@@ -35,6 +35,7 @@ export declare class OrdersController {
                 apellidos: string;
                 correo: string;
                 rol: import(".prisma/client").$Enums.Rol;
+                pushSubscription: import("@prisma/client/runtime/library").JsonValue | null;
             };
             id: number;
             monto_total: import("@prisma/client/runtime/library").Decimal;
@@ -65,6 +66,7 @@ export declare class OrdersController {
                 apellidos: string;
                 correo: string;
                 rol: import(".prisma/client").$Enums.Rol;
+                pushSubscription: import("@prisma/client/runtime/library").JsonValue | null;
             };
             id: number;
             monto_total: import("@prisma/client/runtime/library").Decimal;
@@ -116,6 +118,7 @@ export declare class OrdersController {
             apellidos: string;
             correo: string;
             rol: import(".prisma/client").$Enums.Rol;
+            pushSubscription: import("@prisma/client/runtime/library").JsonValue | null;
         };
         id: number;
         monto_total: import("@prisma/client/runtime/library").Decimal;

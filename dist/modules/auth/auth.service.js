@@ -16,8 +16,6 @@ const jwt_1 = require("@nestjs/jwt");
 const bcrypt = require("bcryptjs");
 const envs_1 = require("../../config/envs");
 const prisma_service_1 = require("../../providers/prisma/prisma.service");
-const server_1 = require("@simplewebauthn/server");
-const web_authn_constants_1 = require("./constants/web-authn.constants");
 let AuthService = class AuthService {
     constructor(userService, jwtService, db) {
         this.userService = userService;
@@ -51,10 +49,6 @@ let AuthService = class AuthService {
             },
         };
     }
-    async verifyUserbyEmail(correo) {
-        const user = await this.userService.getOneByEmail(correo);
-        return user;
-    }
     async refresh(user) {
         const payload = {
             id: user.id,
@@ -71,90 +65,6 @@ let AuthService = class AuthService {
                 secret: envs_1.envs.jwtSecret,
                 expiresIn: '7d',
             }),
-        };
-    }
-    async generateRegistrationOptions(correo) {
-        const user = await this.userService.getOneByEmail(correo);
-        const userCreds = await this.db.webAuthnCredential.findMany({
-            where: { usuario_id: user.id },
-        });
-        return (0, server_1.generateRegistrationOptions)({
-            rpName: 'UTP cafeteria',
-            rpID: web_authn_constants_1.WEB_AUTHN_RPID,
-            userID: new TextEncoder().encode(user.id.toString()),
-            userName: user.correo,
-            attestationType: 'none',
-            excludeCredentials: userCreds.map((cred) => ({
-                id: Buffer.from(cred.credential_id).toString('base64'),
-                type: 'public-key',
-                transports: ['internal'],
-            })),
-            authenticatorSelection: {
-                userVerification: 'required',
-                authenticatorAttachment: 'platform',
-            },
-        });
-    }
-    async verifyRegistration(dto) {
-        const { credential, expectedChallenge, userId } = dto;
-        const user = await this.db.usuario.findUnique({
-            where: { id: userId },
-        });
-        if (!user)
-            throw new common_1.NotFoundException('Usuario no encontrado');
-        const verification = await (0, server_1.verifyRegistrationResponse)({
-            response: credential,
-            expectedChallenge,
-            expectedOrigin: web_authn_constants_1.WEB_AUTHN_ORIGIN,
-            expectedRPID: web_authn_constants_1.WEB_AUTHN_RPID,
-        });
-        if (!verification.verified || !verification.registrationInfo) {
-            throw new common_1.BadRequestException('Verificación fallida');
-        }
-        const { credential: { id, publicKey, counter }, } = verification.registrationInfo;
-        await this.db.webAuthnCredential.create({
-            data: {
-                credential_id: Buffer.from(id),
-                public_key: Buffer.from(publicKey),
-                counter,
-                Usuario: { connect: { id: userId } },
-            },
-        });
-        return { success: true };
-    }
-    async verifyAuthentication(dto, correo) {
-        const user = await this.userService.getOneByEmail(correo);
-        const credential = user.webAuthnCredentials.find((cred) => Buffer.from(cred.credential_id).toString('base64') ===
-            dto.credential.rawId);
-        if (!credential) {
-            throw new common_1.BadRequestException('Credencial no encontrada');
-        }
-        const verification = await (0, server_1.verifyAuthenticationResponse)({
-            response: dto.credential,
-            expectedChallenge: dto.expectedChallenge,
-            expectedOrigin: web_authn_constants_1.WEB_AUTHN_ORIGIN,
-            expectedRPID: web_authn_constants_1.WEB_AUTHN_RPID,
-            credential: {
-                id: Buffer.from(credential.credential_id).toString('base64'),
-                publicKey: credential.public_key,
-                counter: credential.counter,
-                transports: ['internal'],
-            },
-        });
-        const { verified, authenticationInfo } = verification;
-        if (!verified || !authenticationInfo) {
-            throw new common_1.BadRequestException('Verificación de autenticación fallida');
-        }
-        await this.db.webAuthnCredential.update({
-            where: { id: credential.id },
-            data: {
-                counter: authenticationInfo.newCounter,
-            },
-        });
-        return {
-            success: true,
-            message: 'Inicio de sesión biométrico exitoso',
-            userId: user.id,
         };
     }
 };

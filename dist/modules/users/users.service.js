@@ -187,9 +187,6 @@ let UsersService = class UsersService {
                 correo,
                 archivado: false,
             },
-            include: {
-                webAuthnCredentials: true,
-            },
         });
         if (!user)
             throw new common_1.NotFoundException(`El usuario con el correo ${correo} no existe`);

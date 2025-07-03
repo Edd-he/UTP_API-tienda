@@ -9,4 +9,10 @@ export declare const envs: {
     cloudinaryApiKey: string;
     cloudinaryApiSecret: string;
     cronSecret: string;
+    pusherAppId: string;
+    pusherKey: string;
+    pusherSecret: string;
+    pusherCluster: string;
+    vapidPublicKey: string;
+    vapidPrivateKey: string;
 };

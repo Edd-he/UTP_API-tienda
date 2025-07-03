@@ -16,8 +16,4 @@ export declare class AuthController {
         access: string;
         refresh: string;
     }>;
-    generateAuthenticationOptions(session: IUserSession): Promise<{
-        options: Promise<import("@simplewebauthn/server").PublicKeyCredentialRequestOptionsJSON>;
-        userId: number;
-    }>;
 }

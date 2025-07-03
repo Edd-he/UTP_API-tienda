@@ -1,16 +1,20 @@
 import { PrismaService } from '@providers/prisma/prisma.service';
 import { IUserSession } from '@auth/interfaces/user-session.interface';
-import { Estado, Prisma } from '@prisma/client';
+import { Estado, Orden, Prisma } from '@prisma/client';
 import { ProductsService } from '@modules/products/products.service';
 import { InventoryService } from '@modules/inventory/inventory.service';
 import { SearchQueryParamsDto } from '@common/query-params/search-query-params';
+import { PusherService } from '@providers/pusher/pusher.service';
+import { EventsService } from '@modules/events/events.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { OrdersQueryParams } from './query-params/orders-query-params';
 export declare class OrdersService {
     private readonly db;
     private readonly productService;
     private readonly inventoryService;
-    constructor(db: PrismaService, productService: ProductsService, inventoryService: InventoryService);
+    private readonly pusherService;
+    private readonly eventsService;
+    constructor(db: PrismaService, productService: ProductsService, inventoryService: InventoryService, pusherService: PusherService, eventsService: EventsService);
     create(createOrderDto: CreateOrderDto, session: IUserSession): Promise<{
         creado: string;
         hora_programada: string;
@@ -40,6 +44,7 @@ export declare class OrdersService {
                 apellidos: string;
                 correo: string;
                 rol: import(".prisma/client").$Enums.Rol;
+                pushSubscription: Prisma.JsonValue | null;
             };
             id: number;
             monto_total: Prisma.Decimal;
@@ -70,6 +75,7 @@ export declare class OrdersService {
                 apellidos: string;
                 correo: string;
                 rol: import(".prisma/client").$Enums.Rol;
+                pushSubscription: Prisma.JsonValue | null;
             };
             id: number;
             monto_total: Prisma.Decimal;
@@ -121,6 +127,7 @@ export declare class OrdersService {
             apellidos: string;
             correo: string;
             rol: import(".prisma/client").$Enums.Rol;
+            pushSubscription: Prisma.JsonValue | null;
         };
         id: number;
         monto_total: Prisma.Decimal;
@@ -140,5 +147,8 @@ export declare class OrdersService {
         usuario_id: number;
     }>;
     private hasActiveOrder;
+    reportOrderReady(userId: number): Promise<void>;
+    reportNewOrder(): Promise<void>;
+    reportChangeOrderStatus(order: Orden): Promise<void>;
     private validateOrderItems;
 }

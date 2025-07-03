@@ -11,6 +11,12 @@ interface EnvVariables {
   CLOUDINARY_API_KEY: string
   CLOUDINARY_API_SECRET: string
   CRON_SECRET: string
+  PUSHER_APP_ID: string
+  PUSHER_KEY: string
+  PUSHER_SECRET: string
+  PUSHER_CLUSTER: string
+  VAPID_PUBLIC_KEY: string
+  VAPID_PRIVATE_KEY: string
 }
 
 const envSchema = joi
@@ -24,6 +30,12 @@ const envSchema = joi
     CLOUDINARY_API_KEY: joi.string().required(),
     CLOUDINARY_API_SECRET: joi.string().required(),
     CRON_SECRET: joi.string().required(),
+    PUSHER_APP_ID: joi.string().required(),
+    PUSHER_KEY: joi.string().required(),
+    PUSHER_SECRET: joi.string().required(),
+    PUSHER_CLUSTER: joi.string().required(),
+    VAPID_PUBLIC_KEY: joi.string().required(),
+    VAPID_PRIVATE_KEY: joi.string().required(),
   })
   .unknown(true)
 
@@ -44,4 +56,10 @@ export const envs = {
   cloudinaryApiKey: envVariables.CLOUDINARY_API_KEY,
   cloudinaryApiSecret: envVariables.CLOUDINARY_API_SECRET,
   cronSecret: envVariables.CRON_SECRET,
+  pusherAppId: envVariables.PUSHER_APP_ID,
+  pusherKey: envVariables.PUSHER_KEY,
+  pusherSecret: envVariables.PUSHER_SECRET,
+  pusherCluster: envVariables.PUSHER_CLUSTER,
+  vapidPublicKey: envVariables.VAPID_PUBLIC_KEY,
+  vapidPrivateKey: envVariables.VAPID_PRIVATE_KEY,
 }

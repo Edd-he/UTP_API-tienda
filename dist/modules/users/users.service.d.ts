@@ -1,7 +1,7 @@
 import { PrismaService } from '@providers/prisma/prisma.service';
 import { ReniecService } from '@providers/reniec/reniec.service';
 import { IReniecResponse } from '@providers/reniec/interfaces/reniec-response.interface';
-import { Rol } from '@prisma/client';
+import { Prisma, Rol } from '@prisma/client';
 import { SearchStatusQueryParamsDto } from '@common/query-params/search-status-query-params';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -19,6 +19,7 @@ export declare class UsersService {
         apellidos: string;
         correo: string;
         rol: import(".prisma/client").$Enums.Rol;
+        pushSubscription: Prisma.JsonValue | null;
     }>;
     findAllAdmins({ query, page, page_size, enable, }: SearchStatusQueryParamsDto): Promise<{
         data: {
@@ -31,6 +32,7 @@ export declare class UsersService {
             apellidos: string;
             correo: string;
             rol: import(".prisma/client").$Enums.Rol;
+            pushSubscription: Prisma.JsonValue | null;
         }[];
         total: number;
         totalPages: number;
@@ -46,6 +48,7 @@ export declare class UsersService {
             apellidos: string;
             correo: string;
             rol: import(".prisma/client").$Enums.Rol;
+            pushSubscription: Prisma.JsonValue | null;
         }[];
         total: number;
         totalPages: number;
@@ -61,6 +64,7 @@ export declare class UsersService {
             apellidos: string;
             correo: string;
             rol: import(".prisma/client").$Enums.Rol;
+            pushSubscription: Prisma.JsonValue | null;
         }[];
         total: number;
         totalPages: number;
@@ -75,20 +79,9 @@ export declare class UsersService {
         apellidos: string;
         correo: string;
         rol: import(".prisma/client").$Enums.Rol;
+        pushSubscription: Prisma.JsonValue | null;
     }>;
     getOneByEmail(correo: string): Promise<{
-        webAuthnCredentials: {
-            id: string;
-            creado: Date;
-            name: string | null;
-            usuario_id: number;
-            credential_id: Uint8Array;
-            public_key: Uint8Array;
-            counter: number;
-            transport: string | null;
-            aaguid: string | null;
-        }[];
-    } & {
         nombre: string;
         habilitado: boolean;
         id: number;
@@ -99,6 +92,7 @@ export declare class UsersService {
         correo: string;
         contraseña: string;
         rol: import(".prisma/client").$Enums.Rol;
+        pushSubscription: Prisma.JsonValue | null;
     }>;
     update(id: number, updateUserDto: UpdateUserDto): Promise<{
         creado: string;
@@ -110,6 +104,7 @@ export declare class UsersService {
         apellidos: string;
         correo: string;
         rol: import(".prisma/client").$Enums.Rol;
+        pushSubscription: Prisma.JsonValue | null;
     }>;
     remove(id: number): Promise<{
         id: number;

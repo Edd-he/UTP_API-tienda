@@ -219,9 +219,6 @@ export class UsersService {
         correo,
         archivado: false,
       },
-      include: {
-        webAuthnCredentials: true,
-      },
     })
     if (!user)
       throw new NotFoundException(

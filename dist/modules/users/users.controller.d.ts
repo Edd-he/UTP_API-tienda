@@ -16,6 +16,7 @@ export declare class UsersController {
         apellidos: string;
         correo: string;
         rol: import(".prisma/client").$Enums.Rol;
+        pushSubscription: import("@prisma/client/runtime/library").JsonValue | null;
     }>;
     crearStudent(session: IUserSession, createUserDto: CreateUserDto): Promise<{
         creado: string;
@@ -27,6 +28,7 @@ export declare class UsersController {
         apellidos: string;
         correo: string;
         rol: import(".prisma/client").$Enums.Rol;
+        pushSubscription: import("@prisma/client/runtime/library").JsonValue | null;
     }>;
     createTeacher(session: IUserSession, createUserDto: CreateUserDto): Promise<{
         creado: string;
@@ -38,6 +40,7 @@ export declare class UsersController {
         apellidos: string;
         correo: string;
         rol: import(".prisma/client").$Enums.Rol;
+        pushSubscription: import("@prisma/client/runtime/library").JsonValue | null;
     }>;
     getAllAdmins(query: SearchStatusQueryParamsDto): Promise<{
         data: {
@@ -50,6 +53,7 @@ export declare class UsersController {
             apellidos: string;
             correo: string;
             rol: import(".prisma/client").$Enums.Rol;
+            pushSubscription: import("@prisma/client/runtime/library").JsonValue | null;
         }[];
         total: number;
         totalPages: number;
@@ -65,6 +69,7 @@ export declare class UsersController {
             apellidos: string;
             correo: string;
             rol: import(".prisma/client").$Enums.Rol;
+            pushSubscription: import("@prisma/client/runtime/library").JsonValue | null;
         }[];
         total: number;
         totalPages: number;
@@ -80,6 +85,7 @@ export declare class UsersController {
             apellidos: string;
             correo: string;
             rol: import(".prisma/client").$Enums.Rol;
+            pushSubscription: import("@prisma/client/runtime/library").JsonValue | null;
         }[];
         total: number;
         totalPages: number;
@@ -95,6 +101,7 @@ export declare class UsersController {
         apellidos: string;
         correo: string;
         rol: import(".prisma/client").$Enums.Rol;
+        pushSubscription: import("@prisma/client/runtime/library").JsonValue | null;
     }>;
     updateUser(userId: number, session: IUserSession, updateUserDto: UpdateUserDto): Promise<{
         creado: string;
@@ -106,6 +113,7 @@ export declare class UsersController {
         apellidos: string;
         correo: string;
         rol: import(".prisma/client").$Enums.Rol;
+        pushSubscription: import("@prisma/client/runtime/library").JsonValue | null;
     }>;
     removeUser(userId: number): Promise<{
         id: number;
