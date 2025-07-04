@@ -24,6 +24,7 @@ const validate_dni_pipe_1 = require("./pipes/validate-dni.pipe");
 const update_user_dto_1 = require("./dto/update-user.dto");
 const create_user_dto_1 = require("./dto/create-user.dto");
 const users_service_1 = require("./users.service");
+const new_password_dto_1 = require("./dto/new-password.dto");
 let UsersController = class UsersController {
     constructor(usersService) {
         this.usersService = usersService;
@@ -57,6 +58,10 @@ let UsersController = class UsersController {
     }
     async updateUser(userId, session, updateUserDto) {
         const admin = await this.usersService.update(userId, updateUserDto);
+        return admin;
+    }
+    async updatePassword(userId, dto) {
+        const admin = await this.usersService.updatePassword(userId, dto);
         return admin;
     }
     async removeUser(userId) {
@@ -170,6 +175,18 @@ __decorate([
     __metadata("design:paramtypes", [Number, Object, update_user_dto_1.UpdateUserDto]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "updateUser", null);
+__decorate([
+    (0, common_1.Patch)(':usuarioID/actualizar-contraseña'),
+    (0, swagger_1.ApiOperation)({
+        summary: 'Actualiza la contraseña de un usuario',
+    }),
+    openapi.ApiResponse({ status: 200 }),
+    __param(0, (0, common_1.Param)('usuarioID', validate_id_pipe_1.ValidateId)),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, new_password_dto_1.NewPasswordDto]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "updatePassword", null);
 __decorate([
     (0, common_1.Delete)(':usuarioID/remover-usuario'),
     (0, swagger_1.ApiOperation)({

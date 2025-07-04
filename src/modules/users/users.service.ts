@@ -278,7 +278,7 @@ export class UsersService {
           archivado: false,
         },
         data: {
-          contraseña: await bcrypt.hash(dto.contraseña, 10),
+          contraseña: await bcrypt.hash(dto.nueva_contraseña, 10),
         },
       })
 

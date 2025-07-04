@@ -225,6 +225,30 @@ let UsersService = class UsersService {
             throw new common_1.InternalServerErrorException('Hubo un error al actualizar el usuario');
         }
     }
+    async updatePassword(id, dto) {
+        try {
+            const updatedUser = await this.db.usuario.update({
+                omit: { archivado: true, contraseña: true },
+                where: {
+                    id,
+                    archivado: false,
+                },
+                data: {
+                    contraseña: await bcrypt.hash(dto.nueva_contraseña, 10),
+                },
+            });
+            return {
+                ...updatedUser,
+                creado: (0, format_date_1.formatDate)(updatedUser.creado),
+                actualizado: (0, format_date_1.formatDate)(updatedUser.actualizado),
+            };
+        }
+        catch (e) {
+            if (e.code)
+                throw new prisma_exception_1.PrismaException(e);
+            throw new common_1.InternalServerErrorException('Hubo un error al actualizar la contraseña del usuario');
+        }
+    }
     async remove(id) {
         try {
             const archivedUser = await this.db.usuario.update({

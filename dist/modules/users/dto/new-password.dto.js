@@ -9,27 +9,20 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SignInDto = void 0;
+exports.NewPasswordDto = void 0;
 const openapi = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
-class SignInDto {
+class NewPasswordDto {
     static _OPENAPI_METADATA_FACTORY() {
-        return { correo: { required: true, type: () => String, format: "email", pattern: "/^([AU]\\d{8})@utp\\.edu\\.pe$/" }, contraseña: { required: true, type: () => String, minLength: 5, maxLength: 20 } };
+        return { nueva_contraseña: { required: true, type: () => String, minLength: 8, maxLength: 20 } };
     }
 }
-exports.SignInDto = SignInDto;
+exports.NewPasswordDto = NewPasswordDto;
 __decorate([
-    (0, class_validator_1.IsEmail)({}, { message: 'El correo electrónico no es válido.' }),
-    (0, class_validator_1.Matches)(/^([AU]\d{8})@utp\.edu\.pe$/, {
-        message: 'El correo no posee el formato correcto',
+    (0, class_validator_1.IsString)({ message: 'La nueva contraseña debe ser una cadena de texto' }),
+    (0, class_validator_1.Length)(8, 20, {
+        message: 'La nueva contraseña debe tener entre 8 y 20 caracteres.',
     }),
     __metadata("design:type", String)
-], SignInDto.prototype, "correo", void 0);
-__decorate([
-    (0, class_validator_1.IsString)(),
-    (0, class_validator_1.Length)(5, 20, {
-        message: 'La contraseña debe tener entre 8 y 20 caracteres.',
-    }),
-    __metadata("design:type", String)
-], SignInDto.prototype, "contrase\u00F1a", void 0);
-//# sourceMappingURL=signIn.dto.js.map
+], NewPasswordDto.prototype, "nueva_contrase\u00F1a", void 0);
+//# sourceMappingURL=new-password.dto.js.map

@@ -3,6 +3,7 @@ import { IUserSession } from '@auth/interfaces/user-session.interface';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UsersService } from './users.service';
+import { NewPasswordDto } from './dto/new-password.dto';
 export declare class UsersController {
     private readonly usersService;
     constructor(usersService: UsersService);
@@ -104,6 +105,18 @@ export declare class UsersController {
         pushSubscription: import("@prisma/client/runtime/library").JsonValue | null;
     }>;
     updateUser(userId: number, session: IUserSession, updateUserDto: UpdateUserDto): Promise<{
+        creado: string;
+        actualizado: string;
+        nombre: string;
+        habilitado: boolean;
+        id: number;
+        dni: string;
+        apellidos: string;
+        correo: string;
+        rol: import(".prisma/client").$Enums.Rol;
+        pushSubscription: import("@prisma/client/runtime/library").JsonValue | null;
+    }>;
+    updatePassword(userId: number, dto: NewPasswordDto): Promise<{
         creado: string;
         actualizado: string;
         nombre: string;

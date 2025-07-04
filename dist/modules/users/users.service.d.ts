@@ -5,6 +5,7 @@ import { Prisma, Rol } from '@prisma/client';
 import { SearchStatusQueryParamsDto } from '@common/query-params/search-status-query-params';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { NewPasswordDto } from './dto/new-password.dto';
 export declare class UsersService {
     private readonly db;
     private reniecService;
@@ -95,6 +96,18 @@ export declare class UsersService {
         pushSubscription: Prisma.JsonValue | null;
     }>;
     update(id: number, updateUserDto: UpdateUserDto): Promise<{
+        creado: string;
+        actualizado: string;
+        nombre: string;
+        habilitado: boolean;
+        id: number;
+        dni: string;
+        apellidos: string;
+        correo: string;
+        rol: import(".prisma/client").$Enums.Rol;
+        pushSubscription: Prisma.JsonValue | null;
+    }>;
+    updatePassword(id: number, dto: NewPasswordDto): Promise<{
         creado: string;
         actualizado: string;
         nombre: string;
