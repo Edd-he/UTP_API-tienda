@@ -285,7 +285,7 @@ export class OrdersService {
       await this.eventsService.sendNotification(order.usuario_id, {
         title: 'Nueva Notificación',
         body: `Tu orden ${order.id} esta lista para recoger`,
-        url: '/my-orders',
+        url: '/shop/my-orders',
       })
     }
     await this.reportChangeOrderStatus(order)
