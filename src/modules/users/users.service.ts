@@ -14,6 +14,7 @@ import { formatDate } from '@common/utils/format-date'
 
 import { CreateUserDto } from './dto/create-user.dto'
 import { UpdateUserDto } from './dto/update-user.dto'
+import { NewPasswordDto } from './dto/new-password.dto'
 @Injectable()
 export class UsersService {
   constructor(
@@ -264,6 +265,33 @@ export class UsersService {
 
       throw new InternalServerErrorException(
         'Hubo un error al actualizar el usuario',
+      )
+    }
+  }
+
+  async updatePassword(id: number, dto: NewPasswordDto) {
+    try {
+      const updatedUser = await this.db.usuario.update({
+        omit: { archivado: true, contraseña: true },
+        where: {
+          id,
+          archivado: false,
+        },
+        data: {
+          contraseña: await bcrypt.hash(dto.contraseña, 10),
+        },
+      })
+
+      return {
+        ...updatedUser,
+        creado: formatDate(updatedUser.creado),
+        actualizado: formatDate(updatedUser.actualizado),
+      }
+    } catch (e) {
+      if (e.code) throw new PrismaException(e)
+
+      throw new InternalServerErrorException(
+        'Hubo un error al actualizar la contraseña del usuario',
       )
     }
   }

@@ -19,6 +19,7 @@ import { ValidateDNI } from './pipes/validate-dni.pipe'
 import { UpdateUserDto } from './dto/update-user.dto'
 import { CreateUserDto } from './dto/create-user.dto'
 import { UsersService } from './users.service'
+import { NewPasswordDto } from './dto/new-password.dto'
 
 @ApiTags('Usuarios')
 @Controller('usuarios')
@@ -112,6 +113,18 @@ export class UsersController {
     @Body() updateUserDto: UpdateUserDto,
   ) {
     const admin = await this.usersService.update(userId, updateUserDto)
+    return admin
+  }
+
+  @Patch(':usuarioID/actualizar-contraseña')
+  @ApiOperation({
+    summary: 'Actualiza la contraseña de un usuario',
+  })
+  async updatePassword(
+    @Param('usuarioID', ValidateId) userId: number,
+    @Body() dto: NewPasswordDto,
+  ) {
+    const admin = await this.usersService.updatePassword(userId, dto)
     return admin
   }
 
