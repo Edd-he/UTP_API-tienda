@@ -16,6 +16,7 @@ exports.EventsController = void 0;
 const openapi = require("@nestjs/swagger");
 const common_1 = require("@nestjs/common");
 const common_2 = require("@nestjs/common");
+const swagger_1 = require("@nestjs/swagger");
 const events_service_1 = require("./events.service");
 const create_subscription_dto_1 = require("./dto/create-subscription.dto");
 let EventsController = class EventsController {
@@ -29,7 +30,7 @@ let EventsController = class EventsController {
 };
 exports.EventsController = EventsController;
 __decorate([
-    (0, common_2.Post)('save-subscription'),
+    (0, common_2.Post)('guardar-subscripcion'),
     openapi.ApiResponse({ status: 201 }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -37,7 +38,8 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], EventsController.prototype, "saveSubscription", null);
 exports.EventsController = EventsController = __decorate([
-    (0, common_1.Controller)('events'),
+    (0, swagger_1.ApiTags)('Eventos'),
+    (0, common_1.Controller)('eventos'),
     __metadata("design:paramtypes", [events_service_1.EventsService])
 ], EventsController);
 //# sourceMappingURL=events.controller.js.map
