@@ -249,7 +249,11 @@ let OrdersService = class OrdersService {
             },
         });
         if (order.estado === 'RECOGER') {
-            await this.reportOrderReady(order.usuario_id);
+            await this.eventsService.sendNotification(order.usuario_id, {
+                title: 'Nueva Notificación',
+                body: `Tu orden ${order.id} esta lista para recoger`,
+                url: '/my-orders',
+            });
         }
         await this.reportChangeOrderStatus(order);
         return order;
@@ -267,9 +271,6 @@ let OrdersService = class OrdersService {
                 },
             },
         });
-    }
-    async reportOrderReady(userId) {
-        await this.eventsService.sendNotification(userId, 'Orden lista para recoger');
     }
     async reportNewOrder() {
         await this.pusherService.trigger('orders-channel', 'new-order', {

@@ -147,7 +147,6 @@ export declare class OrdersService {
         usuario_id: number;
     }>;
     private hasActiveOrder;
-    reportOrderReady(userId: number): Promise<void>;
     reportNewOrder(): Promise<void>;
     reportChangeOrderStatus(order: Orden): Promise<void>;
     private validateOrderItems;

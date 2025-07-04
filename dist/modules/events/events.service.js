@@ -44,9 +44,8 @@ let EventsService = class EventsService {
         });
         if (user?.pushSubscription) {
             const subscription = user.pushSubscription;
-            await this.push.sendNotification(subscription, payload);
+            await this.push.sendNotification(subscription, JSON.stringify(payload));
         }
-        return;
     }
 };
 exports.EventsService = EventsService;

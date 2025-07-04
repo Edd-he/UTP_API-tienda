@@ -36,15 +36,17 @@ export class EventsService {
     }
   }
 
-  async sendNotification(userId: number, payload: string) {
+  async sendNotification(
+    userId: number,
+    payload: { title: string; body: string; url?: string },
+  ) {
     const user = await this.db.usuario.findUnique({
       where: { id: userId },
     })
 
     if (user?.pushSubscription) {
       const subscription = user.pushSubscription as unknown as PushSubscription
-      await this.push.sendNotification(subscription, payload)
+      await this.push.sendNotification(subscription, JSON.stringify(payload))
     }
-    return
   }
 }
