@@ -38,8 +38,8 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], EventsController.prototype, "saveSubscription", null);
 exports.EventsController = EventsController = __decorate([
-    (0, swagger_1.ApiTags)('Eventos'),
-    (0, common_1.Controller)('eventos'),
+    (0, swagger_1.ApiTags)('Notificaciones'),
+    (0, common_1.Controller)('notificaciones'),
     __metadata("design:paramtypes", [events_service_1.EventsService])
 ], EventsController);
 //# sourceMappingURL=events.controller.js.map

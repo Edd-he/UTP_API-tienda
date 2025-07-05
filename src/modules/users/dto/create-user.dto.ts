@@ -14,7 +14,7 @@ export class CreateUserDto {
   dni: string
 
   @IsEmail({}, { message: 'El correo debe ser uno válido' })
-  @Matches(/^([AU]\d{8})@utp\.edu\.pe$/, {
+  @Matches(/^([AUC]\d{8})@utp\.edu\.pe$/, {
     message: 'El correo no posee el formato correcto',
   })
   correo: string

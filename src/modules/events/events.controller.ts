@@ -5,8 +5,8 @@ import { ApiTags } from '@nestjs/swagger'
 import { EventsService } from './events.service'
 import { CreateSubscriptionDto } from './dto/create-subscription.dto'
 
-@ApiTags('Eventos')
-@Controller('eventos')
+@ApiTags('Notificaciones')
+@Controller('notificaciones')
 export class EventsController {
   constructor(private readonly eventsService: EventsService) {}
 
