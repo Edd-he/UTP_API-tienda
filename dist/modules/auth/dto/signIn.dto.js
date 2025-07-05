@@ -14,13 +14,13 @@ const openapi = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
 class SignInDto {
     static _OPENAPI_METADATA_FACTORY() {
-        return { correo: { required: true, type: () => String, format: "email", pattern: "/^([AU]\\d{8})@utp\\.edu\\.pe$/" }, contraseña: { required: true, type: () => String, minLength: 5, maxLength: 20 } };
+        return { correo: { required: true, type: () => String, format: "email", pattern: "/^([AUC]\\d{8})@utp\\.edu\\.pe$/" }, contraseña: { required: true, type: () => String, minLength: 5, maxLength: 20 } };
     }
 }
 exports.SignInDto = SignInDto;
 __decorate([
     (0, class_validator_1.IsEmail)({}, { message: 'El correo electrónico no es válido.' }),
-    (0, class_validator_1.Matches)(/^([AU]\d{8})@utp\.edu\.pe$/, {
+    (0, class_validator_1.Matches)(/^([AUC]\d{8})@utp\.edu\.pe$/, {
         message: 'El correo no posee el formato correcto',
     }),
     __metadata("design:type", String)

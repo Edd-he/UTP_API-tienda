@@ -25,7 +25,7 @@ export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
 
   @ApiBearerAuth()
-  @Auth(['ADMINISTRADOR', 'ESTUDIANTE'])
+  @Auth(['PROFESOR', 'ESTUDIANTE'])
   @Post('crear-orden')
   @ApiOperation({
     summary: 'Crea una orden',

@@ -62,7 +62,7 @@ let OrdersController = class OrdersController {
 exports.OrdersController = OrdersController;
 __decorate([
     (0, swagger_1.ApiBearerAuth)(),
-    (0, auth_decorator_1.Auth)(['ADMINISTRADOR', 'ESTUDIANTE']),
+    (0, auth_decorator_1.Auth)(['PROFESOR', 'ESTUDIANTE']),
     (0, common_1.Post)('crear-orden'),
     (0, swagger_1.ApiOperation)({
         summary: 'Crea una orden',

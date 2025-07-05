@@ -2,7 +2,7 @@ import { IsEmail, IsString, Length, Matches } from 'class-validator'
 
 export class SignInDto {
   @IsEmail({}, { message: 'El correo electrónico no es válido.' })
-  @Matches(/^([AU]\d{8})@utp\.edu\.pe$/, {
+  @Matches(/^([AUC]\d{8})@utp\.edu\.pe$/, {
     message: 'El correo no posee el formato correcto',
   })
   correo: string
