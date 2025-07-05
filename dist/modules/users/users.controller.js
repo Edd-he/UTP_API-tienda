@@ -176,7 +176,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "updateUser", null);
 __decorate([
-    (0, common_1.Patch)(':usuarioID/actualizar-contraseña'),
+    (0, common_1.Patch)(':usuarioID/actualizar-contra'),
     (0, swagger_1.ApiOperation)({
         summary: 'Actualiza la contraseña de un usuario',
     }),

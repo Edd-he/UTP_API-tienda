@@ -29,6 +29,9 @@ let InventoryController = class InventoryController {
     async generateManualInventory() {
         return await this.inventoryService.generateInventory();
     }
+    async resetInventory() {
+        return await this.inventoryService.resetInventory();
+    }
     async updateStock(updateStockDto) {
         await this.inventoryService.updateProductStock(updateStockDto);
         return {
@@ -55,6 +58,13 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], InventoryController.prototype, "generateManualInventory", null);
+__decorate([
+    (0, common_1.Delete)('reiniciar-inventario'),
+    openapi.ApiResponse({ status: 200 }),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], InventoryController.prototype, "resetInventory", null);
 __decorate([
     (0, common_1.Patch)('actualizar-stock'),
     openapi.ApiResponse({ status: 200 }),

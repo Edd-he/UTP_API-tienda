@@ -13,6 +13,9 @@ export declare class InventoryService {
     generateInventory(): Promise<{
         message: string;
     }>;
+    resetInventory(): Promise<{
+        message: string;
+    }>;
     getInventoryToday({ query, page, page_size, }: SearchStatusQueryParamsDto): Promise<{
         data: {
             fecha: string;

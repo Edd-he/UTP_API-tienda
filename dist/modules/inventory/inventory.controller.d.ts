@@ -23,6 +23,9 @@ export declare class InventoryController {
     generateManualInventory(): Promise<{
         message: string;
     }>;
+    resetInventory(): Promise<{
+        message: string;
+    }>;
     updateStock(updateStockDto: UpdateStockDto): Promise<{
         message: string;
     }>;

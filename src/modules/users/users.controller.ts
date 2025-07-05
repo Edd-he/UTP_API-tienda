@@ -116,7 +116,7 @@ export class UsersController {
     return admin
   }
 
-  @Patch(':usuarioID/actualizar-contraseña')
+  @Patch(':usuarioID/actualizar-contra')
   @ApiOperation({
     summary: 'Actualiza la contraseña de un usuario',
   })

@@ -54,6 +54,25 @@ let InventoryService = class InventoryService {
             message: `Inventario diario generado para ${data.length} productos.`,
         };
     }
+    async resetInventory() {
+        const now = luxon_1.DateTime.now().setZone('America/Lima').startOf('day');
+        const date = now.toJSDate();
+        try {
+            const { count } = await this.db.inventario_Diario.deleteMany({
+                where: {
+                    fecha: date,
+                },
+            });
+            return {
+                message: `Inventario diario reiniciado para ${count} productos.`,
+            };
+        }
+        catch (e) {
+            if (e.code) {
+                throw new common_1.InternalServerErrorException('Hubo un error al reinciar el inventario');
+            }
+        }
+    }
     async getInventoryToday({ query, page, page_size, }) {
         const now = luxon_1.DateTime.now().setZone('America/Lima').startOf('day');
         const today = now.toJSDate();

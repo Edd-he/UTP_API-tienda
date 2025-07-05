@@ -67,6 +67,30 @@ export class InventoryService {
     }
   }
 
+  async resetInventory() {
+    const now = DateTime.now().setZone('America/Lima').startOf('day')
+
+    const date = now.toJSDate()
+
+    try {
+      const { count } = await this.db.inventario_Diario.deleteMany({
+        where: {
+          fecha: date,
+        },
+      })
+
+      return {
+        message: `Inventario diario reiniciado para ${count} productos.`,
+      }
+    } catch (e) {
+      if (e.code) {
+        throw new InternalServerErrorException(
+          'Hubo un error al reinciar el inventario',
+        )
+      }
+    }
+  }
+
   async getInventoryToday({
     query,
     page,

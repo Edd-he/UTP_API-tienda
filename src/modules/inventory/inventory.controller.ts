@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Patch, Post, Query } from '@nestjs/common'
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common'
 import { SearchQueryParamsDto } from '@common/query-params/search-query-params'
 import { ApiOperation, ApiTags } from '@nestjs/swagger'
 
@@ -21,6 +29,11 @@ export class InventoryController {
   @Post('generar-inventario')
   async generateManualInventory() {
     return await this.inventoryService.generateInventory()
+  }
+
+  @Delete('reiniciar-inventario')
+  async resetInventory() {
+    return await this.inventoryService.resetInventory()
   }
 
   @Patch('actualizar-stock')
