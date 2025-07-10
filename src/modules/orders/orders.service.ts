@@ -64,7 +64,7 @@ export class OrdersService {
         }),
       )
 
-      await this.reportNewOrder()
+      await this.notifyNewOrder()
 
       return {
         ...order,
@@ -138,18 +138,36 @@ export class OrdersService {
       AND: [
         query
           ? {
-              transaccion: {
-                contains: query,
-                mode: Prisma.QueryMode.insensitive,
-              },
+              OR: [
+                {
+                  Usuario: {
+                    nombre: {
+                      contains: query,
+                      mode: Prisma.QueryMode.insensitive,
+                    },
+                  },
+                },
+                {
+                  Usuario: {
+                    apellidos: {
+                      contains: query,
+                      mode: Prisma.QueryMode.insensitive,
+                    },
+                  },
+                },
+              ],
             }
           : {},
+        {
+          hora_programada: {
+            gte: today.toJSDate(),
+            lt: tomorrow.toJSDate(),
+          },
+        },
+        {
+          estado: status as Estado,
+        },
       ],
-      hora_programada: {
-        gte: today.toJSDate(),
-        lt: tomorrow.toJSDate(),
-      },
-      estado: status as Estado,
     }
 
     const [orders, total] = await Promise.all([
@@ -272,6 +290,18 @@ export class OrdersService {
   }
 
   async changeStatusOrder(id: number, estado: Estado) {
+    const { estado: prevStatus } = await this.findOne(id)
+    if (prevStatus === 'CANCELADA')
+      throw new BadRequestException(
+        'Esta orden ya fue cancelada por el cliente',
+      )
+
+    if (prevStatus === 'ABANDONADA')
+      throw new BadRequestException('Esta orden ya fue dada por abandonada')
+
+    if (prevStatus === 'COMPLETADA')
+      throw new BadRequestException('Esta orden ya fue dada por completada')
+
     const order = await this.db.orden.update({
       where: {
         id,
@@ -281,6 +311,10 @@ export class OrdersService {
       },
     })
 
+    if (order.estado === 'CANCELADA') {
+      await this.notifyOrderCancelled(order.id)
+    }
+
     if (order.estado === 'RECOGER') {
       await this.eventsService.sendNotification(order.usuario_id, {
         title: 'Nueva Notificación',
@@ -288,7 +322,7 @@ export class OrdersService {
         url: '/shop/my-orders',
       })
     }
-    await this.reportChangeOrderStatus(order)
+    await this.notifyChangeOrderStatus(order)
     return order
   }
 
@@ -307,16 +341,23 @@ export class OrdersService {
     })
   }
 
-  async reportNewOrder() {
-    await this.pusherService.trigger('orders-channel', 'new-order', {
+  async notifyNewOrder() {
+    await this.pusherService.trigger('orders-channel', 'order:new', {
       timestamp: new Date().toISOString(),
     })
   }
 
-  async reportChangeOrderStatus(order: Orden) {
+  async notifyOrderCancelled(id: number) {
+    await this.pusherService.trigger('orders-channel', 'order:cancelled', {
+      id,
+      timestamp: new Date().toISOString(),
+    })
+  }
+
+  async notifyChangeOrderStatus(order: Orden) {
     await this.pusherService.trigger(
       `user-channel-${order.usuario_id}`,
-      'new-order-status',
+      'order:new-status',
       {
         id: order.id,
         estado: order.estado,

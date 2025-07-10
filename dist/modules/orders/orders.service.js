@@ -55,7 +55,7 @@ let OrdersService = class OrdersService {
                     tipo: 'SALIDA',
                 });
             }));
-            await this.reportNewOrder();
+            await this.notifyNewOrder();
             return {
                 ...order,
                 creado: (0, format_date_1.formatDate)(order.creado),
@@ -122,18 +122,36 @@ let OrdersService = class OrdersService {
             AND: [
                 query
                     ? {
-                        transaccion: {
-                            contains: query,
-                            mode: client_1.Prisma.QueryMode.insensitive,
-                        },
+                        OR: [
+                            {
+                                Usuario: {
+                                    nombre: {
+                                        contains: query,
+                                        mode: client_1.Prisma.QueryMode.insensitive,
+                                    },
+                                },
+                            },
+                            {
+                                Usuario: {
+                                    apellidos: {
+                                        contains: query,
+                                        mode: client_1.Prisma.QueryMode.insensitive,
+                                    },
+                                },
+                            },
+                        ],
                     }
                     : {},
+                {
+                    hora_programada: {
+                        gte: today.toJSDate(),
+                        lt: tomorrow.toJSDate(),
+                    },
+                },
+                {
+                    estado: status,
+                },
             ],
-            hora_programada: {
-                gte: today.toJSDate(),
-                lt: tomorrow.toJSDate(),
-            },
-            estado: status,
         };
         const [orders, total] = await Promise.all([
             this.db.orden.findMany({
@@ -240,6 +258,13 @@ let OrdersService = class OrdersService {
         };
     }
     async changeStatusOrder(id, estado) {
+        const { estado: prevStatus } = await this.findOne(id);
+        if (prevStatus === 'CANCELADA')
+            throw new common_1.BadRequestException('Esta orden ya fue cancelada por el cliente');
+        if (prevStatus === 'ABANDONADA')
+            throw new common_1.BadRequestException('Esta orden ya fue dada por abandonada');
+        if (prevStatus === 'COMPLETADA')
+            throw new common_1.BadRequestException('Esta orden ya fue dada por completada');
         const order = await this.db.orden.update({
             where: {
                 id,
@@ -248,6 +273,9 @@ let OrdersService = class OrdersService {
                 estado: estado,
             },
         });
+        if (order.estado === 'CANCELADA') {
+            await this.notifyOrderCancelled(order.id);
+        }
         if (order.estado === 'RECOGER') {
             await this.eventsService.sendNotification(order.usuario_id, {
                 title: 'Nueva Notificación',
@@ -255,7 +283,7 @@ let OrdersService = class OrdersService {
                 url: '/shop/my-orders',
             });
         }
-        await this.reportChangeOrderStatus(order);
+        await this.notifyChangeOrderStatus(order);
         return order;
     }
     async hasActiveOrder(userId) {
@@ -272,13 +300,19 @@ let OrdersService = class OrdersService {
             },
         });
     }
-    async reportNewOrder() {
-        await this.pusherService.trigger('orders-channel', 'new-order', {
+    async notifyNewOrder() {
+        await this.pusherService.trigger('orders-channel', 'order:new', {
             timestamp: new Date().toISOString(),
         });
     }
-    async reportChangeOrderStatus(order) {
-        await this.pusherService.trigger(`user-channel-${order.usuario_id}`, 'new-order-status', {
+    async notifyOrderCancelled(id) {
+        await this.pusherService.trigger('orders-channel', 'order:cancelled', {
+            id,
+            timestamp: new Date().toISOString(),
+        });
+    }
+    async notifyChangeOrderStatus(order) {
+        await this.pusherService.trigger(`user-channel-${order.usuario_id}`, 'order:new-status', {
             id: order.id,
             estado: order.estado,
             timestamp: (0, format_date_1.formatDate)(new Date()),
